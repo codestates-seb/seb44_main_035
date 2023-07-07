@@ -2,10 +2,10 @@ import { GoogleLogin } from '@react-oauth/google';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 
-const googleClientId: string = import.meta.env.VITE_GOOGLE_CLIENT_ID_2 || '';
+const GOOGLE_CLIENT_ID: string = import.meta.env.VITE_GOOGLE_CLIENT_ID_2 || '';
 
 const GoogleLoginButton = () => {
-  const clientId = googleClientId;
+  const clientId = GOOGLE_CLIENT_ID;
   const navigate = useNavigate();
   return (
     <>

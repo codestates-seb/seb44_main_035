@@ -13,10 +13,9 @@ const StyledLoginButton = styled(LoginButton)`
   }
 `;
 
-const facebookAppId: string = import.meta.env.VITE_FACEBOOK_APP_ID || '';
+const FACEBOOK_APP_ID: string = import.meta.env.VITE_FACEBOOK_APP_ID || '';
 
 function FacebookLoginButton() {
-  console.log(facebookAppId);
   function handleSuccess(response: any) {
     console.log(response);
   }
@@ -26,7 +25,7 @@ function FacebookLoginButton() {
   }
 
   return (
-    <FacebookProvider appId={facebookAppId}>
+    <FacebookProvider appId={FACEBOOK_APP_ID}>
       <StyledLoginButton
         scope='email'
         onError={handleError}
