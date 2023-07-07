@@ -1,8 +1,10 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const LoginLogo = () => {
+  const navigate = useNavigate();
   return (
-    <LogoBox>
+    <LogoBox onClick={() => navigate('/')}>
       <Logo>
         <Font>냉 파 고</Font>
         <SubFont>우리집 냉장고 파먹기 솔루션</SubFont>

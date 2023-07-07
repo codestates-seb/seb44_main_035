@@ -38,6 +38,11 @@ export const KakaoButton = styled.button`
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #e5d600;
+  }
 `;
 
 export const KakaoIcon = styled(FaComment)`
@@ -59,6 +64,11 @@ export const GoogleButton = styled.div`
   border-radius: 2px;
   border: 1px solid rgb(0, 0, 0, 0.3);
   cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
 `;
 
 export const GoogleIcon = styled.span`
@@ -87,6 +97,11 @@ export const FacebookButton = styled.div`
   height: 56px;
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #34519d;
+  }
 `;
 
 export const FacebookIcon = styled(FaFacebookF)`
@@ -108,4 +123,9 @@ export const GuestButton = styled.div`
   height: 56px;
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #424242;
+  }
 `;
