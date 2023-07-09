@@ -1,19 +1,53 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaXmark } from "react-icons/fa6";
 
 const SearchModal = () => {
   const [isDeleteBtn, setIsDeleteBtn] = useState(true);
+  const [ingredient, setIngredient] = useState("");
   const handleDeleteClick = () => {
     setIsDeleteBtn(false);
   };
+  const navigate = useNavigate();
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIngredient(event.target.value);
+  };
+
+  // const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+  //   access: string;
+  //   refresh: string;
+  // };
+  // const addIngre = async () => {
+  //   const url = `${import.meta.env.VITE_API_URL}/ingres/add`;
+  //   const headers = {
+  //     Authorization: `Bearer ${token.access}`,
+  //   };
+  //   try {
+  //     await axios.post(url, { headers });
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.log("Error:", error);
+  //   }
+  // };
+
+  // addIngre();
+
   return (
     <>
       {isDeleteBtn && (
         <Modal>
           <ModalContent>
-            <FaXmark onClick={handleDeleteClick} />
-            <AddIngre></AddIngre>
+            <RightElements>
+              <FaXmark onClick={handleDeleteClick} />
+            </RightElements>
+
+            <AddIngre
+              type="text"
+              value={ingredient}
+              onChange={handleInputChange}
+            ></AddIngre>
             <AddBtn>재료추가</AddBtn>
           </ModalContent>
         </Modal>
@@ -42,7 +76,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  position: relative;
   background-color: rgba(98, 104, 131, 1);
   width: 300px;
   height: 223px;
@@ -63,4 +97,10 @@ const AddBtn = styled.button`
   height: 51px;
   border-radius: 10px;
   font-weight: bold;
+`;
+const RightElements = styled.div`
+  margin: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
