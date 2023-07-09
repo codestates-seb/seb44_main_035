@@ -1,27 +1,38 @@
-import { useState } from "react";
-import SearchModal from "../components/SearchModal";
-import { FaPlus } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { useRecoilState } from "recoil";
 import { FaXmark } from "react-icons/fa6";
 import styled from "styled-components";
-
-const IngreItem = () => {
+import { ingreItemAtom } from "../atoms/atoms";
+type IngreItemProps = {
+  el: string;
+};
+const IngreItem: React.FC<IngreItemProps> = ({ el }) => {
+  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
   const [isDeleteBtn, setIsDeleteBtn] = useState(true);
-  const [isOpenAddIngre, setIsOpenAddIngre] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  const handleAddClick = () => {
-    setIsOpenAddIngre(!isOpenAddIngre);
-  };
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsDeleteBtn(false);
+    setIngreState((ingreState) => ingreState.filter((item) => item !== el));
+    e.stopPropagation();
   };
+
   const handleBtnChange = () => {
     setClicked(!clicked);
+    if (!clicked) {
+      setIngreState(() => [el, ...ingreState]);
+    } else {
+      setIngreState((ingreState) => ingreState.filter((item) => item !== el));
+    }
   };
-  // TODO 여기에 get요청 받아서 그리드 안에 추가시키기
+  useEffect(() => {
+    const isClicked = ingreState.includes(el);
+    setClicked(isClicked);
+  }, [el, ingreState]);
+
   return (
-    <GridContainer>
-      {isDeleteBtn && (
+    isDeleteBtn && (
+      <>
         <IngreBtn
           onClick={handleBtnChange}
           style={{
@@ -31,39 +42,17 @@ const IngreItem = () => {
             color: clicked ? "white" : "black",
           }}
         >
-          <Ingre>감자</Ingre>
+          <Ingre>{el}</Ingre>
           <DeleteBtn onClick={handleDeleteClick}>
             <FaXmark />
           </DeleteBtn>
         </IngreBtn>
-      )}
-
-      <PlusBtn onClick={handleAddClick}>
-        <FaPlus size="30" />
-      </PlusBtn>
-      {isOpenAddIngre && <SearchModal />}
-    </GridContainer>
+      </>
+    )
   );
 };
 
 export default IngreItem;
-
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  grid-gap: 10px;
-`;
-const PlusBtn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(238, 238, 238, 1);
-  border-radius: 18%;
-  width: 80px;
-  height: 85px;
-  border: none;
-`;
 const IngreBtn = styled.div`
   //상속하는 거 알아오기
   display: flex;
