@@ -17,6 +17,8 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: ./client
+        env:
+          CI: ""
 
       - name: SHOW AWS CLI VERSION
         run: |
@@ -28,8 +30,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_EC2_METADATA_DISABLED: true
         run: |
-          aws s3 sync ./dist \
+          aws s3 sync \
             --region ap-northeast-2 \
-            build s3://seb44-fe035-main-project
-            --delete
+            dist s3://seb44-fe035-main-project
         working-directory: ./client
