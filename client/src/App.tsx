@@ -1,5 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
+import BottomNavBar from './components/BottomNavBar';
+
 function App() {
   return (
     <>
@@ -7,6 +9,7 @@ function App() {
         <Route path='/' element={<></>} />
         <Route path='/login' element={<Login />} />
       </Routes>
+      <BottomNavBar />
     </>
   );
 }

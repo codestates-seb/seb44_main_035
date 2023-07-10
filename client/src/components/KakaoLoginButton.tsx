@@ -1,17 +1,11 @@
-import axios from 'axios';
 import { KakaoButton, KakaoIcon } from '../styles/SocailLoginStyles';
+import { handleLoginClick } from '../services/Login';
+
+const path = '/auth/kakao';
 
 function KakaoLoginButton() {
-  const handleLoginClick = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/auth/kakao');
-      window.location.href = response.data.url;
-    } catch (error) {
-      console.error('로그인 요청 중 에러가 발생했습니다.', error);
-    }
-  };
   return (
-    <KakaoButton onClick={handleLoginClick}>
+    <KakaoButton onClick={() => handleLoginClick(path)}>
       <KakaoIcon />
       Kakao Login
     </KakaoButton>
