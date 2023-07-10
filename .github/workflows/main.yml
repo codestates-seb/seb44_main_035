@@ -32,5 +32,5 @@ jobs:
         run: |
           aws s3 sync \
             --region ap-northeast-2 \
-            dist s3://seb44-fe035-main-project
+            dist s3://seb44-main035
         working-directory: ./client
