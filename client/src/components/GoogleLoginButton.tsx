@@ -1,7 +1,7 @@
-import { GoogleButton, GoogleIcon } from '../styles/SocailLoginStyles';
-import { handleLoginClick } from '../services/Login';
+import { GoogleButton, GoogleIcon } from "../styles/SocailLoginStyles";
+import { handleLoginClick } from "../services/Login";
 
-const path = '/auth/google';
+const path = "/oauth2/authorization/google";
 
 function GoogleLoginButton() {
   return (

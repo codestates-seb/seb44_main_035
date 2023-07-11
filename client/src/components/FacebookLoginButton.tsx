@@ -1,7 +1,7 @@
-import { FacebookButton, FacebookIcon } from '../styles/SocailLoginStyles';
-import { handleLoginClick } from '../services/Login';
+import { FacebookButton, FacebookIcon } from "../styles/SocailLoginStyles";
+import { handleLoginClick } from "../services/Login";
 
-const path = '/auth/facebook';
+const path = "/oauth2/authorization/facebook";
 
 function FacebookLoginButton() {
   return (

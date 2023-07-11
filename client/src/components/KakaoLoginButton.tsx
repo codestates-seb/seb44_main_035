@@ -1,7 +1,7 @@
-import { KakaoButton, KakaoIcon } from '../styles/SocailLoginStyles';
-import { handleLoginClick } from '../services/Login';
+import { KakaoButton, KakaoIcon } from "../styles/SocailLoginStyles";
+import { handleLoginClick } from "../services/Login";
 
-const path = '/auth/kakao';
+const path = "/oauth2/authorization/kakao";
 
 function KakaoLoginButton() {
   return (
