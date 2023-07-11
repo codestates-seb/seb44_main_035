@@ -1,18 +1,11 @@
-import axios from 'axios';
-import { FacebookButton, FacebookIcon } from '../styles/SocailLoginStyles';
+import { FacebookButton, FacebookIcon } from "../styles/SocailLoginStyles";
+import { handleLoginClick } from "../services/Login";
+
+const path = "/oauth2/authorization/facebook";
 
 function FacebookLoginButton() {
-  const handleLoginClick = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/auth/facebook');
-      window.location.href = response.data.url;
-    } catch (error) {
-      console.error('로그인 요청 중 에러가 발생했습니다.', error);
-    }
-  };
-
   return (
-    <FacebookButton onClick={handleLoginClick}>
+    <FacebookButton onClick={() => handleLoginClick(path)}>
       <FacebookIcon />
       Facebook Login
     </FacebookButton>

@@ -20,55 +20,9 @@ export const BottonBox = styled.div`
   }
 `;
 
-export const KakaoButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-width: 200px;
-  max-width: 250px;
-  height: 56px;
-  padding: 0;
-  background-color: #fee500;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  line-height: 44px;
-  text-align: center;
-  color: #3c1e1e;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #e5d600;
-  }
-`;
-
 export const KakaoIcon = styled(FaComment)`
   font-size: 1.5rem;
   margin-right: 5px;
-`;
-
-export const GoogleButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  min-width: 200px;
-  max-width: 250px;
-  height: 56px;
-  background-color: #ffffff;
-  color: black;
-  font-size: 16px;
-  border-radius: 2px;
-  border: 1px solid rgb(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
 `;
 
 export const GoogleIcon = styled.span`
@@ -82,48 +36,65 @@ export const GoogleIcon = styled.span`
   margin-right: 10px;
 `;
 
-export const FacebookButton = styled.div`
+export const FacebookIcon = styled(FaFacebookF)`
+  margin-right: 5px;
+  font-size: 1.5rem;
+`;
+
+const BaseButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #4267b2;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
   width: 100%;
   min-width: 200px;
   max-width: 250px;
   height: 56px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 1rem;
   transition: background-color 0.2s;
+`;
+
+export const KakaoButton = styled(BaseButton)`
+  padding: 0;
+  background-color: #fee500;
+  border: 1px solid transparent;
+  line-height: 44px;
+  text-align: center;
+  color: #3c1e1e;
+
+  &:hover {
+    background-color: #e5d600;
+  }
+`;
+
+export const GoogleButton = styled(BaseButton)`
+  background-color: #ffffff;
+  color: black;
+  border: 1px solid rgb(0, 0, 0, 0.3);
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+export const FacebookButton = styled(BaseButton)`
+  background-color: #4267b2;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
 
   &:hover {
     background-color: #34519d;
   }
 `;
 
-export const FacebookIcon = styled(FaFacebookF)`
-  margin-right: 5px;
-  font-size: 1.5rem;
-`;
-export const GuestButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const GuestButton = styled(BaseButton)`
   background-color: #525252;
   color: #fff;
   border: none;
   padding: 10px 20px;
-  border-radius: 4px;
-  width: 100%;
-  min-width: 200px;
-  max-width: 250px;
-  height: 56px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.2s;
 
   &:hover {
     background-color: #424242;
