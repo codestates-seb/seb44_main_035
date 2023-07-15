@@ -1,23 +1,13 @@
 import styled from "styled-components";
 import SearchBar from "../components/recipe/SearchBar";
 import BackButton from "../components/BackButton";
-import RecipeCard from "../components/recipe/RecipeCard";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { RecipeProps } from "../components/recipe/RecipeCard";
-import CreateButton from "../components/recipe/CreateButton";
+import Recipes from "../components/recipe/Recipes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function RecipePage() {
-  const [recipeData, setRecipeData] = useState<RecipeProps[]>([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:5173/moks/recipe.json")
-      .then((res) => setRecipeData(res.data))
-      .catch(() => {
-        console.log("에러입니다");
-      });
-  });
+  //무한스크롤
 
   return (
     <Container>
@@ -26,8 +16,10 @@ function RecipePage() {
           <BackButton />
           <SearchBar />
         </Header>
-        <RecipeCard recipe={recipeData} />
-        <CreateButton />
+        <QueryClientProvider client={queryClient}>
+          <Recipes />
+        </QueryClientProvider>
+        {/* <CreateButton /> */}
       </AppBox>
     </Container>
   );
@@ -48,6 +40,7 @@ const AppBox = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  overflow-y: auto;
 `;
 
 const Header = styled.div`
