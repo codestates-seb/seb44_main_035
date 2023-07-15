@@ -1,16 +1,30 @@
 import styled from "styled-components";
 import { IoSearch } from "react-icons/io5";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 function SearchBar() {
+  const { keyword } = useParams();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState(""); //input에 넣을 검색어
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate(`/recipes/findbyname/{recipe-name}`);
+  };
+
+  useEffect(() => setSearch(keyword || ""), [keyword]);
+
   return (
     <SearchWrapper>
-      <form className="search_form">
+      <form className="search_form" onSubmit={handleSubmit}>
         <input
           type="text"
           className="search_input"
           placeholder="요리명을 검색해주세요"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         ></input>
-        <IoSearch className="search_icon" />
+        <IoSearch className="search_icon"></IoSearch>
       </form>
     </SearchWrapper>
   );
