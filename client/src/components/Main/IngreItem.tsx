@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { FaXmark } from "react-icons/fa6";
 import styled from "styled-components";
-import { ingreItemAtom } from "../atoms/atoms";
+import { ingreItemAtom } from "../../atoms/atoms";
 type IngreItemProps = {
   el: string;
 };

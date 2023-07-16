@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { FaCircleXmark } from "react-icons/fa6";
-import { ingreItemAtom } from "../atoms/atoms";
+import { ingreItemAtom } from "../../atoms/atoms";
 
 const BasketItem = () => {
   const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);

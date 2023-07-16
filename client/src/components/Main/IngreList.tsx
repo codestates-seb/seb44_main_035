@@ -3,9 +3,10 @@ import SearchModal from "./SearchModal";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
 import IngreItem from "./IngreItem";
-
-import { ingreItemAtom } from "../atoms/atoms";
-import db from "./db.json";
+import axios from "axios";
+// 지울 것
+import { ingreItemAtom } from "../../atoms/atoms";
+import db from "../db.json";
 import { useRecoilState } from "recoil";
 
 const IngreList = () => {
@@ -15,13 +16,23 @@ const IngreList = () => {
   const handleAddClick = () => {
     setIsOpenAddIngre(!isOpenAddIngre);
   };
-  // TODO  여기에 get요청 받아서 그리드 안에 추가시키기
+
+  const getList = async () => {
+    try {
+      const url = `${import.meta.env.VITE_API_URL}/ingres`;
+      const data = await axios.get(url);
+      console.log(data);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+  getList();
+
   return (
     <GridContainer>
       {db.data.map((el) => (
-        <IngreItem />
+        <IngreItem el={el.ingreName} />
       ))}
-
       <PlusBtn onClick={handleAddClick}>
         <FaPlus size="30" />
       </PlusBtn>

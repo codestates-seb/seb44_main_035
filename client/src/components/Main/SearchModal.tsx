@@ -1,8 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaXmark } from "react-icons/fa6";
+import axios from "axios";
 
 const SearchModal = () => {
   const [isDeleteBtn, setIsDeleteBtn] = useState(true);
@@ -15,24 +15,31 @@ const SearchModal = () => {
     setIngredient(event.target.value);
   };
 
-  // const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
-  //   access: string;
-  //   refresh: string;
-  // };
-  // const addIngre = async () => {
-  //   const url = `${import.meta.env.VITE_API_URL}/ingres/add`;
-  //   const headers = {
-  //     Authorization: `Bearer ${token.access}`,
-  //   };
-  //   try {
-  //     await axios.post(url, { headers });
-  //     navigate("/");
-  //   } catch (error) {
-  //     console.log("Error:", error);
-  //   }
-  // };
+  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+    access: string;
+    refresh: string;
+  };
 
-  // addIngre();
+  const addIngredient = async () => {
+    try {
+      const url = `${import.meta.env.VITE_API_URL}/ingres/add`;
+      const headers = {
+        Authorization: `Bearer ${token.access}`,
+      };
+      const data = {
+        ingreName: ingredient, //이거 확인
+      };
+
+      await axios.post(url, data, { headers });
+      navigate("/");
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const handleAddClick = () => {
+    addIngredient();
+  };
 
   return (
     <>
@@ -48,7 +55,7 @@ const SearchModal = () => {
               value={ingredient}
               onChange={handleInputChange}
             ></AddIngre>
-            <AddBtn>재료추가</AddBtn>
+            <AddBtn onClick={handleAddClick}>재료추가</AddBtn>
           </ModalContent>
         </Modal>
       )}
