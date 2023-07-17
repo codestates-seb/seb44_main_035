@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Ingredient from "../components/Write/Ingredient";
 import CookingOrder from "../components/Write/CookingOrder";
@@ -13,10 +13,6 @@ export interface Recipes {
   cookStepImage: string[];
 }
 
-// type WritePageProps = {
-//   type: "write" | "edit";
-// };
-
 const WritePage = () => {
   const [recipeName, setRecipeName] = useState("");
   const [recipeImage, setRecipeImage] = useState("");
@@ -27,9 +23,16 @@ const WritePage = () => {
   ) => {
     setRecipeName(event.target.value);
   };
+  useEffect(() => {
+    console.log(recipeName);
+  }, [recipeName]);
+
   const handleContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRecipeIntro(event.target.value);
   };
+  useEffect(() => {
+    console.log(recipeIntro);
+  }, [recipeIntro]);
 
   const saveRecipeImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
