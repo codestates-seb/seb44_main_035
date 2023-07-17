@@ -1,44 +1,79 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaPlusCircle } from "react-icons/fa";
-
+type IngredientType = {
+  ingredientName: string;
+  quantity: string;
+};
 const Ingredient = () => {
-  const [ingredientInput, setIngredientInput] = useState([
-    { placeholder: "예) 밥(2공기)" },
-    { placeholder: "예) 참기름(2T)" },
-    { placeholder: "예) 굴소스(1T)" },
+  const [ingredientName, setIngredientName] = useState([
+    { placeholder: "예) 스파게티 면" },
+    { placeholder: "예) 토마토 소스" },
+    { placeholder: "예) 양파" },
   ]);
-  console.log(ingredientInput);
-  const [ingredient, setIngredient] = useState("");
-  const [ingredients, setIngredients] = useState<string[]>([]);
+  const [quantity, setQuantity] = useState([
+    { placeholder: "예) 200g" },
+    { placeholder: "예) 400ml" },
+    { placeholder: "예) 1개" },
+  ]);
+
+  const [ingredients, setIngredients] = useState<IngredientType[]>([]);
 
   const handleIngredientChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
   ) => {
-    setIngredient(event.target.value);
-    setIngredients([...ingredients, ingredient]);
+    const newIngredients: IngredientType[] = [...ingredients];
+    newIngredients[index] = {
+      ...newIngredients[index],
+      [event.target.name]: event.target.value,
+    };
+    setIngredients(newIngredients);
   };
+
+  useEffect(() => {
+    console.log(ingredients);
+  }, [ingredients]);
 
   const handleAddIngredient = () => {
     const newIngredients = {
-      placeholder: "예) 재료(계량)",
+      placeholder: "예) 재료",
     };
-    setIngredientInput([...ingredientInput, newIngredients]);
+
+    const newQuantity = {
+      placeholder: "예) 계량",
+    };
+    setIngredientName([...ingredientName, newIngredients]);
+    setQuantity([...quantity, newQuantity]);
   };
   return (
     <>
       <Title>재료</Title>
       <GridContainer>
-        {ingredientInput.map((input, index) => (
-          <Input
-            key={index}
-            type="text"
-            name={`ingredient-${index}`}
-            placeholder={input.placeholder}
-            onChange={(event) => handleIngredientChange(event)}
-          />
-        ))}
+        <div>
+          {ingredientName.map((input, index) => (
+            <Input
+              key={index}
+              type="text"
+              name={`ingredient-${index}`}
+              placeholder={input.placeholder}
+              onChange={(event) => handleIngredientChange(event, index)}
+            />
+          ))}
+        </div>
+        <div>
+          {quantity.map((input, index) => (
+            <Input
+              key={index}
+              type="text"
+              name={`quantity-${index}`}
+              placeholder={input.placeholder}
+              onChange={(event) => handleIngredientChange(event, index)}
+            />
+          ))}
+        </div>
       </GridContainer>
+
       <AddContainer>
         <AddBtn onClick={handleAddIngredient}>
           <FaPlusCircle size="20px" />
@@ -63,7 +98,10 @@ const Title = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr; // 두 개의 열로 구성
+  grid-auto-rows: minmax(50px, auto); // 행의 높이를 자동으로 조정
+  column-gap: 10px; // 열 사이의 간격
+  row-gap: 10px; // 행 사이의 간격
 `;
 
 const Input = styled.input`
