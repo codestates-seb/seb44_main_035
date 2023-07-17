@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainLogo from "../components/MainLogo";
-import IngreList from "../components/IngreList";
-import BasketModal from "../components/BasketModal";
+import MainLogo from "../components/Main/MainLogo";
+import IngreList from "../components/Main/IngreList";
+import BasketModal from "../components/Main/BasketModal";
 import styled from "styled-components";
+import { ingreItemAtom } from "../atoms/atoms";
+import { useRecoilState } from "recoil";
 
 const MainPage = () => {
+  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
   const navigate = useNavigate();
   const [isOpenBasketModal, setIsOpenBasketModal] = useState(false);
   const handleBasketClick = () => {
@@ -23,13 +26,15 @@ const MainPage = () => {
         </Header>
         <Body>
           <IngreList />
-          <BottomBtn>
-            <Btn onClick={() => navigate("/recipes")}>추천 레시피</Btn>
-            <Btn onClick={handleBasketClick}> 선택 재료</Btn>
+          <ButtonBox>
+            <Button onClick={() => navigate("/recipes")}>추천 레시피</Button>
+            <Button onClick={handleBasketClick}>
+              선택 재료 <ItemCount>{ingreState.length}</ItemCount>
+            </Button>
             {isOpenBasketModal && (
               <BasketModal onClose={handleCloseBasketModal} />
             )}
-          </BottomBtn>
+          </ButtonBox>
         </Body>
       </AppBox>
     </StyledWrapper>
@@ -38,30 +43,13 @@ const MainPage = () => {
 
 export default MainPage;
 
-const BottomBtn = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-const Btn = styled.button`
-  width: 140px;
-  height: 46px;
-  background-color: rgba(100, 117, 138, 1);
-  color: white;
-  padding: 15px;
-  margin: 30px;
-  border-radius: 11px;
-  border: none;
-  font-weight: bold;
-`;
-
 const StyledWrapper = styled.main`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  /* margin: 0;
-  padding: 0; */
+
   background-color: rgba(241, 241, 241, 0.5);
 `;
 
@@ -83,4 +71,40 @@ const Body = styled.div`
   width: 100%;
   height: 80%;
   padding: 30px;
+  overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const Button = styled.button`
+  position: relative;
+  width: 140px;
+  height: 46px;
+  background-color: rgba(100, 117, 138, 1);
+  color: white;
+  padding: 15px;
+  margin: 30px;
+  border-radius: 11px;
+  border: none;
+  font-weight: bold;
+`;
+const ItemCount = styled.div`
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  top: -10px;
+  right: -10px;
+  background-color: salmon;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 `;
