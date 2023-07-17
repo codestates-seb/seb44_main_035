@@ -49,4 +49,9 @@ public class User {
         this.recommendList.add(recommend);
         recommend.setUser(this);
     }
+
+    public void addIngredient(Ingredient ingredient) {
+        this.ingredientList.add(ingredient);
+        ingredient.setUser(this);
+    }
 }
