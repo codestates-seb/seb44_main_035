@@ -46,9 +46,9 @@ public class CommentService {
         return commentOptional.orElseThrow(()-> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
 
-    public Page<Comment> findComments(int page, int size) {
-        return commentRepository.findAll(PageRequest.of(page, size, Sort.by("createdAt").descending()));
-    }
+//    public Page<Comment> findComments(int page, int size) {
+//        return commentRepository.findAll(PageRequest.of(page, size, Sort.by("createdAt").descending()));
+//    }
 
     public void deleteComment(long commentId) {
         Comment foundComment = findComment(commentId);
