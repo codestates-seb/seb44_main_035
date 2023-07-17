@@ -6,7 +6,7 @@ import IngreItem from "./IngreItem";
 import axios from "axios";
 // 지울 것
 import { ingreItemAtom } from "../../atoms/atoms";
-import db from "../db.json";
+import db from "./db.json";
 import { useRecoilState } from "recoil";
 
 const IngreList = () => {
