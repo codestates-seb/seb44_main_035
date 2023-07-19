@@ -1,14 +1,20 @@
 import styled from "styled-components";
 import SearchBar from "../components/recipe/SearchBar";
 import BackButton from "../components/BackButton";
-import Recipes from "../components/recipe/Recipes";
+import RecipeCard from "../components/recipe/RecipeCard";
+import CreateButton from "../components/recipe/CreateButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RecipeProps } from "../components/detail/RecipeDetail";
 
 const queryClient = new QueryClient();
 
-function RecipePage() {
-  //무한스크롤
+interface Props {
+  recipes: RecipeProps[];
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+}
 
+function RecipePage() {
   return (
     <Container>
       <AppBox>
@@ -17,9 +23,9 @@ function RecipePage() {
           <SearchBar />
         </Header>
         <QueryClientProvider client={queryClient}>
-          <Recipes />
+          <RecipeCard />
         </QueryClientProvider>
-        {/* <CreateButton /> */}
+        <CreateButton />
       </AppBox>
     </Container>
   );
