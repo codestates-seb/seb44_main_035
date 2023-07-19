@@ -1,10 +1,18 @@
 import styled from "styled-components";
 import { PiPencilCircle } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
 
 function CreateButton() {
+  const navigate = useNavigate();
+
   return (
     <ButtonWrapper>
-      <PiPencilCircle className="pencil-icon" />
+      <PiPencilCircle
+        className="pencil-icon"
+        onClick={() => {
+          navigate("/create-recipe");
+        }}
+      />
     </ButtonWrapper>
   );
 }
