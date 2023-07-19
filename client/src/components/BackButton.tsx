@@ -1,10 +1,18 @@
 import styled from "styled-components";
 import { BsArrowLeftCircle } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 function BackButton() {
+  const navigate = useNavigate();
+
   return (
     <IconContainer>
-      <BsArrowLeftCircle className="icon" />
+      <BsArrowLeftCircle
+        className="icon"
+        onClick={() => {
+          navigate(-1);
+        }}
+      />
     </IconContainer>
   );
 }
