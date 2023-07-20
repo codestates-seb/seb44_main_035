@@ -6,28 +6,47 @@ import BottomNavBar from "./components/bottom/BottomNavBar";
 import SearchPage from "./pages/SearchPage";
 import { RecipeProps } from "./components/detail/RecipeDetail";
 import { useState } from "react";
+import MainPage from "./pages/MainPage";
+import BaseketPage from "./pages/BaseketPage";
 
-interface Props {
-  // data: RecipeProps[];
-  search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
-  state: string;
+export interface Recipes {
+  recipe_id: number;
+  name: string;
+  view: number;
+  likes: number;
+  img: string;
 }
+
+export interface RecipeList {
+  recipes: Recipes;
+}
+
+export interface RecipeList {
+  Recipes: {
+    recipe_id: number;
+    name: string;
+    view: number;
+    likes: number;
+    img: string;
+  };
+}
+
 function App() {
-  const [data, setData] = useState([]);
+  const [data] = useState<RecipeList[]>([]);
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<></>} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/recipes" element={<RecipePage />} />
-        <Route path="/recipes/:id" element={<DetailPage />} />
+        <Route path="/recipes/:recipeId" element={<DetailPage />} />
         <Route
           path="/recipes/search/:keyword"
           // path="/recipes/search/:keyword"
           element={<SearchPage />}
         />
+        <Route path="*" element={<div>없는 페이지입니다.</div>} />
       </Routes>
       {/* <BottomNavBar /> */}
     </>
