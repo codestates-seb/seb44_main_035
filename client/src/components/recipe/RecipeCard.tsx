@@ -1,17 +1,21 @@
-import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useCallback, useEffect, Key } from "react";
+import { useState, useEffect, Key } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
+import { Link } from "react-router-dom";
 
-export interface RecipeList {
+export interface Recipes {
   recipe_id: number;
   name: string;
   view: number;
   likes: number;
   img: string;
+}
+
+export interface RecipeList {
+  recipes: Recipes[];
 }
 
 function RecipeCard() {
@@ -37,6 +41,7 @@ function RecipeCard() {
     try {
       const response = await axios.get(`${apiUrl}?page=${currentPage}`);
       // const response = await axios.get(`${apiUrl}?page=${currentPage}`);
+      console.log(response);
       const newItems: RecipeList[] = response.data;
 
       // 기존 데이터와 새로운 데이터 합치기
@@ -79,19 +84,14 @@ function RecipeCard() {
             {data.map((recipe: any, index: Key | null | undefined) => (
               <>
                 <Component>
-                  <li
-                    key={index}
-                    onClick={() => {
-                      navigate(`/recipes/${recipe.recipe_id}`, {
-                        state: { recipe },
-                      });
-                    }}
-                  >
-                    <img className="img" alt="img" src={recipe.img} />
-                    <div className="name">{recipe.name}</div>
-                    <div className="view">view: {recipe.view}</div>
-                    <div className="likes">likes: {recipe.likes}</div>
-                  </li>
+                  <Link to={`/recipes/${recipe.recipe_id}`}>
+                    <li key={index}>
+                      <img className="img" alt="img" src={recipe.img} />
+                      <div className="name">{recipe.name}</div>
+                      <div className="view">view: {recipe.view}</div>
+                      <div className="likes">likes: {recipe.likes}</div>
+                    </li>
+                  </Link>
                 </Component>
               </>
             ))}
