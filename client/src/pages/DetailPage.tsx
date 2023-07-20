@@ -2,21 +2,18 @@ import Comment from "../components/detail/Comment";
 import BackButton from "../components/BackButton";
 import RecipeDetail from "../components/detail/RecipeDetail";
 import styled from "styled-components";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-interface RecipeProps {
-  recipe_id: number;
-  img: string;
-  name: string;
-  view: number;
-  likes: number;
-}
+const queryClient = new QueryClient();
 
 function DetailPage() {
   return (
     <Container>
       <AppBox>
         <BackButton />
-        <RecipeDetail />
+        <QueryClientProvider client={queryClient}>
+          <RecipeDetail />
+        </QueryClientProvider>
         <Comment />
       </AppBox>
     </Container>
