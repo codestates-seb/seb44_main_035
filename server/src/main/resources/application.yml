@@ -5,7 +5,7 @@ spring:
 
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://svc.sel4.cloudtype.app:30934/server
+    url: jdbc:mariadb://svc.sel4.cloudtype.app:31945/server
     username: root
     password: 1234
   jpa:
