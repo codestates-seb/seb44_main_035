@@ -1,19 +1,88 @@
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import AddModal from "../components/MyPage/AddModal";
+import axios from "axios";
 
 const MyPage = () => {
+  // const [imgFile, setImgFile] = useState("");
+  // const imgRef = useRef();
+  const [memberId, setMemberId] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+  const navigate = useNavigate();
+  // const handleRecipesClick = () => {
+  //   navigate("/my-recipes");
+  // };
+  const [isOpenAddIngredientModal, setIsOpenAddIngredientModal] =
+    useState(false);
+  const handleAddClick = () => {
+    setIsOpenAddIngredientModal(!isOpenAddIngredientModal);
+  };
+  const handleCloseIngredientModal = () => {
+    setIsOpenAddIngredientModal(false);
+  };
+  // const saveImgFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       saveImgFile(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+  /*페이지 로드 */
+  async function fetchData() {
+    try {
+      const response = await axios.get("URL");
+      const data = response.data;
+      setMemberId(data.memberId);
+      setName(data.name);
+      setImage(data.image);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  // 받아온 데이터를 활용하여 화면에 표시하는 로직 작성
+  useEffect(() => {
+    fetchData();
+  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+
   return (
     <StyledWrapper>
       <AppBox>
         <ProFile>
-          <UserPicture>유저 사진</UserPicture>
-          <UserName>유저 이름</UserName>
+          {/* <form>
+            {recipeImage ? (
+              <>
+                <img src={recipeImage} />
+                <ImgLabel htmlFor="FoodImg">이미지 변경</ImgLabel>
+              </>
+            ) : (
+              <ImgLabel htmlFor="FoodImg">
+                <MdAddAPhoto size="45px" />
+                프로필 이미지 추가
+              </ImgLabel>
+            )}
+            <ImgInput
+              type="file"
+              accept="image/*"
+              id="FoodImg"
+              onChange={saveRecipeImage}
+            />
+          </form> */}
+          <UserPicture>{image}유저 사진</UserPicture>
+          <UserName>{name}유저 이름</UserName>
         </ProFile>
 
         <RecipeBox>
-          <List>좋아요 누른 레시피</List>
           <List>내가 작성한 레시피</List>
           <List>댓글 작성한 레시피</List>
-          <List>재료 추가 신청</List>
+          <List onClick={handleAddClick}>재료 추가 신청</List>
+          {isOpenAddIngredientModal && (
+            <AddModal onClose={handleCloseIngredientModal} />
+          )}
         </RecipeBox>
       </AppBox>
     </StyledWrapper>
@@ -50,11 +119,11 @@ const UserPicture = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(217, 217, 217, 1);
+  background-color: rgba(98, 104, 131, 1);
   width: 135px;
   height: 135px;
   border-radius: 100%;
-  color: black;
+  color: white;
 `;
 const UserName = styled.div`
   color: rgba(61, 80, 103, 1);
@@ -69,8 +138,17 @@ const List = styled.div`
   justify-content: center;
   width: 332px;
   height: 100px;
-  background-color: rgba(217, 217, 217, 1);
+  background-color: rgba(98, 104, 131, 1);
   margin: 30px;
   border-radius: 14px;
-  color: black;
+  color: white;
+  font-size: large;
+`;
+const Label = styled.label`
+  margin: 5px 0 20px 0;
+  font-weight: bold;
+  font-size: 13px;
+  color: #0095f6;
+  display: inline-block;
+  cursor: pointer;
 `;

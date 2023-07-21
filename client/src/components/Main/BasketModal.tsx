@@ -13,27 +13,14 @@ type BasketModalProps = {
 const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
   const [isDeleteBtn, setIsDeleteBtn] = useState(true);
   const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
+  console.log(ingreState);
   const navigate = useNavigate();
   const handleDeleteClick = () => {
     setIsDeleteBtn(false);
     onClose();
   };
 
-  const handleSearchClick = async () => {
-    try {
-      const url = `${import.meta.env.VITE_API_URL}/recipes/select`;
-      const data = {
-        ingreName: ingreState,
-      };
-
-      await axios.post(url, data);
-      navigate("/recipes");
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
-
-  // 닫히는 버튼이 따로 분리되어있다/ 모달을 열고 닫는 것은 한 곳에ㄴ
+  // 닫히는 버튼이 따로 분리되어있다/ 모달을 열고 닫는 것은 한 곳에
   return (
     isDeleteBtn && (
       <Modal>
@@ -44,7 +31,9 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
           <CenterElements>
             <BasketItem />
           </CenterElements>
-          <SearchBtn onClick={handleSearchClick}>레시피 검색</SearchBtn>
+          <SearchBtn onClick={() => navigate("/recipes")}>
+            레시피 검색
+          </SearchBtn>
         </ModalContent>
       </Modal>
     )

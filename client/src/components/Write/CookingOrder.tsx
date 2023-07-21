@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { MdAddAPhoto } from "react-icons/md";
 import { FaPlusCircle } from "react-icons/fa";
+import { useRecoilState } from "recoil";
+import { recipesStateAtom } from "../../atoms/atoms";
+
 type OrderInput = {
   orderNumber: number;
   placeholder: string;
   imgFile: string;
 };
 const CookingOrder = () => {
+  const [recipes, setRecipes] = useRecoilState(recipesStateAtom);
   const [cookStepContent, setCookStepContent] = useState<string[]>([]);
   const [cookStepImage, setCookStepImage] = useState<string[]>([]);
   const [orderInputs, setOrderInputs] = useState<OrderInput[]>([
@@ -27,6 +32,22 @@ const CookingOrder = () => {
       imgFile: "",
     },
   ]);
+
+  useEffect(() => {
+    const fetchRecipeData = async () => {
+      try {
+        const response = await axios.get("/create-recipe/{recipe-Id}");
+        const recipeData = response.data;
+
+        setCookStepContent(recipeData.cookStepContent);
+        setCookStepImage(recipeData.cookStepImage);
+      } catch (error) {
+        console.error("Error fetching recipe data:", error);
+      }
+    };
+
+    fetchRecipeData();
+  }, []);
 
   // 이미지 업로드 input의 onChange
   const saveImgFile = (index: number) => {
@@ -68,9 +89,7 @@ const CookingOrder = () => {
     index: number
   ): void => {
     const newCookStepContent: string[] = [...cookStepContent];
-
     newCookStepContent[index] = event.target.value;
-
     setCookStepContent(newCookStepContent);
   };
   useEffect(() => {

@@ -1,37 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchModal from "./SearchModal";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
 import IngreItem from "./IngreItem";
 import axios from "axios";
-// 지울 것
-import { ingreItemAtom } from "../../atoms/atoms";
-import db from "./db.json";
-import { useRecoilState } from "recoil";
+
+type ingreListType = {
+  ingredientId: number;
+  ingredientName: string;
+  quantity: number;
+};
 
 const IngreList = () => {
-  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
-  console.log(ingreState);
+  const [ingreList, setIngreList] = useState<ingreListType[]>([]);
+
   const [isOpenAddIngre, setIsOpenAddIngre] = useState(false);
+
   const handleAddClick = () => {
     setIsOpenAddIngre(!isOpenAddIngre);
   };
 
-  const getList = async () => {
-    try {
-      const url = `${import.meta.env.VITE_API_URL}/ingres`;
-      const data = await axios.get(url);
-      console.log(data);
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
-  getList();
+  useEffect(() => {
+    const getList = async () => {
+      try {
+        const headers = {
+          "ngrok-skip-browser-warning": "true",
+        };
+        const url = `${import.meta.env.VITE_API_URL}/ingres/1`;
+        const response = await axios.get(url, { headers });
+        const data = response.data.data;
+        console.log(response);
+        console.log(data);
+        setIngreList(() => [...data]);
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    };
+
+    getList();
+  }, []);
 
   return (
     <GridContainer>
-      {db.data.map((el) => (
-        <IngreItem el={el.ingreName} />
+      {ingreList.map((el) => (
+        <IngreItem el={el.ingredientName} ingredientId={el.ingredientId} />
       ))}
       <PlusBtn onClick={handleAddClick}>
         <FaPlus size="30" />

@@ -1,33 +1,35 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FaXmark } from "react-icons/fa6";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const SearchModal = () => {
-  const [isDeleteBtn, setIsDeleteBtn] = useState(true);
+type AddModalProps = {
+  onClose: () => void;
+};
+const AddModal: React.FC<AddModalProps> = ({ onClose }) => {
   const [ingredient, setIngredient] = useState("");
-  const handleDeleteClick = () => {
-    setIsDeleteBtn(false);
-  };
   const navigate = useNavigate();
+  const handleDeleteClick = () => {
+    onClose();
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIngredient(event.target.value);
   };
-
+  //   보내는거 확인하기
   const addIngredient = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_URL}/ingres/add/1`;
+      const url = `${import.meta.env.VITE_API_URL}/ingres/request`;
+      //   const headers = {
+      //     Authorization: `Bearer ${token.access}`,
+      //   };
       const data = {
-        ingredientName: ingredient,
+        ingreName: ingredient,
       };
 
       await axios.post(url, data);
-      console.log(data);
-      window.location.href = "/";
-      navigate("/"); //딴 거 넣으면 이동 다 됨
+      navigate("/mypage");
     } catch (error) {
       console.log("Error:", error);
     }
@@ -39,28 +41,24 @@ const SearchModal = () => {
 
   return (
     <>
-      {isDeleteBtn && (
-        <Modal>
-          <ModalContent>
-            <RightElements>
-              <FaXmark onClick={handleDeleteClick} />
-            </RightElements>
+      <Modal>
+        <ModalContent>
+          <RightElements>
+            <FaXmark onClick={handleDeleteClick} />
+          </RightElements>
 
-            <AddIngre
-              type="text"
-              value={ingredient}
-              onChange={handleInputChange}
-            ></AddIngre>
-            <AddBtn onClick={handleAddClick}>재료추가</AddBtn>
-          </ModalContent>
-        </Modal>
-      )}
+          <AddIngre
+            type="text"
+            value={ingredient}
+            onChange={handleInputChange}
+          ></AddIngre>
+          <AddBtn onClick={handleAddClick}>재료 추가 신청</AddBtn>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
-
-export default SearchModal;
-
+export default AddModal;
 const Modal = styled.div`
   position: fixed;
   top: 0;

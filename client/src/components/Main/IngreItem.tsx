@@ -3,10 +3,18 @@ import { useRecoilState } from "recoil";
 import { FaXmark } from "react-icons/fa6";
 import styled from "styled-components";
 import { ingreItemAtom } from "../../atoms/atoms";
+import axios from "axios";
+
+/*IngreList 에서 전달 */
 type IngreItemProps = {
   el: string;
+  ingredientId: number;
 };
-const IngreItem: React.FC<IngreItemProps> = ({ el }) => {
+
+const IngreItem: React.FC<IngreItemProps> = ({
+  el, //ingredientName
+  ingredientId,
+}: IngreItemProps) => {
   const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
   const [isDeleteBtn, setIsDeleteBtn] = useState(true);
   const [clicked, setClicked] = useState(false);
@@ -15,6 +23,7 @@ const IngreItem: React.FC<IngreItemProps> = ({ el }) => {
     setIsDeleteBtn(false);
     setIngreState((ingreState) => ingreState.filter((item) => item !== el));
     e.stopPropagation();
+    deleteIngredient();
   };
 
   const handleBtnChange = () => {
@@ -29,6 +38,21 @@ const IngreItem: React.FC<IngreItemProps> = ({ el }) => {
     const isClicked = ingreState.includes(el);
     setClicked(isClicked);
   }, [el, ingreState]);
+
+  /* 삭제하는 통신 */
+  const deleteIngredient = async () => {
+    try {
+      const headers = {
+        "ngrok-skip-browser-warning": "true",
+      };
+      const url = `${
+        import.meta.env.VITE_API_URL
+      }/ingres/delete/${ingredientId}/1`;
+      await axios.delete(url, { headers });
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
 
   return (
     isDeleteBtn && (
