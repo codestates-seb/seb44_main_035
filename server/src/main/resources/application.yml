@@ -7,7 +7,7 @@ spring:
     driverClassName: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://svc.sel4.cloudtype.app:30934/server
     username: root
-    password: 1234
+    password: ${MYSQL_SECRET}
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
@@ -33,8 +33,8 @@ cloud:
     s3:
       bucket: my-github-actions-s3-burket
     credentials:
-      access-key: AKIATYK3GYSCFHHJCTAY
-      secret-key: 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
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
     region:
       static: ap-northeast-2
       auto: false
