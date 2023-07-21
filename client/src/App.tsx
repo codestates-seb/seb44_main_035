@@ -4,10 +4,10 @@ import RecipePage from "./pages/RecipePage";
 import DetailPage from "./pages/DetailPage";
 import BottomNavBar from "./components/bottom/BottomNavBar";
 import SearchPage from "./pages/SearchPage";
-import { RecipeProps } from "./components/detail/RecipeDetail";
 import { useState } from "react";
 import MainPage from "./pages/MainPage";
-import BaseketPage from "./pages/BaseketPage";
+import Basket from "../src/pages/BaseketPage";
+import Refridge from "../src/pages/RefridgePage";
 
 export interface Recipes {
   recipe_id: number;
@@ -46,6 +46,8 @@ function App() {
           // path="/recipes/search/:keyword"
           element={<SearchPage />}
         />
+        <Route path="/refridge" element={<Refridge />} />
+        <Route path="/basket" element={<Basket />} />
         <Route path="*" element={<div>없는 페이지입니다.</div>} />
       </Routes>
       {/* <BottomNavBar /> */}
