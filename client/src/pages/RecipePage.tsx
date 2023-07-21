@@ -4,15 +4,8 @@ import BackButton from "../components/BackButton";
 import RecipeCard from "../components/recipe/RecipeCard";
 import CreateButton from "../components/recipe/CreateButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RecipeProps } from "../components/detail/RecipeDetail";
 
-const queryClient = new QueryClient();
-
-interface Props {
-  recipes: RecipeProps[];
-  search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
-}
+// const queryClient = new QueryClient();
 
 function RecipePage() {
   return (
@@ -22,9 +15,9 @@ function RecipePage() {
           <BackButton />
           <SearchBar />
         </Header>
-        <QueryClientProvider client={queryClient}>
-          <RecipeCard />
-        </QueryClientProvider>
+        {/* <QueryClientProvider client={queryClient}> */}
+        <RecipeCard />
+        {/* </QueryClientProvider> */}
         <CreateButton />
       </AppBox>
     </Container>

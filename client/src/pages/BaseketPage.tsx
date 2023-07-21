@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { ingreItemAtom } from "../atoms/atoms";
+import { BASE_URL } from "../constants/constants";
 
 export default function BaseketPage() {
   // 장바구니에 재료가 있는 경우 => 장바구니 속 재료 모두 있는 레시피 뿌려주기
@@ -16,9 +17,7 @@ export default function BaseketPage() {
       const queryString = ingreState
         .map((ingre) => `ingredients=${encodeURIComponent(ingre)}`)
         .join("&");
-      const url = `${
-        import.meta.env.VITE_API_URL
-      }/recipes/select?${queryString}`;
+      const url = BASE_URL + `/recipes/select?${queryString}`;
 
       const response = await axios.get(url, { headers });
 
