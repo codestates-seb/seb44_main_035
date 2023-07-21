@@ -2,20 +2,26 @@ import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaShare } from "react-icons/fa";
 import { FaCommentAlt } from "react-icons/fa";
-import { IoThumbsUpSharp } from "react-icons/io5";
-import { IoEyeSharp } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../../constants/constants";
 import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { LargeNumberLike } from "crypto";
 
-export interface RecipeProps {
-  recipe_id: number;
-  img: string;
-  name: string;
-  view: number;
-  likes: number;
+export interface Comments {
+  recipeId: number;
+  userId: number;
+  commentId: number;
+  commentContent: string;
+  createdAt: string;
+  modifiedAt: string;
+}
+
+export interface Ingredients {
+  ingredientId: number;
+  ingredientName: string;
+  quantity: string;
 }
 
 export interface RecipeDetail {
@@ -23,38 +29,29 @@ export interface RecipeDetail {
   recipeName: string;
   recipeImage: string;
   recipeIntro: string;
-  ingredients: string;
   cookStepContent: [];
   cookStepImage: string;
+  comments: Comments[];
+  ingredients: Ingredients[];
 }
 
 function RecipeDetail() {
   const navigate = useNavigate();
-
   const { recipeId } = useParams();
-
-  const baseUrl = "http://localhost:5173/";
-  // const baseUrl = process.env.REACT_APP_SERVER_API;
   const [data, setData] = useState<RecipeDetail>();
   const getData = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:5173/recipeDetail.json/${recipeId}`,
-        // `${baseUrl}/recipes/find/${id}`
-        {
-          headers: {},
-        }
-      );
+      const res = await axios.get(BASE_URL + `recipes/find/${recipeId}`);
       console.log(res);
-      setData(res.data);
+      setData(res.data.data);
     } catch (error) {
       console.log("에러입니다");
     }
   };
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
   const copyClipboard = async (text: string) => {
     try {
@@ -71,7 +68,7 @@ function RecipeDetail() {
 
   return (
     <DetailWrapper>
-      <img className="img" alt="img" src={data.cookStepImage} />
+      <img className="img" alt="img" src={data.recipeImage} />
       <NumberTag>
         <span>
           <FaCommentAlt className="comment" />
@@ -79,7 +76,7 @@ function RecipeDetail() {
         <span className="share">
           <FaShare
             className="link"
-            onClick={() => copyClipboard(`${baseUrl}${location.pathname}`)}
+            onClick={() => copyClipboard(`${BASE_URL}${location.pathname}`)}
           />
         </span>
       </NumberTag>
@@ -98,9 +95,28 @@ function RecipeDetail() {
         <div className="title">요리 소개</div>
         <div className="detail">{data.recipeIntro}</div>
         <div className="title">재료</div>
-        <div className="ingredient">{data.ingredients}</div>
+        <div className="ingredient">
+          {data.ingredients.map((ingreName: any, index: number) => (
+            <>
+              <div className="ingreName">
+                {ingreName[Object.keys(ingreName)[1]]}
+                {ingreName[Object.keys(ingreName)[2]]}
+              </div>
+            </>
+          ))}
+        </div>
+
         <div className="title">요리 방법</div>
-        <div className="howto">{data.cookStepContent}</div>
+        {data.cookStepContent.map((cookStep: any, index: number) => (
+          <>
+            <div className="howto">{cookStep}</div>
+            <img
+              className="cookStepImage"
+              alt="cookStepImage"
+              src={cookStep.cookStepImage}
+            />
+          </>
+        ))}
       </TitleWrapper>
     </DetailWrapper>
   );
