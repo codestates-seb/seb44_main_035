@@ -66,7 +66,7 @@ function RecipeDetail() {
             <span
               className="edit"
               onClick={() => {
-                navigate(`/edit/${recipe_id}`);
+                navigate(`/create-recipe/${recipe_id}`);
               }}
             >
               수정

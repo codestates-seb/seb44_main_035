@@ -6,12 +6,12 @@ export const ingreItemAtom = atom<string[]>({
   key: "ingreItemAtom",
   default: [],
 });
-/* ----- 레시피 상태 -----  */
+
 export const recipesStateAtom = atom<Recipes>({
   key: "recipesStateAtom",
   default: {
     recipeName: "",
-    recipeImage: "",
+    recipeImage: new File([], ""),
     recipeIntro: "",
     ingredients: [],
     cookStepContent: [],

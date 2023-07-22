@@ -11,11 +11,3 @@ export interface Recipes {
   cookStepContent: string[];
   cookStepImage: File[];
 }
-export interface updateRecipe {
-  recipeName: string;
-  recipeImage: string;
-  recipeIntro: string;
-  ingredients: IngredientType[];
-  cookStepContent: string[];
-  cookStepImage: string[];
-}

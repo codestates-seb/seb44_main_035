@@ -5,8 +5,6 @@ import AddModal from "../components/MyPage/AddModal";
 import axios from "axios";
 
 const MyPage = () => {
-  // const [imgFile, setImgFile] = useState("");
-  // const imgRef = useRef();
   const [memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
@@ -22,16 +20,7 @@ const MyPage = () => {
   const handleCloseIngredientModal = () => {
     setIsOpenAddIngredientModal(false);
   };
-  // const saveImgFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       saveImgFile(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+
   /*페이지 로드 */
   async function fetchData() {
     try {
