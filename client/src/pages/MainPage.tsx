@@ -27,7 +27,7 @@ const MainPage = () => {
         <Body>
           <IngreList />
           <ButtonBox>
-            <Button onClick={() => navigate("/recipes")}>추천 레시피</Button>
+            <Button onClick={() => navigate("/refridge")}>추천 레시피</Button>
             <Button onClick={handleBasketClick}>
               선택 재료 <ItemCount>{ingreState.length}</ItemCount>
             </Button>
