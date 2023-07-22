@@ -13,17 +13,29 @@ function CreateButton() {
           navigate("/create-recipe");
         }}
       />
+      {/* <span className="write-button" onClick={() => navigate("/create-recipe")}>
+        레시피 작성
+      </span> */}
     </ButtonWrapper>
   );
 }
 
-const ButtonWrapper = styled.div`
+const ButtonWrapper = styled.span`
   text-align: right;
-  margin-bottom: 100px;
+
+  /* .write-button {
+    background-color: #d4f4fa;
+    height: 30px;
+    width: 60px;
+    text-align: center;
+    border-radius: 40px;
+    padding: 3px 0;
+  } */
 
   .pencil-icon {
-    width: 5rem;
-    height: 5rem;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
     color: grey;
   }
 `;

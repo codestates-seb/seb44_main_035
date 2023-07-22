@@ -3,15 +3,7 @@ import BackButton from "../components/BackButton";
 import SearchBar from "../components/recipe/SearchBar";
 import Search from "../components/search/Search";
 import CreateButton from "../components/recipe/CreateButton";
-import { RecipeProps } from "../components/detail/RecipeDetail";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-interface Props {
-  // data: RecipeProps[];
-  search: string;
-  setSearch: (value: string) => void;
-  state: string;
-}
 
 function SearchPage() {
   const queryClient = new QueryClient();

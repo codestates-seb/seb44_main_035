@@ -2,9 +2,7 @@ import styled from "styled-components";
 import { IoSearch } from "react-icons/io5";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 interface Props {
   setSearch: React.Dispatch<React.SetStateAction<void>>;
@@ -12,7 +10,7 @@ interface Props {
 }
 
 function SearchBar() {
-  // const { keyword } = useParams();
+  const { keyword } = useParams();
   const navigate = useNavigate();
 
   //입력값(검색어)
@@ -23,7 +21,6 @@ function SearchBar() {
     if (e.key === "Enter") {
       handleSubmit;
     }
-    // console.log(document.getElementsByTagName("input")[0].value);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,8 +30,6 @@ function SearchBar() {
       alert("검색어를 입력해주세요.");
     } else {
       const findValue = document.getElementsByTagName("input")[0].value;
-      console.log(findValue);
-      // console.log(e.currentTarget);
       return navigate(`/recipes/search/${search}`, {
         state: findValue,
       });
@@ -48,8 +43,6 @@ function SearchBar() {
       alert("검색어를 입력해주세요.");
     } else {
       const findValue = document.getElementsByTagName("input")[0].value;
-      // console.log(findValue);
-      // console.log(e.currentTarget);
       return navigate(`/recipes/search/${search}`, {
         state: findValue,
       });

@@ -1,43 +1,43 @@
 import styled from "styled-components";
 import axios from "axios";
 import { useEffect } from "react";
-import { RecipeProps } from "../detail/RecipeDetail";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { BASE_URL } from "../../constants/constants";
 
-interface Props {
-  // recipes: RecipeProps[];
-  search: string;
-  setSearch: (e: string) => void;
-  state: string;
+export interface RecipeList {
+  recipeId: number;
+  recipeName: string;
+  recipeImage: string;
+  recommendCount: number;
 }
 
 function Search() {
+  const { keyword } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   //검색어
   const [search, setSearch] = useState("");
 
   //검색 목록 담을 곳
-  const [searchResult, setSearchResult] = useState<RecipeProps[]>([]);
+  const [searchResult, setSearchResult] = useState<RecipeList[]>([]);
   const searchWord = location.state;
+  console.log(searchWord);
 
   useEffect(() => {
     setSearch(searchWord); //state에 검색어 저장
     axios
-      .get("http://localhost:5173/moks/recipe.json")
-      // .get(`/recipes/${keyword? 'find/underbar': 'findbyname/{recipe-name} })
-      .then((res) => setSearchResult(res.data))
+      .get(BASE_URL + "recipes/find/underbar")
+      .then((res) => setSearchResult(res.data.data))
       .catch(() => {
         console.log("에러입니다");
       });
   }, [searchWord]); //searchWord 변경될 때 렌더링
 
-  console.log(searchResult);
   if (Array.isArray(searchResult)) {
     const filteredResult = searchResult.filter((item) => {
-      return item.name.includes(search);
+      return item.recipeName.includes(search);
     });
     return (
       <ul>
@@ -48,13 +48,11 @@ function Search() {
                 <Component>
                   <li
                     onClick={() => {
-                      navigate(`/recipes/${item.recipe_id}`);
+                      navigate(`/recipes/${item.recipeId}`);
                     }}
                   >
-                    <img className="img" alt="img" src={item.img} />
-                    <div className="name">{item.name}</div>
-                    <div className="view">view: {item.view}</div>
-                    <div className="likes">likes: {item.likes}</div>
+                    <img className="img" alt="img" src={item.recipeImage} />
+                    <div className="name">{item.recipeName}</div>
                   </li>
                 </Component>
               </>
