@@ -30,7 +30,7 @@ export interface RecipeDetail {
   recipeImage: string;
   recipeIntro: string;
   cookStepContent: [];
-  cookStepImage: string;
+  cookStepImage: [];
   comments: Comments[];
   ingredients: Ingredients[];
 }
@@ -92,31 +92,62 @@ function RecipeDetail() {
             수정
           </span>
         </Title>
-        <div className="title">요리 소개</div>
+        <div className="title">🍱 요리 소개</div>
         <div className="detail">{data.recipeIntro}</div>
-        <div className="title">재료</div>
+        <div className="title">🥦 재료</div>
         <div className="ingredient">
           {data.ingredients.map((ingreName: any, index: number) => (
             <>
-              <div className="ingreName">
-                {ingreName[Object.keys(ingreName)[1]]}
-                {ingreName[Object.keys(ingreName)[2]]}
-              </div>
+              <li key={index}>
+                <div className="ingredients">
+                  <span className="ingreName">
+                    {ingreName[Object.keys(ingreName)[1]]}
+                  </span>
+                  <span className="ingreQuantity">
+                    {ingreName[Object.keys(ingreName)[2]]}
+                  </span>
+                </div>
+              </li>
             </>
           ))}
         </div>
+        <CookStep>
+          <div className="title">🍳 요리 방법</div>
+          {Object.entries(data).map((item: any, index: number) => {
+            const getCookStep = Object.values(data.cookStepContent).map(
+              (entrie, index) => {
+                return console.log(entrie, index);
+              }
+            );
+            const getCookStepImg = Object.values(data.cookStepImage).map(
+              (entrie, index) => {
+                return console.log(entrie, index);
+              }
+            );
 
-        <div className="title">요리 방법</div>
-        {data.cookStepContent.map((cookStep: any, index: number) => (
-          <>
-            <div className="howto">{cookStep}</div>
-            <img
-              className="cookStepImage"
-              alt="cookStepImage"
-              src={cookStep.cookStepImage}
-            />
-          </>
-        ))}
+            return (
+              <li key={index}>
+                <div className="textBox">
+                  <h4>Step {index + 1}</h4>
+                  <div className="howto">{item.cookStepContent[index]}</div>
+                </div>
+                <div className="imgBox">
+                  <img src={item.cookStepImage[index]} alt="cookStepImg" />
+                </div>
+              </li>
+            );
+          })}
+
+          {/* {data.cookStepImage.map((cookStepImg: any, index: number) => (
+            <>
+              <img
+                className="cookStepImage"
+                alt="cookStepImage"
+                src={cookStepImg}
+              />
+            </>
+          ))} */}
+        </CookStep>
       </TitleWrapper>
     </DetailWrapper>
   );
@@ -139,9 +170,9 @@ const DetailWrapper = styled.section`
 const NumberTag = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
   margin-top: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
 
   span {
     width: 85px;
@@ -150,6 +181,7 @@ const NumberTag = styled.div`
     text-align: center;
     border-radius: 30px;
     padding: 10px 0;
+    margin-left: auto;
   }
 `;
 
@@ -157,6 +189,12 @@ const TitleWrapper = styled.div`
   width: 100%;
   margin-top: 30px;
   margin-bottom: 20px;
+
+  .ingredients {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 20px;
+  }
 
   .edit {
     background-color: #d4f4fa;
@@ -170,8 +208,9 @@ const TitleWrapper = styled.div`
   .title {
     font-size: 20px;
     margin-top: 20px;
+    margin-bottom: 9px;
+    background-color: #e6e6e6;
   }
-
   .name {
     font-size: 30px;
   }
@@ -180,6 +219,12 @@ const TitleWrapper = styled.div`
 const Title = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const CookStep = styled.div`
+  .cookStepImage {
+    width: 30%;
+  }
 `;
 
 export default RecipeDetail;
