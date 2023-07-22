@@ -16,13 +16,14 @@ const SearchModal = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIngredient(event.target.value);
   };
-
+  /*재료 추가 부분 */
   const addIngredient = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_URL}/ingres/add/1`;
+      const url = `${import.meta.env.VITE_API_URL}/ingres/add/2`;
       const data = {
         ingredientName: ingredient,
       };
+      console.log(url);
 
       await axios.post(url, data);
       console.log(data);

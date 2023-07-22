@@ -26,7 +26,7 @@ const IngreList = () => {
         const headers = {
           "ngrok-skip-browser-warning": "true",
         };
-        const url = `${import.meta.env.VITE_API_URL}/ingres/1`;
+        const url = `${import.meta.env.VITE_API_URL}/ingres/2`;
         const response = await axios.get(url, { headers });
         const data = response.data.data;
         console.log(response);

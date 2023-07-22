@@ -1,56 +1,100 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Ingredient from "../components/Write/Ingredient";
 import CookingOrder from "../components/Write/CookingOrder";
-import Buttons from "../components/Write/Buttons";
 import { MdAddAPhoto } from "react-icons/md";
-
-export interface Recipes {
-  recipeName: string;
-  recipeImage: string;
-  recipeIntro: string;
-  cookStepContent: string[];
-  cookStepImage: string[];
-}
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { recipesStateAtom } from "../atoms/atoms";
 
 const WritePage = () => {
-  const [recipeName, setRecipeName] = useState("");
-  const [recipeImage, setRecipeImage] = useState("");
-  const [recipeIntro, setRecipeIntro] = useState("");
+  const navigate = useNavigate();
+  const [recipes, setRecipes] = useRecoilState(recipesStateAtom);
+  const [recipeImage, setRecipeImage] = useState<string>();
 
   const handleRecipeNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRecipeName(event.target.value);
+    // TODO recipeName
+    updateRecipeName(event.target.value);
   };
-  useEffect(() => {
-    console.log(recipeName);
-  }, [recipeName]);
 
   const handleContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRecipeIntro(event.target.value);
+    // TODO recipeIntro
+    updateRecipeIntro(event.target.value);
   };
-  useEffect(() => {
-    console.log(recipeIntro);
-  }, [recipeIntro]);
+
+  // TODO update recipeName
+  const updateRecipeName = (newRecipeName: string) => {
+    setRecipes((prevRecipes) => ({
+      ...prevRecipes,
+      recipeName: newRecipeName,
+    }));
+  };
+
+  // TODO update recipeIntro
+  const updateRecipeIntro = (newRecipeIntro: string) => {
+    setRecipes((prevRecipes) => ({
+      ...prevRecipes,
+      recipeIntro: newRecipeIntro,
+    }));
+  };
+
+  // TODO update image
+  const updateRecipeImage = (newRecipeImage: File) => {
+    setRecipes((prevRecipes) => ({
+      ...prevRecipes,
+      recipeImage: newRecipeImage,
+    }));
+  };
 
   const saveRecipeImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
+      updateRecipeImage(file);
       reader.onloadend = () => {
         setRecipeImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const handleSaveClick = async () => {
+    try {
+      const url = `${import.meta.env.VITE_API_URL}/recipes/create/2`;
+      const formData = new FormData();
+      // TODO send photo
+      formData.append("recipeImage", recipes.recipeImage);
+
+      // TODO send photo multi photo
+      recipes.cookStepImage.forEach((file) => {
+        formData.append("cookStepImage", file); // 동일한 키를 사용하여 파일들을 추가
+      });
+
+      const data = {
+        recipeName: recipes.recipeName,
+        recipeIntro: recipes.recipeIntro,
+        ingredients: recipes.ingredients,
+        cookStepContent: recipes.cookStepContent,
+      };
+      const json = JSON.stringify(data);
+      const blob = new Blob([json], { type: "application/json" });
+      formData.append("recipe", blob);
+      const response = await axios.post(url, formData);
+      navigate(`/recipes/${response.data.data.recipeId}`); //아이디에 맞는 상세페이지 이동
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   return (
     <StyledWrapper>
       <AppBox>
         <Title>레시피 제목</Title>
         <TitleInput
           type="text"
-          value={recipeName}
           name="title"
           placeholder="요리의 제목을 입력해 주세요."
           onChange={handleRecipeNameChange}
@@ -79,7 +123,6 @@ const WritePage = () => {
         <Title>요리 소개</Title>
         <IntroduceInput
           type="textarea"
-          value={recipeIntro}
           name="food-intoduce"
           placeholder="이 레시피의 탄생 배경을 적어주세요."
           onChange={handleContentChange}
@@ -87,7 +130,10 @@ const WritePage = () => {
 
         <Ingredient />
         <CookingOrder />
-        <Buttons />
+        <BtnContainer>
+          <SaveBtn onClick={handleSaveClick}>저장하기</SaveBtn>
+          <CancelBtn onClick={() => navigate("/recipes")}>취소하기</CancelBtn>
+        </BtnContainer>
       </AppBox>
     </StyledWrapper>
   );
@@ -178,4 +224,27 @@ const ImgLabel = styled.label`
   color: #0095f6;
   display: inline-block;
   cursor: pointer;
+`;
+const BtnContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+`;
+
+const SaveBtn = styled.button`
+  width: 139px;
+  height: 63px;
+  border-radius: 20px;
+  background-color: rgba(96, 150, 255, 1);
+  color: white;
+  margin-right: 15px;
+`;
+const CancelBtn = styled.button`
+  width: 139px;
+  height: 63px;
+  border-radius: 20px;
+  background-color: rgba(255, 118, 118, 1);
+  color: white;
+  margin-left: 15px;
 `;
