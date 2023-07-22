@@ -18,7 +18,6 @@ function RecipePage() {
         {/* <QueryClientProvider client={queryClient}> */}
         <RecipeCard />
         {/* </QueryClientProvider> */}
-        <CreateButton />
       </AppBox>
     </Container>
   );

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import CreateButton from "./CreateButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../constants/constants";
 import { useInView } from "react-intersection-observer";
@@ -44,12 +45,15 @@ function RecipeCard() {
 
   return (
     <>
-      <div className="recipesTitle">레시피 조회 🥘</div>
       {/* {isLoading && <p>Loading...</p>}
       {error && <p>Something is wrong</p>}
       {recipes && ( */}
+      <TitleWrapper>
+        <span className="recipesTitle"> 🍽️ 전체 레시피 조회 🍽️</span>
+        <CreateButton />
+      </TitleWrapper>
       <ul>
-        <Wrapper>
+        <RecipeWrapper>
           {data.map((recipe: any, index: number) => (
             <>
               <Component>
@@ -69,14 +73,27 @@ function RecipeCard() {
               </Component>
             </>
           ))}
-        </Wrapper>
+        </RecipeWrapper>
       </ul>
     </>
   );
   <div ref={ref} />;
 }
 
-const Wrapper = styled.section`
+const TitleWrapper = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
+  .recipesTitle {
+    color: grey;
+    font-size: 20px;
+    text-align: center;
+  }
+`;
+
+const RecipeWrapper = styled.section`
   width: 100%;
   height: 100%;
   display: grid;
