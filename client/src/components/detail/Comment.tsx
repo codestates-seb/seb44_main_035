@@ -14,11 +14,11 @@ function CommentForm() {
   const { recipeId } = useParams();
 
   //데이터 불러오기
-  let data;
-  axios.get(BASE_URL + `recipes/find/${recipeId}`).then(function (res) {
-    data = [...res.data];
-    console.log(data);
-  });
+  // let data;
+  // axios.get(BASE_URL + `recipes/find/${recipeId}`).then(function (res) {
+  //   data = [...res.data];
+  //   console.log(data);
+  // });
 
   // const userId = data.data.comments.userId;
   // const commentId = data.data.comments.commentId;
@@ -108,10 +108,17 @@ function CommentForm() {
   // }
 
   //댓글 삭제
-  const deleteComment = async () => {
+  const deleteComment = async (commentId: any) => {
+    const url = BASE_URL + `recipes/comment/delete/${commentId}`;
     if (window.confirm("게시글을 삭제하시겠습니까?")) {
       await axios
-        .delete(BASE_URL + `recipes/comment/delete/${commentId}`)
+        .delete("url", {
+          headers: {
+            // Authoriztion: authorizationToken,
+          },
+          data: {},
+        })
+        // .delete(BASE_URL + `recipes/comment/delete/${commentId}`)
         .then((res) => {
           alert("삭제되었습니다.");
         });
@@ -126,13 +133,19 @@ function CommentForm() {
         <ul>
           <div className="content">
             {comments.map((comment: any) => (
-              <Contents>
+              <ContentsWrapper>
                 <li key={comment.commentId}>
-                  <div className="comment">{comment.commentContent}</div>
-                  <div className="time">{comment.createdAt}</div>
+                  <Contents>
+                    <div className="comment">{comment.commentContent}</div>
+                    <div className="time">{comment.createdAt}</div>
+                  </Contents>
                   <ButtonContainer>
-                    {/* <span className="editCommentButton"
-                    onClick={updateComment}>수정</span> */}
+                    <span
+                      className="editCommentButton"
+                      // onClick={updateComment}
+                    >
+                      수정
+                    </span>
                     <span
                       className="deleteCommentButton"
                       onClick={deleteComment}
@@ -141,17 +154,20 @@ function CommentForm() {
                     </span>
                   </ButtonContainer>
                 </li>
-              </Contents>
+              </ContentsWrapper>
             ))}
-            <form onSubmit={onSubmit}>
-              <input
-                type="text"
-                placeholder="댓글을 달아주세요 💬"
-                value={newComment}
-                onChange={onChange}
-              ></input>
-              <button className="commentButton">게시</button>
-            </form>
+            <Input>
+              <form onSubmit={onSubmit}>
+                <input
+                  className="inputForm"
+                  type="text"
+                  placeholder="댓글을 달아주세요 💬"
+                  value={newComment}
+                  onChange={onChange}
+                ></input>
+                <button className="commentButton">등록</button>
+              </form>
+            </Input>
           </div>
         </ul>
       </section>
@@ -168,32 +184,38 @@ const CommentWrapper = styled.div`
     font-size: 30px;
     margin-top: 6px;
   }
-  .content {
-    margin-top: 10px;
-    padding-left: 8px;
+  .name {
+    font-size: 12px;
   }
+`;
+
+const ContentsWrapper = styled.div`
+  border-radius: 30px;
+  margin-bottom: 2px;
+  background-color: #ececec;
+  height: 90px;
+  font-size: 14px;
+`;
+
+const Contents = styled.div`
+  margin-left: 15px;
   .comment {
     margin-top: 10px;
     font-size: 18px;
   }
 
   .time {
-    font-size: 12px;
+    font-size: 14px;
+    color: grey;
   }
-
-  .name {
-    font-size: 12px;
-  }
-`;
-
-const Contents = styled.div`
-  border-radius: 30px;
-  margin-bottom: 2px;
-  background-color: #ececec;
 `;
 
 const ButtonContainer = styled.div`
+  margin-top: 10px;
+  margin-right: 9px;
+  margin-left: auto;
   span {
+    margin-right: 3px;
     background-color: #626883;
     color: #f5f1e9;
     height: 50px;
@@ -203,4 +225,18 @@ const ButtonContainer = styled.div`
     border-radius: 10px;
   }
 `;
+
+const Input = styled.div`
+  .inputForm {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 40px;
+    width: 85%;
+  }
+
+  .commentButton {
+    height: 40px;
+  }
+`;
+
 export default CommentForm;
