@@ -4,18 +4,18 @@ import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
 import IngreItem from "./IngreItem";
 import axios from "axios";
-// 지울 것
-import { ingreItemAtom } from "../../atoms/atoms";
-import { useRecoilState } from "recoil";
+
 type ingreListType = {
   ingredientId: number;
   ingredientName: string;
   quantity: number;
 };
+
 const IngreList = () => {
   const [ingreList, setIngreList] = useState<ingreListType[]>([]);
-  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
+
   const [isOpenAddIngre, setIsOpenAddIngre] = useState(false);
+
   const handleAddClick = () => {
     setIsOpenAddIngre(!isOpenAddIngre);
   };
@@ -43,7 +43,7 @@ const IngreList = () => {
   return (
     <GridContainer>
       {ingreList.map((el) => (
-        <IngreItem el={el.ingredientName} />
+        <IngreItem el={el.ingredientName} ingredientId={el.ingredientId} />
       ))}
       <PlusBtn onClick={handleAddClick}>
         <FaPlus size="30" />

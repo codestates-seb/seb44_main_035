@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import { FaXmark } from "react-icons/fa6";
 import axios from "axios";
@@ -11,27 +12,22 @@ const SearchModal = () => {
     setIsDeleteBtn(false);
   };
   const navigate = useNavigate();
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIngredient(event.target.value);
   };
 
-  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
-    access: string;
-    refresh: string;
-  };
-
   const addIngredient = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_URL}/ingres/add`;
-      const headers = {
-        Authorization: `Bearer ${token.access}`,
-      };
+      const url = `${import.meta.env.VITE_API_URL}/ingres/add/1`;
       const data = {
-        ingreName: ingredient, //이거 확인
+        ingredientName: ingredient,
       };
 
-      await axios.post(url, data, { headers });
-      navigate("/");
+      await axios.post(url, data);
+      console.log(data);
+      window.location.href = "/";
+      navigate("/"); //딴 거 넣으면 이동 다 됨
     } catch (error) {
       console.log("Error:", error);
     }
