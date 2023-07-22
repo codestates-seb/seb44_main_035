@@ -33,8 +33,6 @@ export interface RecipeList {
 }
 
 function App() {
-  const [data] = useState<RecipeList[]>([]);
-
   return (
     <>
       <Routes>
