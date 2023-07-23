@@ -63,13 +63,10 @@ function CommentForm() {
       };
       try {
         axios
-          .post(
-            BASE_URL + `recipes/comment/create/${recipeId}/${comments[2]}`,
-            {
-              // /{recipe-id}/{user-id}
-              commentContent: newComment,
-            }
-          )
+          .post(BASE_URL + `recipes/comment/create/`, {
+            // /{recipe-id}/{user-id}
+            commentContent: newComment,
+          })
           .then((res) => {
             if (res.data.success) {
               console.log(res.data.result);
@@ -213,7 +210,7 @@ const Contents = styled.div`
 const ButtonContainer = styled.div`
   margin-top: 10px;
   margin-right: 9px;
-  margin-left: auto;
+  text-align: right;
   span {
     margin-right: 3px;
     background-color: #626883;
