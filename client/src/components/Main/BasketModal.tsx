@@ -31,9 +31,7 @@ const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
           <CenterElements>
             <BasketItem />
           </CenterElements>
-          <SearchBtn onClick={() => navigate("/recipes")}>
-            레시피 검색
-          </SearchBtn>
+          <SearchBtn onClick={() => navigate("/basket")}>레시피 검색</SearchBtn>
         </ModalContent>
       </Modal>
     )

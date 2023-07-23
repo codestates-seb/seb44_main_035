@@ -12,6 +12,7 @@ import BottomNavBar from "./components/bottom/BottomNavBar";
 import SearchPage from "./pages/SearchPage";
 import { RecipeProps } from "./components/detail/RecipeDetail";
 import { useState } from "react";
+import BasketPage from "./pages/BasketPage";
 
 interface Props {
   // data: RecipeProps[];
@@ -33,6 +34,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/recipes" element={<RecipePage />} />
         <Route path="/recipes/:id" element={<DetailPage />} />
+        <Route path="/basket" element={<BasketPage />} />
         <Route
           path="/recipes/search/:keyword"
           // path="/recipes/search/:keyword"
