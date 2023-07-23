@@ -1,8 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 
+import MainPage from "./pages/MainPage";
+import WritePage from "./pages/WritePage";
+import MyPage from "./pages/MyPage";
+import MyWritePage from "./pages/MyWritePage";
 import Login from "./pages/Login";
 import RecipePage from "./pages/RecipePage";
 import DetailPage from "./pages/DetailPage";
+import EditPage from "./pages/EditPage";
 import BottomNavBar from "./components/bottom/BottomNavBar";
 import SearchPage from "./pages/SearchPage";
 import { useState } from "react";
@@ -36,7 +41,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<></>} />
         <Route path="/login" element={<Login />} />
         <Route path="/recipes" element={<RecipePage />} />
         <Route path="/recipes/:recipeId" element={<DetailPage />} />
