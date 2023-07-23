@@ -45,7 +45,9 @@ const BasketPage = () => {
       const queryString = ingreState
         .map((ingre) => `ingredients=${encodeURIComponent(ingre)}`)
         .join("&");
-      const url = `https://port-0-seb44-main-035-rt92alkaxb0vy.sel4.cloudtype.app/recipes/select?${queryString}`;
+      const url = `${
+        import.meta.env.VITE_API_URL
+      }/recipes/select?${queryString}`;
 
       const response = await axios.get(`${url}&page=${currentPage}`);
       const newItems: RecipeList[] = response.data.data;
