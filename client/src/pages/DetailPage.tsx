@@ -1,4 +1,3 @@
-import Comment from "../components/detail/Comment";
 import BackButton from "../components/BackButton";
 import RecipeDetail from "../components/detail/RecipeDetail";
 import styled from "styled-components";
@@ -14,7 +13,6 @@ function DetailPage() {
         <QueryClientProvider client={queryClient}>
           <RecipeDetail />
         </QueryClientProvider>
-        <Comment />
       </AppBox>
     </Container>
   );
