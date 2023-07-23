@@ -37,7 +37,7 @@ function RecipeCard() {
     setPage((prev) => prev + 1);
   };
 
-  const pageEnd = useRef<HTMLDivElement>(null);
+  const pageEnd = useRef<any>();
 
   useEffect(() => {
     if (loading) {
@@ -55,9 +55,6 @@ function RecipeCard() {
 
   return (
     <>
-      {/* {isLoading && <p>Loading...</p>}
-      {error && <p>Something is wrong</p>}
-      {recipes && ( */}
       <TitleWrapper>
         <span className="recipesTitle"> 🍽️ 전체 레시피 조회 🍽️</span>
         <CreateButton />
@@ -88,57 +85,6 @@ function RecipeCard() {
       </ul>
     </>
   );
-
-  // const navigate = useNavigate();
-  // // const { keyword } = useParams();
-  // const [data, setData] = useState<RecipeList[]>([]);
-  // const getData = async () => {
-  //   try {
-  //     const res = await axios.get(BASE_URL + "recipes/find/underbar");
-  //     setData(res.data.data);
-  //   } catch (error) {
-  //     console.log("에러입니다");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
-  // return (
-  //   <>
-  //     {/* {isLoading && <p>Loading...</p>}
-  //     {error && <p>Something is wrong</p>}
-  //     {recipes && ( */}
-  //     <TitleWrapper>
-  //       <span className="recipesTitle"> 🍽️ 전체 레시피 조회 🍽️</span>
-  //       <CreateButton />
-  //     </TitleWrapper>
-  //     <ul>
-  //       <RecipeWrapper>
-  //         {data.map((recipe: any, index: number) => (
-  //           <>
-  //             <Component>
-  //               <li
-  //                 key={index}
-  //                 onClick={() => {
-  //                   navigate(`/recipes/${recipe.recipeId}`);
-  //                 }}
-  //               >
-  //                 <img
-  //                   className="img"
-  //                   alt="recipeImg"
-  //                   src={recipe.recipeImage}
-  //                 />
-  //                 <div className="name">{recipe.recipeName}</div>
-  //               </li>
-  //             </Component>
-  //           </>
-  //         ))}
-  //       </RecipeWrapper>
-  //     </ul>
-  //   </>
-  // );
 }
 
 const TitleWrapper = styled.section`
