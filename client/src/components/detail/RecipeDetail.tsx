@@ -70,15 +70,15 @@ function RecipeDetail() {
     <DetailWrapper>
       <img className="img" alt="img" src={data.recipeImage} />
       <NumberTag>
-        <span>
-          <FaCommentAlt className="comment" />
-        </span>
-        <span className="share">
+        <div>
+          <FaCommentAlt className="icon" />
+        </div>
+        <div className="icon">
           <FaShare
             className="link"
             onClick={() => copyClipboard(`${BASE_URL}${location.pathname}`)}
           />
-        </span>
+        </div>
       </NumberTag>
       <TitleWrapper>
         <Title>
@@ -92,61 +92,29 @@ function RecipeDetail() {
             수정
           </span>
         </Title>
-        <div className="title">🍱 요리 소개</div>
-        <div className="detail">{data.recipeIntro}</div>
-        <div className="title">🥦 재료</div>
-        <div className="ingredient">
-          {data.ingredients.map((ingreName: any, index: number) => (
-            <>
-              <li key={index}>
-                <div className="ingredients">
-                  <span className="ingreName">
-                    {ingreName[Object.keys(ingreName)[1]]}
-                  </span>
-                  <span className="ingreQuantity">
-                    {ingreName[Object.keys(ingreName)[2]]}
-                  </span>
-                </div>
-              </li>
-            </>
-          ))}
-        </div>
+        <Ingredients>
+          <div className="title">🍱 요리 소개</div>
+          <div className="detail">{data.recipeIntro}</div>
+          <div className="title">🥦 재료</div>
+          <div className="ingredient">
+            {data.ingredients.map((ingreName: any, index: number) => (
+              <>
+                <li key={index}>
+                  <div className="ingredients">
+                    <span className="ingreName">
+                      {ingreName[Object.keys(ingreName)[1]]}
+                    </span>
+                    <span className="ingreQuantity">
+                      {ingreName[Object.keys(ingreName)[2]]}
+                    </span>
+                  </div>
+                </li>
+              </>
+            ))}
+          </div>
+        </Ingredients>
         <CookStep>
           <div className="title">🍳 요리 방법</div>
-          {Object.entries(data).map((item: any, index: number) => {
-            const getCookStep = Object.values(data.cookStepContent).map(
-              (entrie, index) => {
-                return console.log(entrie, index);
-              }
-            );
-            const getCookStepImg = Object.values(data.cookStepImage).map(
-              (entrie, index) => {
-                return console.log(entrie, index);
-              }
-            );
-
-            return (
-              <li key={index}>
-                <div className="textBox">
-                  <h4>Step {index + 1}</h4>
-                  <div className="howto">{item.cookStepContent[index]}</div>
-                </div>
-                <div className="imgBox">
-                  <img src={item.cookStepImage[index]} alt="cookStepImg" />
-                </div>
-              </li>
-            );
-          })}
-
-          {/* {data.cookStepImage.map((cookStepImg: any, index: number) => (
-            <>
-              <img
-                className="cookStepImage"
-                alt="cookStepImage"
-                src={cookStepImg}
-              />
-            </>
-          ))} */}
         </CookStep>
       </TitleWrapper>
     </DetailWrapper>
@@ -169,19 +137,17 @@ const DetailWrapper = styled.section`
 
 const NumberTag = styled.div`
   width: 100%;
-  display: flex;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  display: inline;
   cursor: pointer;
 
-  span {
-    width: 85px;
+  .icon {
+    width: 20%;
     height: 40px;
     background-color: #d5d5d5;
     text-align: center;
     border-radius: 30px;
     padding: 10px 0;
-    margin-left: auto;
+    float: right;
   }
 `;
 
@@ -189,12 +155,8 @@ const TitleWrapper = styled.div`
   width: 100%;
   margin-top: 30px;
   margin-bottom: 20px;
-
-  .ingredients {
-    display: flex;
-    justify-content: space-between;
-    padding-right: 20px;
-  }
+  display: flex;
+  flex-direction: column;
 
   .edit {
     background-color: #d4f4fa;
@@ -219,6 +181,16 @@ const TitleWrapper = styled.div`
 const Title = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-top: 15px;
+`;
+
+const Ingredients = styled.div`
+  list-style: none;
+  .ingredients {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 20px;
+  }
 `;
 
 const CookStep = styled.div`
