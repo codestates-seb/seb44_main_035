@@ -1,13 +1,12 @@
 import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaShare } from "react-icons/fa";
-import { FaCommentAlt } from "react-icons/fa";
+
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../constants/constants";
 import { useEffect } from "react";
-import { LargeNumberLike } from "crypto";
 
 export interface Comments {
   recipeId: number;
@@ -150,6 +149,7 @@ const DetailWrapper = styled.section`
     display: flex;
     flex-direction: column;
     position: relative;
+    margin-bottom: 10px;
   }
 `;
 

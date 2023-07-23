@@ -2,15 +2,14 @@ import styled from "styled-components";
 import { IoSearch } from "react-icons/io5";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 
-interface Props {
-  setSearch: React.Dispatch<React.SetStateAction<void>>;
-  search: string;
-}
+// interface Props {
+//   setSearch: React.Dispatch<React.SetStateAction<void>>;
+//   search: string;
+// }
 
 function SearchBar() {
-  const { keyword } = useParams();
+  // const { keyword } = useParams();
   const navigate = useNavigate();
 
   //입력값(검색어)

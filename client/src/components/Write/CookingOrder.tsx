@@ -12,7 +12,7 @@ type OrderInput = {
 };
 const CookingOrder = () => {
   const [recipes, setRecipes] = useRecoilState(recipesStateAtom);
-  const [cookStepImage, setCookStepImage] = useState<File[]>([]);
+  const [cookStepImage, _setCookStepImage] = useState<File[]>([]);
   const [orderInputs, setOrderInputs] = useState<OrderInput[]>([
     {
       orderNumber: 1,

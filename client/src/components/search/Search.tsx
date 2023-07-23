@@ -3,7 +3,6 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import { BASE_URL } from "../../constants/constants";
 
 export interface RecipeList {
@@ -14,7 +13,7 @@ export interface RecipeList {
 }
 
 function Search() {
-  const { keyword } = useParams();
+  // const { keyword } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   //검색어

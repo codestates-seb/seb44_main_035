@@ -3,10 +3,20 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+const Container = styled.main`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(241, 241, 241, 0.5);
+`;
+
 const NavBarContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
-  position: fixed;
+  position: absolute;
+  max-width: 420px;
   bottom: 0;
   width: 100%;
   height: 70px;
@@ -27,27 +37,29 @@ const BottomNavBar = () => {
   const [isLogin, _setIsLogin] = useState(false);
 
   return (
-    <NavBarContainer>
-      <NavButton onClick={() => navigate("/recipes")}>
-        <FaRegListAlt />
-        <p>Recipes</p>
-      </NavButton>
-      <NavButton onClick={() => navigate("/home")}>
-        <FaHome />
-        <p>Home</p>
-      </NavButton>
-      {isLogin ? (
-        <NavButton onClick={() => navigate("/mypage")}>
-          <FaUserCircle />
-          <p>MyPage</p>
+    <Container>
+      <NavBarContainer>
+        <NavButton onClick={() => navigate("/recipes")}>
+          <FaRegListAlt />
+          <p>Recipes</p>
         </NavButton>
-      ) : (
-        <NavButton onClick={() => navigate("/login")}>
-          <FaLock />
-          <p>Login</p>
+        <NavButton onClick={() => navigate("/")}>
+          <FaHome />
+          <p>Home</p>
         </NavButton>
-      )}
-    </NavBarContainer>
+        {isLogin ? (
+          <NavButton onClick={() => navigate("/mypage")}>
+            <FaUserCircle />
+            <p>MyPage</p>
+          </NavButton>
+        ) : (
+          <NavButton onClick={() => navigate("/login")}>
+            <FaLock />
+            <p>Login</p>
+          </NavButton>
+        )}
+      </NavBarContainer>
+    </Container>
   );
 };
 

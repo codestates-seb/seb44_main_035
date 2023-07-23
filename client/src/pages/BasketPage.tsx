@@ -24,7 +24,7 @@ const BasketPage = () => {
   const [ref, inView] = useInView();
   const navigate = useNavigate();
 
-  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
+  const [ingreState, _setIngreState] = useRecoilState(ingreItemAtom);
 
   useEffect(() => {
     if (inView) {
@@ -62,11 +62,15 @@ const BasketPage = () => {
           <BackButton />
           <SearchBar />
         </Header>
+        <TitleWrapper>
+          <span className="recipesTitle"> 🍽️ 장바구니 레시피 조회 🍽️</span>
+          <CreateButton />
+        </TitleWrapper>
         <>
           <ul>
             <Wrapper>
-              {data.map((recipe) => (
-                <Component key={recipe.recipeId}>
+              {data.map((recipe: any, index: number) => (
+                <Component key={index}>
                   <li
                     onClick={() => {
                       navigate(`/recipes/${recipe.recipeId}`, {
@@ -76,8 +80,6 @@ const BasketPage = () => {
                   >
                     <img className="img" alt="img" src={recipe.recipeImage} />
                     <div className="name">{recipe.recipeName}</div>
-                    <div className="view">view: {recipe.views}</div>
-                    <div className="likes">likes: {recipe.recommendCount}</div>
                   </li>
                 </Component>
               ))}
@@ -85,7 +87,6 @@ const BasketPage = () => {
           </ul>
           <div ref={ref}></div>
         </>
-        <CreateButton />
       </AppBox>
     </Container>
   );
@@ -97,6 +98,19 @@ const Wrapper = styled.section`
   height: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+`;
+
+const TitleWrapper = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
+  .recipesTitle {
+    color: grey;
+    font-size: 20px;
+    text-align: center;
+  }
 `;
 
 const Component = styled.div`

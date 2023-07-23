@@ -8,7 +8,7 @@ import { ingreItemAtom } from "../atoms/atoms";
 import { useRecoilState } from "recoil";
 
 const MainPage = () => {
-  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
+  const [ingreState, _setIngreState] = useRecoilState(ingreItemAtom);
   const navigate = useNavigate();
   const [isOpenBasketModal, setIsOpenBasketModal] = useState(false);
   const handleBasketClick = () => {

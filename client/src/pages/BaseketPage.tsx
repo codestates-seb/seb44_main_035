@@ -9,7 +9,7 @@ export default function BaseketPage() {
   // 선택된 재료 = 장바구니에 담긴 재료 = ingreState(get) -> 보내주신 대로 가져오기
   // http://localhost:8080/recipes/select?ingredients=양파&ingredients=마늘
 
-  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
+  const [ingreState, _setIngreState] = useRecoilState(ingreItemAtom);
 
   const searchBasket = async () => {
     try {

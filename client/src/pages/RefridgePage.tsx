@@ -60,7 +60,7 @@ export default function RefridgePage() {
   const [data, setData] = useState<RecipeList[]>([]);
   const getData = async () => {
     try {
-      const url = BASE_URL + "recipes/find/main?" + queryStr;
+      const url = BASE_URL + `recipes/find/main?${queryStr}`;
       const res = await axios.get(url);
       console.log(res.data);
       setData(res.data.data);

@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import CreateButton from "./CreateButton";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants/constants";
 import { useInView } from "react-intersection-observer";
 
@@ -27,7 +27,7 @@ function RecipeCard() {
 
   const navigate = useNavigate();
 
-  const { keyword } = useParams();
+  // const { keyword } = useParams();
   const [data, setData] = useState<RecipeList[]>([]);
   const getData = async () => {
     try {

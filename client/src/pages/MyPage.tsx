@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import AddModal from "../components/MyPage/AddModal";
 import axios from "axios";
 
 const MyPage = () => {
-  const [memberId, setMemberId] = useState("");
+  const [_memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const handleRecipesClick = () => {
   //   navigate("/my-recipes");
   // };
@@ -133,11 +133,11 @@ const List = styled.div`
   color: white;
   font-size: large;
 `;
-const Label = styled.label`
-  margin: 5px 0 20px 0;
-  font-weight: bold;
-  font-size: 13px;
-  color: #0095f6;
-  display: inline-block;
-  cursor: pointer;
-`;
+// const Label = styled.label`
+//   margin: 5px 0 20px 0;
+//   font-weight: bold;
+//   font-size: 13px;
+//   color: #0095f6;
+//   display: inline-block;
+//   cursor: pointer;
+// `;

@@ -5,10 +5,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../constants/constants";
 import { Comments } from "../../types/types";
-import { CommentsPost } from "../../types/types";
-import { CommentsEdit } from "../../types/types";
-import { Ingredients } from "../../types/types";
-import { RecipeDetail } from "../../types/types";
 
 function CommentForm() {
   const { recipeId } = useParams();
@@ -44,7 +40,7 @@ function CommentForm() {
 
   // 댓글 추가
   const [newComment, setNewComment] = useState("");
-  const [commentArray, setCommentArray] = useState([] as any);
+  const [_commentArray, setCommentArray] = useState([] as any);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
@@ -55,12 +51,12 @@ function CommentForm() {
     if (!newComment) {
       alert("댓글을 입력해주세요.");
     } else {
-      const commentValue = document.getElementsByTagName("input")[0].value;
+      // const commentValue = document.getElementsByTagName("input")[0].value;
       setCommentArray((commentArray: any) => [newComment, ...commentArray]);
       setNewComment("");
-      const variables = {
-        commentContent: newComment,
-      };
+      // const variables = {
+      //   commentContent: newComment,
+      // };
       try {
         axios
           .post(BASE_URL + `recipes/comment/create/`, {
@@ -91,7 +87,7 @@ function CommentForm() {
   // );
 
   // const updateComment = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault()
+  //   e.preventDefault();
   //   if (!newComment) {
   //     alert("댓글을 입력해주세요.");
   //   } else {
@@ -105,8 +101,8 @@ function CommentForm() {
   // }
 
   //댓글 삭제
-  const deleteComment = async (commentId: any) => {
-    const url = BASE_URL + `recipes/comment/delete/${commentId}`;
+  const deleteComment = async (_commentId: any) => {
+    // const url = BASE_URL + `recipes/comment/delete/${commentId}`;
     if (window.confirm("게시글을 삭제하시겠습니까?")) {
       await axios
         .delete("url", {
@@ -116,7 +112,7 @@ function CommentForm() {
           data: {},
         })
         // .delete(BASE_URL + `recipes/comment/delete/${commentId}`)
-        .then((res) => {
+        .then((_res) => {
           alert("삭제되었습니다.");
         });
     }

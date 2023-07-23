@@ -2,8 +2,6 @@ import styled from "styled-components";
 import SearchBar from "../components/recipe/SearchBar";
 import BackButton from "../components/BackButton";
 import RecipeCard from "../components/recipe/RecipeCard";
-import CreateButton from "../components/recipe/CreateButton";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // const queryClient = new QueryClient();
 
