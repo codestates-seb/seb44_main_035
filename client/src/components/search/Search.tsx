@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants/constants";
+import CreateButton from "../recipe/CreateButton";
 
 export interface RecipeList {
   recipeId: number;
@@ -27,7 +28,7 @@ function Search() {
   useEffect(() => {
     setSearch(searchWord); //state에 검색어 저장
     axios
-      .get(BASE_URL + "recipes/find/underbar")
+      .get(BASE_URL + `recipes/findbyname?recipe-name=${searchWord}`)
       .then((res) => setSearchResult(res.data.data))
       .catch(() => {
         console.log("에러입니다");
@@ -39,26 +40,49 @@ function Search() {
       return item.recipeName.includes(search);
     });
     return (
-      <ul>
-        <Wrapper>
-          {filteredResult.map((item, index) => (
-            <div key={index}>
+      <>
+        <TitleWrapper>
+          <div className="recipesTitle">
+            {filteredResult.length > 0 ? (
+              <div> 🔎 {searchWord} 검색결과 입니다 </div>
+            ) : (
               <>
-                <Component>
-                  <li
-                    onClick={() => {
-                      navigate(`/recipes/${item.recipeId}`);
-                    }}
-                  >
-                    <img className="img" alt="img" src={item.recipeImage} />
-                    <div className="name">{item.recipeName}</div>
-                  </li>
-                </Component>
+                <div> 검색 결과가 없습니다 🙁 </div>
+                <div
+                  className="recipe-button"
+                  onClick={() => {
+                    navigate("/recipes");
+                  }}
+                >
+                  전체 레시피 보기
+                </div>
               </>
-            </div>
-          ))}
-        </Wrapper>
-      </ul>
+            )}
+          </div>
+          <CreateButton />
+        </TitleWrapper>
+
+        <ul>
+          <Wrapper>
+            {filteredResult.map((item, index) => (
+              <div key={index}>
+                <>
+                  <Component>
+                    <li
+                      onClick={() => {
+                        navigate(`/recipes/${item.recipeId}`);
+                      }}
+                    >
+                      <img className="img" alt="img" src={item.recipeImage} />
+                      <div className="name">{item.recipeName}</div>
+                    </li>
+                  </Component>
+                </>
+              </div>
+            ))}
+          </Wrapper>
+        </ul>
+      </>
     );
   }
 }
@@ -88,6 +112,30 @@ const Component = styled.div`
 
   li {
     list-style: none;
+  }
+`;
+
+const TitleWrapper = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
+  .recipesTitle {
+    color: grey;
+    font-size: 20px;
+    text-align: center;
+  }
+  .recipe-button {
+    margin-top: 10px;
+    padding: 6px 0px;
+    color: white;
+    background-color: #626883;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
   }
 `;
 
