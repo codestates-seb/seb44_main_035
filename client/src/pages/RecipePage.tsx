@@ -25,6 +25,8 @@ const Container = styled.main`
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   background-color: rgba(241, 241, 241, 0.5);

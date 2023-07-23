@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components';
-import { normalize } from 'styled-normalize';
-import { reset } from 'styled-reset';
+import { createGlobalStyle } from "styled-components";
+import { normalize } from "styled-normalize";
+import { reset } from "styled-reset";
 
 const GlobalStyles = createGlobalStyle`
   ${reset}
@@ -13,6 +13,8 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: "Helvetica", "Arial", sans-serif;
     line-height: 1.5;
+    overflow: hidden;
+  position: fixed;
   }
 `;
 

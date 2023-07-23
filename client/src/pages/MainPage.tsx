@@ -49,7 +49,8 @@ const StyledWrapper = styled.main`
   justify-content: center;
   width: 100vw;
   height: 100vh;
-
+  overflow: hidden;
+  position: fixed;
   background-color: rgba(241, 241, 241, 0.5);
 `;
 
