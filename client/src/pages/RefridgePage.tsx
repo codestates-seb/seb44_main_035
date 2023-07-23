@@ -76,9 +76,6 @@ export default function RefridgePage() {
   return (
     <>
       <Container>
-        {/* {isLoading && <p>Loading...</p>}
-      {error && <p>Something is wrong</p>}
-      {recipes && ( */}
         <AppBox>
           <Header>
             <BackButton />
