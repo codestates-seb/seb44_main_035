@@ -9,7 +9,8 @@ public enum ExceptionCode {
     RECOMMEND_NOT_FOUND(404, "Recommend not found"),
     COMMENT_NOT_FOUND(404, "해당 댓글을 찾을 수 없습니다."),
     INGREDIENT_NOT_FOUND(404,"Ingredient not found"),
-    INGREDIENT_EXISTS(409, "Ingredient exists");
+    INGREDIENT_EXISTS(409, "Ingredient exists"),
+    JWT_TOKEN_EXPIRED(404, "토큰이 만료되었습니다");
 
     @Getter
     private int status;

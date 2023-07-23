@@ -6,6 +6,7 @@ import com.server.server.domain.ingredient.mapper.IngredientMapper;
 import com.server.server.domain.ingredient.service.IngredientService;
 import com.server.server.global.response.MultiResponseDto;
 import com.server.server.global.response.SingleResponseDto;
+import com.server.server.global.security.auth.loginResolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,8 @@ private final IngredientMapper mapper;
 
 
 
-    @PostMapping("/add/{user-id}")
-    public ResponseEntity postIngredient(@PathVariable("user-id") long userId,
+    @PostMapping("/add")
+    public ResponseEntity postIngredient(@LoginMemberId Long userId,
                                          @RequestBody IngredientDto.PostUser requestBody) {    //재료 등록(유저의 재료목록에 추가)
        Ingredient ingredient = mapper.PostUserToIngredient(requestBody);
        Ingredient saveIngredient = ingredientService.addIngredient(ingredient,userId);
@@ -41,8 +42,8 @@ private final IngredientMapper mapper;
         return null;
     }
 
-    @GetMapping("/{user-id}")
-    public ResponseEntity getIngredients(@PathVariable("user-id") long userId,
+    @GetMapping
+    public ResponseEntity getIngredients(@LoginMemberId Long userId,
                                          @Positive @RequestParam(value = "page", defaultValue = "1") int page,
                                          @Positive @RequestParam(value = "size", defaultValue = "20") int size) {
         Page<Ingredient> pageIngredient = ingredientService.findUserIngredient(userId, page-1, size);
@@ -53,9 +54,9 @@ private final IngredientMapper mapper;
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{ingre-id}/{user-id}") //해당 재료 삭제
+    @DeleteMapping("/delete/{ingre-id}") //해당 재료 삭제
     public ResponseEntity deleteIngredient(@PathVariable("ingre-id") long ingredientId,
-                                           @PathVariable("user-id") long userId) {//재료 삭제
+                                           @LoginMemberId Long userId) {//재료 삭제
         ingredientService.deleteIngredient(ingredientId, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

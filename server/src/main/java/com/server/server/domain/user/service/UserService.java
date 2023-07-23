@@ -1,7 +1,6 @@
 package com.server.server.domain.user.service;
 
 
-import com.server.server.domain.user.dto.SignupForm;
 import com.server.server.domain.comment.entity.Comment;
 import com.server.server.domain.recipe.entity.Recipe;
 import com.server.server.domain.recommend.entity.Recommend;
@@ -9,92 +8,127 @@ import com.server.server.domain.user.entity.User;
 import com.server.server.domain.user.repository.UserRepository;
 import com.server.server.global.exception.BusinessLogicException;
 import com.server.server.global.exception.ExceptionCode;
-import com.server.server.global.security.config.jwt.JwtTokenProvider;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.server.server.global.security.auth.jwt.JwtTokenizer;
+import com.server.server.global.security.auth.utils.CustomAuthorityUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
-    private final BCryptPasswordEncoder encoder;
-    private final UserRepository repository;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
+    @Autowired
+    private final JwtTokenizer jwtTokenizer;
 
-    public UserService(BCryptPasswordEncoder encoder, UserRepository repository, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider) {
-        this.encoder = encoder;
-        this.repository = repository;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
-    public String login(String email, String password) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-
-        // 검증
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        // 검증된 인증 정보로 JWT 토큰 생성
-        String token = jwtTokenProvider.generateToken(authentication);
-
-        return token;
-    }
-
-    public Long signup(SignupForm signupForm) {
-        boolean check = checkEmailExists(signupForm.getEmail());
-
-        if (check) {
-            throw new IllegalArgumentException("이미 존재하는 유저입니다.");
-        }
-
-        String encPwd = encoder.encode(signupForm.getPassword());
-
-        User user = repository.save(signupForm.toEntity(encPwd));
-
-        if(user!=null) {
-            return user.getUserId();
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-    }
-
-    public boolean checkEmailExists(String email) {
-        return repository.existsUsersByEmail(email);
-    }
 
 
     public User createUser(User user) {
-        return repository.save(user);
+        verifyExistEmail(user.getEmail());
+        user.setName(verifyExistName(user.getName()));   //중복되는 이름 확인 후 중복되는 이름이 있을 시 뒤에 0~9999까지 번호를 붙여서 이름 저장
+
+        // (3) 추가: Password 암호화
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+
+        // (4) 추가: DB에 User Role 저장
+        List<String> roles = authorityUtils.createRoles(user.getEmail());
+        user.setRoles(roles);
+
+        User savedUser = userRepository.save(user);
+
+        return savedUser;
     }
+    public User createUserOAuth2(User user) {
+
+        List<String> roles = authorityUtils.createRoles(user.getEmail());
+        user.setRoles(roles);
+        String newName = verifyExistName(user.getName());
+        user.setName(newName);
+
+        return userRepository.save(user);
+    }
+
     public User findUser(long userId) {
-        Optional<User> optionalUser = repository.findById(userId);
-        return optionalUser.orElseThrow(() ->
+        return findVerifiedUser(userId);
+    }
+
+    public User findVerifiedUser(long userId) {
+        Optional<User> optionalUser =  userRepository.findById(userId);
+        User findUser = optionalUser.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-    public User saveUser(User user) {
-        return repository.save(user);
+
+        return findUser;
     }
 
-    public User generateTemporaryUserId(User user) {
-        // User 객체 생성 및 저장
-        Long newUserId = user.getUserId();
-        user.setUserId(newUserId);
+    public User findVerifiedUser(String email) {
+        Optional<User> optionalUser =  userRepository.findByEmail(email);
+        User findUser = optionalUser.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        return repository.save(user);
+        return findUser;
+    }
+
+    private void verifyExistEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent())
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsUsersByEmail(email);
+    }
+
+    private String verifyExistName(String name){     // oauth2로 로그인 했을 때 같은 이름이 있을 때 1~1000까지의 랜덤숫자를 붙임
+        String newName = name;
+        Optional<User> optionalUser = userRepository.findByName(name);
+        if(optionalUser.isPresent()){
+            Random random = new Random();
+            int randomNumber = random.nextInt(10000) + 1;
+            newName = name + randomNumber;
+        }
+
+        return newName;
+    }
+
+    public String delegateAccessToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getUserId());
+        claims.put("roles", user.getRoles());
+
+        String subject = user.getEmail();
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+
+        return accessToken;
+    }
+
+
+    public String delegateRefreshToken(User user) {
+
+
+        String subject = user.getEmail();
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
+
+        return refreshToken;
     }
 
     public Page<Recipe> findUserRecommendRecipe(long userId, Pageable pageable) {
@@ -106,6 +140,7 @@ public class UserService {
         }
         return convertToPage(recipeList, pageable);
     }
+
     public Page<Recipe> findUserRecipe(long userId, Pageable pageable) {
         User user = findUser(userId);
         List<Recipe> recipeList = new ArrayList<>();
