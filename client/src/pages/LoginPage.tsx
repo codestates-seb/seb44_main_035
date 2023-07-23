@@ -23,7 +23,7 @@ const loginInput: LoginInput = {
 const LoginPage = () => {
   const [randomId, setRandomId] = useState("");
   const [loginState, setLoginState] = useState(loginInput);
-  const url = `${import.meta.env.VITE_API_URL}/login`;
+  const url = `${import.meta.env.VITE_API_URL}/members/login`;
   const navigate = useNavigate();
   //TODO 라우트 연결
   const handleNavigate = () => {
@@ -34,8 +34,7 @@ const LoginPage = () => {
   const login = async (loginState: LoginInput) => {
     try {
       const response = await axios.post(url, loginState);
-      //   const { authorization: Authorization, refresh: Refresh } =
-      //     response.headers;
+
       const Authorization = response.headers.authorization;
       const Refresh = response.headers.refresh;
 
@@ -47,13 +46,7 @@ const LoginPage = () => {
         })
       );
 
-      sessionStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: response.data.email,
-        })
-      );
-
+      localStorage.setItem("isLoggedIn", "true");
       navigate("/");
     } catch (error) {
       alert("가입되지 않은 유저입니다.");
@@ -71,6 +64,7 @@ const LoginPage = () => {
       alert("Password를 입력해 주세요.");
       return;
     }
+    login(loginState);
   };
 
   const handleInputChange = (key: keyof LoginInput, value: string) => {
@@ -87,15 +81,15 @@ const LoginPage = () => {
         handleLogin();
       }
     };
-  const handleguest = async () => {
-    try {
-      const response = await axios.get(`${url}/random-id`); // 'url'은 랜덤 아이디를 제공하는 API 엔드포인트의 URL로 대체해야 합니다.
-      setRandomId(response.data.randomId);
-    } catch (error) {
-      console.error("랜덤 아이디 가져오기 실패:", error);
-      setRandomId("랜덤 아이디를 가져오는데 실패했습니다.");
-    }
-  };
+  // const handleguest = async () => {
+  //   try {
+  //     const response = await axios.get(`${url}/random-id`); // 'url'은 랜덤 아이디를 제공하는 API 엔드포인트의 URL로 대체해야 합니다.
+  //     setRandomId(response.data.randomId);
+  //   } catch (error) {
+  //     console.error("랜덤 아이디 가져오기 실패:", error);
+  //     setRandomId("랜덤 아이디를 가져오는데 실패했습니다.");
+  //   }
+  // };
 
   return (
     <StyledWrapper>
