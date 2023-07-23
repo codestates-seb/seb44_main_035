@@ -16,16 +16,23 @@ const SearchModal = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIngredient(event.target.value);
   };
+  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+    access: string;
+    refresh: string;
+  };
+
   /*재료 추가 부분 */
   const addIngredient = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_URL}/ingres/add/2`;
+      const url = `${import.meta.env.VITE_API_URL}/ingres/add`;
       const data = {
         ingredientName: ingredient,
       };
-      console.log(url);
+      const headers = {
+        Authorization: `Bearer ${token.access}`,
+      };
 
-      await axios.post(url, data);
+      await axios.post(url, data, { headers });
       console.log(data);
       window.location.href = "/";
       navigate("/"); //딴 거 넣으면 이동 다 됨
