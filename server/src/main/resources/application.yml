@@ -40,6 +40,10 @@ cloud:
       auto: false
     stack:
       auto: false
+mail:
+  address:
+    admin: admin@gmail.com
 jwt:
-  temporary-token-expiration-ms: 1800000
-  secret: woduddl13@@
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 120
+  refresh-token-expiration-minutes: 360
