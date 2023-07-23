@@ -66,13 +66,16 @@ function RecipeDetail() {
     return null;
   }
 
+  const cookStepData = Object.entries(data);
+  console.log(cookStepData);
+
   return (
     <DetailWrapper>
       <img className="img" alt="img" src={data.recipeImage} />
       <NumberTag>
-        <div>
+        {/* <div>
           <FaCommentAlt className="icon" />
-        </div>
+        </div> */}
         <div className="icon">
           <FaShare
             className="link"
@@ -86,7 +89,7 @@ function RecipeDetail() {
           <span
             className="edit"
             onClick={() => {
-              navigate(`/edit/${data.recipeId}`);
+              navigate(`/create-recipe/${data.recipeId}`);
             }}
           >
             수정
@@ -115,6 +118,21 @@ function RecipeDetail() {
         </Ingredients>
         <CookStep>
           <div className="title">🍳 요리 방법</div>
+          {data.cookStepContent.map((cookStep: any, index: any) => (
+            <>
+              <h2 className="step">Step {index + 1}</h2>
+              <div key={index}>
+                <div className="cookStep">{cookStep}</div>
+              </div>
+            </>
+          ))}
+          {data.cookStepImage.map((cookStepImage: any, index: any) => (
+            <>
+              <div key={index}>
+                <img className="cookStepImage" src={cookStepImage} />
+              </div>
+            </>
+          ))}
         </CookStep>
       </TitleWrapper>
     </DetailWrapper>
@@ -194,8 +212,18 @@ const Ingredients = styled.div`
 `;
 
 const CookStep = styled.div`
+  display: inline;
+  .step {
+    font-size: 18px;
+    font-weight: bold;
+    color: #626883;
+    margin-top: 4px;
+  }
   .cookStepImage {
     width: 30%;
+    margin-top: 10px;
+    display: flex;
+    float: left;
   }
 `;
 
