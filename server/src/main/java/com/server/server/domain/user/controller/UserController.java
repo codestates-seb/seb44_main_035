@@ -6,11 +6,12 @@ import com.server.server.domain.recipe.mapper.RecipeMapper;
 import com.server.server.domain.user.dto.UserDto;
 import com.server.server.domain.user.entity.User;
 import com.server.server.domain.user.mapper.UserMapper;
-import com.server.server.domain.user.service.TemporaryTokenService;
 import com.server.server.domain.user.service.UserService;
 import com.server.server.global.response.MultiResponseDto;
 import com.server.server.global.response.SingleResponseDto;
-import com.server.server.global.security.config.jwt.JwtTokenProvider;
+import com.server.server.global.security.auth.jwt.JwtTokenizer;
+import com.server.server.global.security.auth.loginResolver.LoginMemberId;
+import com.server.server.global.utils.EmailPasswordGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,12 +22,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.server.server.domain.user.dto.SignupForm;
-import org.springframework.http.ResponseEntity;
 
-import java.util.Map;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -36,39 +35,35 @@ public class UserController {
     private final UserMapper userMapper;
     private final UserService userService;
     private final RecipeMapper recipeMapper;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final TemporaryTokenService temporaryTokenService;
+    private final JwtTokenizer jwtTokenizer;
 
-    @GetMapping("/temper")
-    public ResponseEntity<String> getTemporaryToken() {
-        // 랜덤한 이메일 생성
-        String randomEmail = EmailGenerator.generateRandomEmail();
-
-        // 생성된 이메일로 유저를 생성
-        UserDto.Post requestBody = new UserDto.Post();
-        requestBody.setEmail(randomEmail);
-        User user = userService.createUser(userMapper.postToUser(requestBody));
-
-        // 임시 토큰 생성
-        String temporaryToken = temporaryTokenService.issueTemporaryToken();
-
-        return ResponseEntity.ok(temporaryToken);
-    }
-  
     @PostMapping("/register")
     public ResponseEntity postUser(@RequestBody UserDto.Post requestBody) {
         User user = userService.createUser(userMapper.postToUser(requestBody));
         return new ResponseEntity(new SingleResponseDto<>(userMapper.userToResponse(user)), HttpStatus.OK);
     }
+    @PostMapping("/logout")
+    public ResponseEntity logout(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        String jws = authorizationHeader.substring(7);    // "Bearer " 이후의 토큰 문자열 추출
 
-    @GetMapping("/{user-id}")
-    public void getUser(@PathVariable("user-id") long userId) {
-        User user = userService.findUser(userId);
-        System.out.println(user.getRecipeList());
+        jwtTokenizer.addToTokenBlackList(jws);     //블랙리스트에 jws 추가, 접근 막음
+
+        return ResponseEntity.ok().body("Successfully logged out");
     }
+    @GetMapping("/guest")
+    public ResponseEntity getGuestUser() {
+        String email = EmailPasswordGenerator.generateRandomEmail();
+        String password = EmailPasswordGenerator.generateRandomPassword();
+        User user = new User(email, password);
+        User savedUser = userService.createUser(user);
+        savedUser.setPassword(password);
 
-    @GetMapping("/find/liked/{user-id}")
-    public ResponseEntity getUserRecommend(@PathVariable("user-id") long userId,
+        return new ResponseEntity(new SingleResponseDto<>(
+                userMapper.userToGuestResponse(savedUser)), HttpStatus.OK);
+    }
+    @GetMapping("/find/liked")
+    public ResponseEntity getUserRecommend(@LoginMemberId Long userId,
                                            @RequestParam(value = "page", defaultValue = "1") int page,
                                            @RequestParam(value = "size", defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
@@ -77,8 +72,8 @@ public class UserController {
 
         return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage),HttpStatus.OK );
     }
-    @GetMapping("/find/recipe/{user-id}")
-    public ResponseEntity getUserRecipe(@PathVariable("user-id") long userId,
+    @GetMapping("/find/recipe")
+    public ResponseEntity getUserRecipe(@LoginMemberId Long userId,
                                         @RequestParam(value = "page", defaultValue = "1") int page,
                                         @RequestParam(value = "size", defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
@@ -87,8 +82,8 @@ public class UserController {
 
         return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage),HttpStatus.OK );
     }
-    @GetMapping("/find/comment/{user-id}")
-    public ResponseEntity getUserComment(@PathVariable("user-id") long userId,
+    @GetMapping("/find/comment")
+    public ResponseEntity getUserComment(@LoginMemberId Long userId,
                                          @RequestParam(value = "page", defaultValue = "1") int page,
                                          @RequestParam(value = "size", defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);

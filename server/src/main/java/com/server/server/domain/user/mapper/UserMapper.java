@@ -9,5 +9,5 @@ import org.mapstruct.ReportingPolicy;
 public interface UserMapper {
     User postToUser(UserDto.Post post);
     UserDto.Response userToResponse(User user);
-    User responseToUser(UserDto.Response response);
+    UserDto.GuestResponse userToGuestResponse(User user);
 }

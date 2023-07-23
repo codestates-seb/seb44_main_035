@@ -21,4 +21,13 @@ public class UserDto {
     public static class Response {
         private long userId;
     }
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GuestResponse {
+        private long userId;
+        private String email;
+        private String password;
+    }
 }

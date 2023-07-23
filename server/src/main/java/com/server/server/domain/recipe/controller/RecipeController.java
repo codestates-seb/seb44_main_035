@@ -8,6 +8,7 @@ import com.server.server.domain.recipe.mapper.RecipeMapper;
 import com.server.server.domain.recipe.service.RecipeService;
 import com.server.server.global.response.MultiResponseDto;
 import com.server.server.global.response.SingleResponseDto;
+import com.server.server.global.security.auth.loginResolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
@@ -30,11 +31,11 @@ public class RecipeController {
 
 
     //레시피 등록
-    @PostMapping("/create/{user-id}")
+    @PostMapping("/create")
     public ResponseEntity postRecipe(@RequestPart(value = "recipeImage", required = false) MultipartFile recipeImage,
                                      @RequestPart(value = "cookStepImage", required = false) List<MultipartFile> cookStepImage,
                                      @RequestPart(value = "recipe") RecipeDto.Post requestBody,
-                                     @PathVariable("user-id") long userId) {
+                                     @LoginMemberId Long userId) {
         List<Ingredient> ingredients = ingredientMapper.PostRecipeToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeMapper.postToRecipe(requestBody, ingredients);
         Recipe savedRecipe = recipeService.createRecipe(recipe, recipeImage, cookStepImage, userId);
@@ -43,9 +44,9 @@ public class RecipeController {
     }
 
     //레시피 추천(토글 형식)
-    @PostMapping("/recommend/{recipe-id}/{user-id}")
-    public ResponseEntity toggleRecipeRecommend(@PathVariable("recipe-id") long recipeId,
-                                                @PathVariable("user-id") long userId) {
+    @PostMapping("/recommend/{recipe-id}")
+    public ResponseEntity toggleRecipeRecommend(@LoginMemberId Long userId,
+                                                @PathVariable("recipe-id") long recipeId) {
         RecipeDto.RecommendResponse response = recipeService.toggleRecipeRecommend(userId, recipeId);
         if (response.getRecommendId() != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);

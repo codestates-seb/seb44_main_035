@@ -6,6 +6,7 @@ import com.server.server.domain.comment.mapper.CommentMapper;
 import com.server.server.domain.comment.service.CommentService;
 import com.server.server.global.response.MultiResponseDto;
 import com.server.server.global.response.SingleResponseDto;
+import com.server.server.global.security.auth.loginResolver.LoginMemberId;
 import com.server.server.global.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -30,11 +31,11 @@ public class CommentController {
         this.commentMapper = commentMapper;
     }
 
-    @PostMapping("/create/{recipe-id}/{user-id}")
+    @PostMapping("/create/{recipe-id}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
                                       @PathVariable("recipe-id") long recipeId,
-                                      @PathVariable("user-id") long userId) {    //댓글 등록
+                                      @LoginMemberId Long userId) {    //댓글 등록
         Comment comment = commentMapper.commentPostToComment(post);
         Comment response = commentService.createComment(comment, recipeId, userId);
 
