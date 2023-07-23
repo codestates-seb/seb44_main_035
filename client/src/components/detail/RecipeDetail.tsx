@@ -220,7 +220,7 @@ const CookStep = styled.div`
     margin-top: 4px;
   }
   .cookStepImage {
-    width: 30%;
+    width: 50%;
     margin-top: 10px;
     display: flex;
     float: left;

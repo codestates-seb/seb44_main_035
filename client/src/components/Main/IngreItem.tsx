@@ -4,6 +4,7 @@ import { FaXmark } from "react-icons/fa6";
 import styled from "styled-components";
 import { ingreItemAtom } from "../../atoms/atoms";
 import axios from "axios";
+import { BASE_URL } from "../../constants/constants";
 
 /*IngreList 에서 전달 */
 type IngreItemProps = {
@@ -45,9 +46,7 @@ const IngreItem: React.FC<IngreItemProps> = ({
       const headers = {
         "ngrok-skip-browser-warning": "true",
       };
-      const url = `${
-        import.meta.env.VITE_API_URL
-      }/ingres/delete/${ingredientId}/1`;
+      const url = BASE_URL + `ingres/delete/${ingredientId}/1`;
       await axios.delete(url, { headers });
     } catch (error) {
       console.log("Error:", error);
