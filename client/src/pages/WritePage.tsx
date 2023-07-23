@@ -60,10 +60,16 @@ const WritePage = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+    access: string;
+    refresh: string;
+  };
   const handleSaveClick = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_URL}/recipes/create/2`;
+      const headers = {
+        Authorization: `Bearer ${token.access}`,
+      };
+      const url = `${import.meta.env.VITE_API_URL}/recipes/create`;
       const formData = new FormData();
       // TODO send photo
       formData.append("recipeImage", recipes.recipeImage);
@@ -82,7 +88,7 @@ const WritePage = () => {
       const json = JSON.stringify(data);
       const blob = new Blob([json], { type: "application/json" });
       formData.append("recipe", blob);
-      const response = await axios.post(url, formData);
+      const response = await axios.post(url, formData, { headers });
       navigate(`/recipes/${response.data.data.recipeId}`); //아이디에 맞는 상세페이지 이동
     } catch (error) {
       console.log("Error:", error);
