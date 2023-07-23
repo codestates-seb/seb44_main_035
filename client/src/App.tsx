@@ -8,7 +8,7 @@ import EditPage from "./pages/EditPage";
 import Login from "./pages/Login";
 import RecipePage from "./pages/RecipePage";
 import DetailPage from "./pages/DetailPage";
-// import BottomNavBar from "./components/bottom/BottomNavBar";
+import BottomNavBar from "./components/bottom/BottomNavBar";
 import SearchPage from "./pages/SearchPage";
 import BasketPage from "./pages/BasketPage";
 
@@ -43,7 +43,7 @@ function App() {
         <Route path="/create-recipe/:recipeId" element={<EditPage />} />
         <Route path="*" element={<div>없는 페이지입니다.</div>} />
       </Routes>
-      {/* <BottomNavBar /> */}
+      <BottomNavBar />
     </>
   );
 }

@@ -15,7 +15,7 @@ const Container = styled.main`
 const NavBarContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
-  position: absolute;
+  position: fixed;
   max-width: 420px;
   bottom: 0;
   width: 100%;
