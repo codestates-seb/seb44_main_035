@@ -4,7 +4,6 @@ import { FaXmark } from "react-icons/fa6";
 import styled from "styled-components";
 import { ingreItemAtom } from "../../atoms/atoms";
 import axios from "axios";
-import { BASE_URL } from "../../constants/constants";
 
 /*IngreList 에서 전달 */
 type IngreItemProps = {

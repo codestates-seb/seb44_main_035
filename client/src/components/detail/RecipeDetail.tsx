@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FaShare } from "react-icons/fa";
-
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
@@ -36,11 +35,13 @@ export interface RecipeDetail {
 
 function RecipeDetail() {
   const navigate = useNavigate();
-  const { recipeId } = useParams();
+  const { id } = useParams();
   const [data, setData] = useState<RecipeDetail>();
   const getData = async () => {
     try {
-      const res = await axios.get(BASE_URL + `recipes/find/${recipeId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/recipes/find/${id}`
+      );
       console.log(res);
       setData(res.data.data);
     } catch (error) {
@@ -72,9 +73,6 @@ function RecipeDetail() {
     <DetailWrapper>
       <img className="img" alt="img" src={data.recipeImage} />
       <NumberTag>
-        {/* <div>
-          <FaCommentAlt className="icon" />
-        </div> */}
         <div className="icon">
           <FaShare
             className="link"
@@ -142,6 +140,7 @@ const DetailWrapper = styled.section`
   width: 100%;
   padding: 10px;
   cursor: pointer;
+  padding-bottom: 60px;
 
   .img {
     width: 100%;

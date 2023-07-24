@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { BASE_URL } from "../constants/constants";
 import { RecipeList } from "../App";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import SearchBar from "../components/recipe/SearchBar";
 import CreateButton from "../components/recipe/CreateButton";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 type ingreListType = {
   ingredientId: number;
@@ -24,14 +24,18 @@ export default function RefridgePage() {
   const [ingreList, setIngreList] = useState<ingreListType[]>([]);
 
   const navigate = useNavigate();
+  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+    access: string;
+    refresh: string;
+  };
   useEffect(() => {
     const getRefridgeIngre = async () => {
       //냉장고에 담긴 재료 조회
       try {
+        const url = `${import.meta.env.VITE_API_URL}/ingres`;
         const headers = {
-          "ngrok-skip-browser-warning": "true",
+          Authorization: `Bearer ${token.access}`,
         };
-        const url = `https://port-0-seb44-main-035-rt92alkaxb0vy.sel4.cloudtype.app/ingres/1`;
         const response = await axios.get(url, { headers });
         const data = response.data.data;
         setIngreList(() => [...data]);
@@ -47,12 +51,13 @@ export default function RefridgePage() {
   for (let data of ingreList) {
     ingredientName.push(data.ingredientName);
   }
-
   // 배열로 재료 이름 뽑힘 ex) [양파, 마늘, 당근]
+
   const queryStr = ingredientName
     .map((item: any) => `ingredients=${item}&`)
     .join("")
     .slice(0, -1);
+  // http://localhost:8080/recipes/find/main?ingredients=양파&ingredients=마늘
   // const queryStr = ingres.join("").slice(0, -1);
   // const url = BASE_URL + `recipes/find/main?${queryStr}`;
   // console.log(url);
@@ -60,7 +65,9 @@ export default function RefridgePage() {
   const [data, setData] = useState<RecipeList[]>([]);
   const getData = async () => {
     try {
-      const url = BASE_URL + `recipes/find/main?${queryStr}`;
+      const url = `${
+        import.meta.env.VITE_API_URL
+      }/recipes/find/main?${queryStr}`;
       const res = await axios.get(url);
       console.log(res.data);
       setData(res.data.data);
@@ -71,7 +78,7 @@ export default function RefridgePage() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [ingreList]);
 
   return (
     <>
@@ -111,6 +118,7 @@ export default function RefridgePage() {
           </ul>
         </AppBox>
       </Container>
+      <BottomNavBar />
     </>
   );
 }
@@ -171,7 +179,8 @@ const Component = styled.div`
 
   .img {
     width: 100%;
-    height: 100%;
+    height: 150px;
+    object-fit: cover;
     display: flex;
     flex-direction: column;
     position: relative;

@@ -3,7 +3,6 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../constants/constants";
 import CreateButton from "../recipe/CreateButton";
 
 export interface RecipeList {
@@ -28,7 +27,11 @@ function Search() {
   useEffect(() => {
     setSearch(searchWord); //state에 검색어 저장
     axios
-      .get(BASE_URL + `recipes/findbyname?recipe-name=${searchWord}`)
+      .get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/recipes/findbyname?recipe-name=${searchWord}`
+      )
       .then((res) => setSearchResult(res.data.data))
       .catch(() => {
         console.log("에러입니다");
@@ -104,7 +107,8 @@ const Component = styled.div`
 
   .img {
     width: 100%;
-    height: 100%;
+    height: 150px;
+    object-fit: cover;
     display: flex;
     flex-direction: column;
     position: relative;
