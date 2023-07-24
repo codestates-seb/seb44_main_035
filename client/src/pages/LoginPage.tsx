@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainLogo from "../components/Main/MainLogo";
 import styled from "styled-components";
 import axios from "axios";
 /* ----- 로그인, 유저 타입 -----  */
@@ -21,7 +20,6 @@ const loginInput: LoginInput = {
   password: "",
 };
 const LoginPage = () => {
-  const [randomId, setRandomId] = useState("");
   const [loginState, setLoginState] = useState(loginInput);
   const url = `${import.meta.env.VITE_API_URL}/members/login`;
   const navigate = useNavigate();
@@ -47,6 +45,7 @@ const LoginPage = () => {
       );
 
       localStorage.setItem("isLoggedIn", "true");
+      window.location.href = "/";
       navigate("/");
     } catch (error) {
       alert("가입되지 않은 유저입니다.");

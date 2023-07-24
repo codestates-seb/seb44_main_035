@@ -26,7 +26,7 @@ const SignUpPage = () => {
     });
   };
   const validateForm = () => {
-    const { email, password } = validationState;
+    const { email } = validationState;
     let errors: Validation = {
       email: "",
       password: "",
