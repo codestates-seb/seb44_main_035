@@ -39,14 +39,20 @@ const IngreItem: React.FC<IngreItemProps> = ({
     const isClicked = ingreState.includes(el);
     setClicked(isClicked);
   }, [el, ingreState]);
+  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+    access: string;
+    refresh: string;
+  };
 
   /* 삭제하는 통신 */
   const deleteIngredient = async () => {
     try {
       const headers = {
-        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token.access}`,
       };
-      const url = BASE_URL + `ingres/delete/${ingredientId}/1`;
+      const url = `${
+        import.meta.env.VITE_API_URL
+      }/ingres/delete/${ingredientId}`;
       await axios.delete(url, { headers });
     } catch (error) {
       console.log("Error:", error);
