@@ -1,16 +1,20 @@
 import styled from "styled-components";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 const MyWritePage = () => {
   return (
-    <StyledWrapper>
-      <AppBox>
-        <ListBox>
-          <Box>
-            <Image></Image>
-            <Title></Title>
-          </Box>
-        </ListBox>
-      </AppBox>
-    </StyledWrapper>
+    <>
+      <StyledWrapper>
+        <AppBox>
+          <ListBox>
+            <Box>
+              <Image></Image>
+              <Title></Title>
+            </Box>
+          </ListBox>
+        </AppBox>
+      </StyledWrapper>
+      <BottomNavBar />
+    </>
   );
 };
 export default MyWritePage;

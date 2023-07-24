@@ -3,6 +3,7 @@ import styled from "styled-components";
 // import { useNavigate } from "react-router-dom";
 import AddModal from "../components/MyPage/AddModal";
 import axios from "axios";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 const MyPage = () => {
   const [_memberId, setMemberId] = useState("");
@@ -39,10 +40,11 @@ const MyPage = () => {
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
 
   return (
-    <StyledWrapper>
-      <AppBox>
-        <ProFile>
-          {/* <form>
+    <>
+      <StyledWrapper>
+        <AppBox>
+          <ProFile>
+            {/* <form>
             {recipeImage ? (
               <>
                 <img src={recipeImage} />
@@ -61,20 +63,22 @@ const MyPage = () => {
               onChange={saveRecipeImage}
             />
           </form> */}
-          <UserPicture>{image}유저 사진</UserPicture>
-          <UserName>{name}유저 이름</UserName>
-        </ProFile>
+            <UserPicture>{image}유저 사진</UserPicture>
+            <UserName>{name}유저 이름</UserName>
+          </ProFile>
 
-        <RecipeBox>
-          <List>내가 작성한 레시피</List>
-          <List>댓글 작성한 레시피</List>
-          <List onClick={handleAddClick}>재료 추가 신청</List>
-          {isOpenAddIngredientModal && (
-            <AddModal onClose={handleCloseIngredientModal} />
-          )}
-        </RecipeBox>
-      </AppBox>
-    </StyledWrapper>
+          <RecipeBox>
+            <List>내가 작성한 레시피</List>
+            <List>댓글 작성한 레시피</List>
+            <List onClick={handleAddClick}>재료 추가 신청</List>
+            {isOpenAddIngredientModal && (
+              <AddModal onClose={handleCloseIngredientModal} />
+            )}
+          </RecipeBox>
+        </AppBox>
+      </StyledWrapper>
+      <BottomNavBar />
+    </>
   );
 };
 export default MyPage;

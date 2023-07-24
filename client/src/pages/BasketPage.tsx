@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useRecoilState } from "recoil";
 import { ingreItemAtom } from "../atoms/atoms";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 export interface RecipeList {
   recipeId: number;
@@ -39,9 +40,6 @@ const BasketPage = () => {
 
     // API 호출하여 새로운 데이터 로드
     try {
-      //   const headers = {
-      //       "ngrok-skip-browser-warning": "true",
-      //   };
       const queryString = ingreState
         .map((ingre) => `ingredients=${encodeURIComponent(ingre)}`)
         .join("&");
@@ -58,39 +56,42 @@ const BasketPage = () => {
   };
 
   return (
-    <Container>
-      <AppBox>
-        <Header>
-          <BackButton />
-          <SearchBar />
-        </Header>
-        <TitleWrapper>
-          <span className="recipesTitle"> 🍽️ 장바구니 레시피 조회 🍽️</span>
-          <CreateButton />
-        </TitleWrapper>
-        <>
-          <ul>
-            <Wrapper>
-              {data.map((recipe: any, index: number) => (
-                <Component key={index}>
-                  <li
-                    onClick={() => {
-                      navigate(`/recipes/${recipe.recipeId}`, {
-                        state: { recipe },
-                      });
-                    }}
-                  >
-                    <img className="img" alt="img" src={recipe.recipeImage} />
-                    <div className="name">{recipe.recipeName}</div>
-                  </li>
-                </Component>
-              ))}
-            </Wrapper>
-          </ul>
-          <div ref={ref}></div>
-        </>
-      </AppBox>
-    </Container>
+    <>
+      <Container>
+        <AppBox>
+          <Header>
+            <BackButton />
+            <SearchBar />
+          </Header>
+          <TitleWrapper>
+            <span className="recipesTitle"> 🍽️ 장바구니 레시피 조회 🍽️</span>
+            <CreateButton />
+          </TitleWrapper>
+          <>
+            <ul>
+              <Wrapper>
+                {data.map((recipe: any, index: number) => (
+                  <Component key={index}>
+                    <li
+                      onClick={() => {
+                        navigate(`/recipes/${recipe.recipeId}`, {
+                          state: { recipe },
+                        });
+                      }}
+                    >
+                      <img className="img" alt="img" src={recipe.recipeImage} />
+                      <div className="name">{recipe.recipeName}</div>
+                    </li>
+                  </Component>
+                ))}
+              </Wrapper>
+            </ul>
+            <div ref={ref}></div>
+          </>
+        </AppBox>
+      </Container>
+      <BottomNavBar />
+    </>
   );
 };
 export default BasketPage;
@@ -125,7 +126,8 @@ const Component = styled.div`
 
   .img {
     width: 100%;
-    height: 100%;
+    height: 150px;
+    object-fit: cover;
     display: flex;
     flex-direction: column;
     position: relative;

@@ -6,6 +6,7 @@ import BasketModal from "../components/Main/BasketModal";
 import styled from "styled-components";
 import { ingreItemAtom } from "../atoms/atoms";
 import { useRecoilState } from "recoil";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 const MainPage = () => {
   const [ingreState, _setIngreState] = useRecoilState(ingreItemAtom);
@@ -19,25 +20,28 @@ const MainPage = () => {
   };
 
   return (
-    <StyledWrapper>
-      <AppBox>
-        <Header>
-          <MainLogo />
-        </Header>
-        <Body>
-          <IngreList />
-          <ButtonBox>
-            <Button onClick={() => navigate("/refridge")}>추천 레시피</Button>
-            <Button onClick={handleBasketClick}>
-              선택 재료 <ItemCount>{ingreState.length}</ItemCount>
-            </Button>
-            {isOpenBasketModal && (
-              <BasketModal onClose={handleCloseBasketModal} />
-            )}
-          </ButtonBox>
-        </Body>
-      </AppBox>
-    </StyledWrapper>
+    <>
+      <StyledWrapper>
+        <AppBox>
+          <Header>
+            <MainLogo />
+          </Header>
+          <Body>
+            <IngreList />
+            <ButtonBox>
+              <Button onClick={() => navigate("/refridge")}>추천 레시피</Button>
+              <Button onClick={handleBasketClick}>
+                선택 재료 <ItemCount>{ingreState.length}</ItemCount>
+              </Button>
+              {isOpenBasketModal && (
+                <BasketModal onClose={handleCloseBasketModal} />
+              )}
+            </ButtonBox>
+          </Body>
+        </AppBox>
+      </StyledWrapper>
+      <BottomNavBar />
+    </>
   );
 };
 
@@ -49,6 +53,7 @@ const StyledWrapper = styled.main`
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  padding-bottom: 60px;
   overflow: hidden;
   position: fixed;
   background-color: rgba(241, 241, 241, 0.5);

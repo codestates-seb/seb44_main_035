@@ -4,6 +4,7 @@ import SearchBar from "../components/recipe/SearchBar";
 import Search from "../components/search/Search";
 // import CreateButton from "../components/recipe/CreateButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 function SearchPage() {
   const queryClient = new QueryClient();
@@ -11,17 +12,20 @@ function SearchPage() {
   // const searchWord = location.state;
 
   return (
-    <Container>
-      <AppBox>
-        <Header>
-          <BackButton />
-          <SearchBar />
-        </Header>
-        <QueryClientProvider client={queryClient}>
-          <Search />
-        </QueryClientProvider>
-      </AppBox>
-    </Container>
+    <>
+      <Container>
+        <AppBox>
+          <Header>
+            <BackButton />
+            <SearchBar />
+          </Header>
+          <QueryClientProvider client={queryClient}>
+            <Search />
+          </QueryClientProvider>
+        </AppBox>
+      </Container>
+      <BottomNavBar />
+    </>
   );
 }
 

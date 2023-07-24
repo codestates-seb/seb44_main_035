@@ -14,7 +14,7 @@ const GlobalStyles = createGlobalStyle`
     font-family: "Helvetica", "Arial", sans-serif;
     line-height: 1.5;
     overflow: hidden;
-  position: fixed;
+    position: fixed;
   }
 `;
 

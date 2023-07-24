@@ -2,22 +2,22 @@ import styled from "styled-components";
 import SearchBar from "../components/recipe/SearchBar";
 import BackButton from "../components/BackButton";
 import RecipeCard from "../components/recipe/RecipeCard";
-
-// const queryClient = new QueryClient();
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 function RecipePage() {
   return (
-    <Container>
-      <AppBox>
-        <Header>
-          <BackButton />
-          <SearchBar />
-        </Header>
-        {/* <QueryClientProvider client={queryClient}> */}
-        <RecipeCard />
-        {/* </QueryClientProvider> */}
-      </AppBox>
-    </Container>
+    <>
+      <Container>
+        <AppBox>
+          <Header>
+            <BackButton />
+            <SearchBar />
+          </Header>
+          <RecipeCard />
+        </AppBox>
+      </Container>
+      <BottomNavBar />
+    </>
   );
 }
 
@@ -30,6 +30,7 @@ const Container = styled.main`
   width: 100vw;
   height: 100vh;
   background-color: rgba(241, 241, 241, 0.5);
+  padding-bottom: 60px;
 `;
 
 const AppBox = styled.div`

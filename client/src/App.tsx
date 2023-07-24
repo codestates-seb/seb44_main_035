@@ -5,10 +5,8 @@ import WritePage from "./pages/WritePage";
 import MyPage from "./pages/MyPage";
 import MyWritePage from "./pages/MyWritePage";
 import EditPage from "./pages/EditPage";
-import Login from "./pages/Login";
 import RecipePage from "./pages/RecipePage";
 import DetailPage from "./pages/DetailPage";
-import BottomNavBar from "./components/bottom/BottomNavBar";
 import SearchPage from "./pages/SearchPage";
 import BasketPage from "./pages/BasketPage";
 import LoginPage from "./pages/LoginPage";
@@ -25,28 +23,29 @@ export interface RecipeList {
 }
 
 function App() {
-  const [data, setData] = useState([]);
+  function isLoggedIn() {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    console.log("isLoggedIn:", isLoggedIn);
+    return isLoggedIn;
+  }
 
   return (
     <>
       <Routes>
         <Route path="/" element={isLoggedIn() ? <MainPage /> : <LoginPage />} />
         <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
         <Route path="/create-recipe" element={<WritePage />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/my-writepage" element={<MyWritePage />} />
         <Route path="/create-recipe/:id" element={<EditPage />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/recipes" element={<RecipePage />} />
         <Route path="/recipes/:id" element={<DetailPage />} />
         <Route path="/basket" element={<BasketPage />} />
-        <Route
-          path="/recipes/search/:keyword"
-          // path="/recipes/search/:keyword"
-          element={<SearchPage />}
-        />
+        <Route path="/recipes/search/:keyword" element={<SearchPage />} />
+        <Route path="/refridge" element={<RefridgePage />} />
       </Routes>
-      {/* <BottomNavBar /> */}
     </>
   );
 }
