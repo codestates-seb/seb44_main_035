@@ -2,25 +2,30 @@ import styled from "styled-components";
 import BackButton from "../components/BackButton";
 import SearchBar from "../components/recipe/SearchBar";
 import Search from "../components/search/Search";
-import CreateButton from "../components/recipe/CreateButton";
+// import CreateButton from "../components/recipe/CreateButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 function SearchPage() {
   const queryClient = new QueryClient();
+  // const location = useLocation();
+  // const searchWord = location.state;
 
   return (
-    <Container>
-      <AppBox>
-        <Header>
-          <BackButton />
-          <SearchBar />
-        </Header>
-        <QueryClientProvider client={queryClient}>
-          <Search />
-        </QueryClientProvider>
-        <CreateButton />
-      </AppBox>
-    </Container>
+    <>
+      <Container>
+        <AppBox>
+          <Header>
+            <BackButton />
+            <SearchBar />
+          </Header>
+          <QueryClientProvider client={queryClient}>
+            <Search />
+          </QueryClientProvider>
+        </AppBox>
+      </Container>
+      <BottomNavBar />
+    </>
   );
 }
 
@@ -30,6 +35,8 @@ const Container = styled.main`
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  position: fixed;
   background-color: rgba(241, 241, 241, 0.5);
 `;
 

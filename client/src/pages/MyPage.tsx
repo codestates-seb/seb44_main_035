@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import AddModal from "../components/MyPage/AddModal";
 import axios from "axios";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 const MyPage = () => {
-  // const [imgFile, setImgFile] = useState("");
-  // const imgRef = useRef();
-  const [memberId, setMemberId] = useState("");
+  const [_memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const handleRecipesClick = () => {
   //   navigate("/my-recipes");
   // };
@@ -22,16 +21,7 @@ const MyPage = () => {
   const handleCloseIngredientModal = () => {
     setIsOpenAddIngredientModal(false);
   };
-  // const saveImgFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       saveImgFile(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+
   /*페이지 로드 */
   async function fetchData() {
     try {
@@ -50,10 +40,11 @@ const MyPage = () => {
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
 
   return (
-    <StyledWrapper>
-      <AppBox>
-        <ProFile>
-          {/* <form>
+    <>
+      <StyledWrapper>
+        <AppBox>
+          <ProFile>
+            {/* <form>
             {recipeImage ? (
               <>
                 <img src={recipeImage} />
@@ -72,20 +63,22 @@ const MyPage = () => {
               onChange={saveRecipeImage}
             />
           </form> */}
-          <UserPicture>{image}유저 사진</UserPicture>
-          <UserName>{name}유저 이름</UserName>
-        </ProFile>
+            <UserPicture>{image}유저 사진</UserPicture>
+            <UserName>{name}유저 이름</UserName>
+          </ProFile>
 
-        <RecipeBox>
-          <List>내가 작성한 레시피</List>
-          <List>댓글 작성한 레시피</List>
-          <List onClick={handleAddClick}>재료 추가 신청</List>
-          {isOpenAddIngredientModal && (
-            <AddModal onClose={handleCloseIngredientModal} />
-          )}
-        </RecipeBox>
-      </AppBox>
-    </StyledWrapper>
+          <RecipeBox>
+            <List>내가 작성한 레시피</List>
+            <List>댓글 작성한 레시피</List>
+            <List onClick={handleAddClick}>재료 추가 신청</List>
+            {isOpenAddIngredientModal && (
+              <AddModal onClose={handleCloseIngredientModal} />
+            )}
+          </RecipeBox>
+        </AppBox>
+      </StyledWrapper>
+      <BottomNavBar />
+    </>
   );
 };
 export default MyPage;
@@ -144,11 +137,11 @@ const List = styled.div`
   color: white;
   font-size: large;
 `;
-const Label = styled.label`
-  margin: 5px 0 20px 0;
-  font-weight: bold;
-  font-size: 13px;
-  color: #0095f6;
-  display: inline-block;
-  cursor: pointer;
-`;
+// const Label = styled.label`
+//   margin: 5px 0 20px 0;
+//   font-weight: bold;
+//   font-size: 13px;
+//   color: #0095f6;
+//   display: inline-block;
+//   cursor: pointer;
+// `;

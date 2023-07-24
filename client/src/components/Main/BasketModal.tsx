@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useRecoilState } from "recoil";
 import { ingreItemAtom } from "../../atoms/atoms";
 import styled from "styled-components";
@@ -12,7 +11,7 @@ type BasketModalProps = {
 };
 const BasketModal: React.FC<BasketModalProps> = ({ onClose }) => {
   const [isDeleteBtn, setIsDeleteBtn] = useState(true);
-  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
+  const [ingreState, _setIngreState] = useRecoilState(ingreItemAtom);
   console.log(ingreState);
   const navigate = useNavigate();
   const handleDeleteClick = () => {

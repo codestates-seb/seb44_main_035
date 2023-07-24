@@ -19,14 +19,18 @@ const IngreList = () => {
   const handleAddClick = () => {
     setIsOpenAddIngre(!isOpenAddIngre);
   };
+  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+    access: string;
+    refresh: string;
+  };
 
   useEffect(() => {
     const getList = async () => {
       try {
         const headers = {
-          "ngrok-skip-browser-warning": "true",
+          Authorization: `Bearer ${token.access}`,
         };
-        const url = `https://port-0-seb44-main-035-rt92alkaxb0vy.sel4.cloudtype.app/ingres/1`;
+        const url = `${import.meta.env.VITE_API_URL}/ingres`;
         const response = await axios.get(url, { headers });
         const data = response.data.data;
         console.log(response);

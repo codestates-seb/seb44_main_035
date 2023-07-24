@@ -1,35 +1,11 @@
-import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { MdAddAPhoto } from "react-icons/md";
 import { FaPlusCircle } from "react-icons/fa";
 import { useRecoilState } from "recoil";
 import { recipesStateAtom } from "../../atoms/atoms";
 
-type OrderInput = {
-  orderNumber: number;
-  placeholder: string;
-  imgFile: string;
-};
 const CookingOrder = () => {
   const [recipes, setRecipes] = useRecoilState(recipesStateAtom);
-  const [cookStepImage, _setCookStepImage] = useState<File[]>([]);
-  const [orderInputs, setOrderInputs] = useState<OrderInput[]>([
-    {
-      orderNumber: 1,
-      placeholder: "예) 소고기는 적당한 크기로 잘라주세요.",
-      imgFile: "",
-    },
-    {
-      orderNumber: 2,
-      placeholder: "예) 준비된 양념으로 고기를 재워 둡니다.",
-      imgFile: "",
-    },
-    {
-      orderNumber: 3,
-      placeholder: "예) 고기가 반쯤 익어갈 때 야채와 볶아요.",
-      imgFile: "",
-    },
-  ]);
 
   // TODO update images
   const updateRecipeImages = (newRecipeImage: File[]) => {
@@ -58,28 +34,18 @@ const CookingOrder = () => {
         const newCookStepImage: File[] = [...recipes.cookStepImage];
         newCookStepImage[index] = file;
         updateRecipeImages(newCookStepImage);
-
-        reader.onloadend = () => {
-          const newOrderInputs = [...orderInputs];
-          newOrderInputs[index].imgFile = reader.result as string;
-          setOrderInputs(newOrderInputs);
-        };
         reader.readAsDataURL(file);
       }
     };
   };
-  useEffect(() => {
-    console.log(cookStepImage);
-  }, [cookStepImage]);
 
   const handleAddInput = () => {
-    const newOrderNumber: number = orderInputs.length + 1;
-    const newInput: OrderInput = {
-      orderNumber: newOrderNumber,
-      placeholder: "새로운 입력 칸",
-      imgFile: "",
-    };
-    setOrderInputs([...orderInputs, newInput]);
+    const newCookStepContent = "";
+    const newCookStepContents = [
+      ...recipes.cookStepContent,
+      newCookStepContent,
+    ];
+    updateStepContent(newCookStepContents);
   };
 
   const handleChangeOrderInput = (
@@ -92,24 +58,34 @@ const CookingOrder = () => {
     updateStepContent(newCookStepContent);
   };
 
+  const maxLength = Math.max(
+    recipes.cookStepContent.length,
+    recipes.cookStepImage.length
+  );
+
   return (
     <>
       <Title>요리 순서</Title>
       <OrderContainer>
-        {orderInputs.map((input, index) => (
+        {Array.from({ length: maxLength }).map((_, index) => (
           <IngreOrder key={index}>
-            <OrderNumber>{input.orderNumber}</OrderNumber>
+            <OrderNumber>{index + 1}</OrderNumber>
             <OrderInput
-              placeholder={input.placeholder}
+              placeholder="새로운 입력 칸"
+              value={recipes.cookStepContent[index]}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 handleChangeOrderInput(event, index)
               }
             ></OrderInput>
+
             <OrderPhoto>
               <form>
-                {input.imgFile ? (
+                {recipes.cookStepImage[index] ? (
                   <>
-                    <img src={input.imgFile} />
+                    <img
+                      src={URL.createObjectURL(recipes.cookStepImage[index])}
+                      alt={`Food Image ${index}`}
+                    />
                     <ImgLabel htmlFor={`FoodImg-${index}`}>
                       이미지 변경
                     </ImgLabel>

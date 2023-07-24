@@ -2,9 +2,7 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import CreateButton from "./CreateButton";
-import { useNavigate, useParams } from "react-router-dom";
-import { BASE_URL } from "../../constants/constants";
-import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 
 export interface RecipeList {
   recipeId: number;
@@ -15,39 +13,49 @@ export interface RecipeList {
 
 function RecipeCard() {
   //무한스크롤
-
-  const { ref, inView } = useInView();
-  const loadMoreItems = async () => {};
-
-  useEffect(() => {
-    if (inView) {
-      loadMoreItems();
-    }
-  });
-
   const navigate = useNavigate();
-
-  const { keyword } = useParams();
+  // const { keyword } = useParams();
   const [data, setData] = useState<RecipeList[]>([]);
-  const getData = async () => {
-    try {
-      const res = await axios.get(BASE_URL + "recipes/find/underbar");
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-      setData(res.data.data);
-    } catch (error) {
-      console.log("에러입니다");
-    }
+  const getData = async (page: any) => {
+    const res = await axios.get(
+      `${
+        import.meta.env.VITE_API_URL
+      }/recipes/find/underbar/?page=${page}&size=20`
+    );
+    const data = await res.data.data;
+    setData((prev) => [...prev, ...data]);
+    setLoading(true);
   };
 
   useEffect(() => {
-    getData();
-  }, []);
+    getData(page);
+  }, [page]);
+
+  const loadMore = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  const pageEnd = useRef<any>();
+
+  useEffect(() => {
+    if (loading) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            loadMore();
+          }
+        },
+        { threshold: 1 }
+      );
+      observer.observe(pageEnd.current);
+    }
+  }, [loading]);
 
   return (
     <>
-      {/* {isLoading && <p>Loading...</p>}
-      {error && <p>Something is wrong</p>}
-      {recipes && ( */}
       <TitleWrapper>
         <span className="recipesTitle"> 🍽️ 전체 레시피 조회 🍽️</span>
         <CreateButton />
@@ -74,10 +82,10 @@ function RecipeCard() {
             </>
           ))}
         </RecipeWrapper>
+        <InfiniteScroll ref={pageEnd} />
       </ul>
     </>
   );
-  <div ref={ref} />;
 }
 
 const TitleWrapper = styled.section`
@@ -110,11 +118,14 @@ const Component = styled.div`
 
   .img {
     width: 100%;
-    height: 100%;
+    height: 150px;
+    object-fit: cover;
     display: flex;
     flex-direction: column;
     position: relative;
   }
 `;
+
+const InfiniteScroll = styled.div``;
 
 export default RecipeCard;

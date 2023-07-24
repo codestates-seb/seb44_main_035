@@ -1,15 +1,15 @@
-export interface Ingredient {
+export interface IngredientType {
   ingredientName: string;
   quantity: string;
 }
 
 export interface Recipes {
   recipeName: string;
-  recipeImage: string;
+  recipeImage: File;
   recipeIntro: string;
-  ingredients: Ingredient[];
+  ingredients: IngredientType[];
   cookStepContent: string[];
-  cookStepImage: string[];
+  cookStepImage: File[];
 }
 
 export interface Comments {

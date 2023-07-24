@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaPlusCircle } from "react-icons/fa";
 import { useRecoilState } from "recoil";
@@ -8,47 +7,27 @@ type IngredientType = {
   quantity: string;
 };
 const Ingredient = () => {
-  const [_recipes, setRecipes] = useRecoilState(recipesStateAtom);
-  const [ingredientName, setIngredientName] = useState([
-    { placeholder: "예) 스파게티 면" },
-    { placeholder: "예) 토마토 소스" },
-    { placeholder: "예) 양파" },
-  ]);
-  const [quantity, setQuantity] = useState([
-    { placeholder: "예) 200g" },
-    { placeholder: "예) 400ml" },
-    { placeholder: "예) 1개" },
-  ]);
-
-  const [ingredients, setIngredients] = useState<IngredientType[]>([]);
-
+  const [recipes, setRecipes] = useRecoilState(recipesStateAtom);
   const handleIngredientChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
-    const newIngredients: IngredientType[] = [...ingredients];
+    const newIngredients: IngredientType[] = [...recipes.ingredients];
     newIngredients[index] = {
       ...newIngredients[index],
       [event.target.name]: event.target.value,
     };
-    setIngredients(newIngredients);
     updateRecipeIngredient(newIngredients);
   };
 
-  useEffect(() => {
-    console.log(ingredients);
-  }, [ingredients]);
-
   const handleAddIngredient = () => {
-    const newIngredients = {
-      placeholder: "예) 재료",
+    const newIngredient = {
+      ingredientName: "",
+      quantity: "",
     };
-
-    const newQuantity = {
-      placeholder: "예) 계량",
-    };
-    setIngredientName([...ingredientName, newIngredients]);
-    setQuantity([...quantity, newQuantity]);
+    const newIngredients = [...recipes.ingredients, newIngredient];
+    updateRecipeIngredient(newIngredients);
+    console.log(recipes.ingredients);
   };
 
   // TODO update ingredient
@@ -64,23 +43,25 @@ const Ingredient = () => {
       <Title>재료</Title>
       <GridContainer>
         <div>
-          {ingredientName.map((input, index) => (
+          {recipes.ingredients.map((ingredient, index) => (
             <Input
               key={index}
               type="text"
               name={`ingredientName`}
-              placeholder={input.placeholder}
+              value={ingredient.ingredientName}
+              placeholder={"예) 재료"}
               onChange={(event) => handleIngredientChange(event, index)}
             />
           ))}
         </div>
         <div>
-          {quantity.map((input, index) => (
+          {recipes.ingredients.map((ingredient, index) => (
             <Input
               key={index}
               type="text"
               name={`quantity`}
-              placeholder={input.placeholder}
+              value={ingredient.quantity}
+              placeholder={"예) 계량"}
               onChange={(event) => handleIngredientChange(event, index)}
             />
           ))}
