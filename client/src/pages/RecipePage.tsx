@@ -30,7 +30,6 @@ const Container = styled.main`
   width: 100vw;
   height: 100vh;
   background-color: rgba(241, 241, 241, 0.5);
-  padding-bottom: 60px;
 `;
 
 const AppBox = styled.div`
@@ -40,6 +39,7 @@ const AppBox = styled.div`
   height: 100%;
   position: relative;
   overflow-y: auto;
+  padding-bottom: 60px;
 `;
 
 const Header = styled.div`
