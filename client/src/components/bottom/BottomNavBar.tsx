@@ -1,7 +1,6 @@
-import { FaHome, FaRegListAlt, FaUserCircle, FaLock } from "react-icons/fa";
+import { FaHome, FaRegListAlt, FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 const Container = styled.main`
   display: flex;
@@ -34,7 +33,7 @@ const NavButton = styled.button`
 
 const BottomNavBar = () => {
   const navigate = useNavigate();
-  const [isLogin, _setIsLogin] = useState(false);
+  // const [isLogin, _setIsLogin] = useState(false);
 
   return (
     <Container>
@@ -47,17 +46,17 @@ const BottomNavBar = () => {
           <FaHome />
           <p>Home</p>
         </NavButton>
-        {isLogin ? (
-          <NavButton onClick={() => navigate("/mypage")}>
-            <FaUserCircle />
-            <p>MyPage</p>
-          </NavButton>
-        ) : (
+        {/* {isLogin ? ( */}
+        <NavButton onClick={() => navigate("/mypage")}>
+          <FaUserCircle />
+          <p>MyPage</p>
+        </NavButton>
+        {/* ) : (
           <NavButton onClick={() => navigate("/login")}>
             <FaLock />
             <p>Login</p>
           </NavButton>
-        )}
+        )} */}
       </NavBarContainer>
     </Container>
   );
