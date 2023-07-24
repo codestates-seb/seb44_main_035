@@ -3,7 +3,6 @@ import SearchModal from "./SearchModal";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
 import IngreItem from "./IngreItem";
-import { BASE_URL } from "../../constants/constants";
 import axios from "axios";
 
 type ingreListType = {
@@ -30,7 +29,6 @@ const IngreList = () => {
       try {
         const headers = {
           Authorization: `Bearer ${token.access}`,
-          // "ngrok-skip-browser-warning": "true",
         };
         const url = `${import.meta.env.VITE_API_URL}/ingres`;
         const response = await axios.get(url, { headers });
