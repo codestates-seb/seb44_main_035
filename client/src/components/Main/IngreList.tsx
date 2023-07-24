@@ -29,7 +29,6 @@ const IngreList = () => {
       try {
         const headers = {
           Authorization: `Bearer ${token.access}`,
-          // "ngrok-skip-browser-warning": "true",
         };
         const url = `${import.meta.env.VITE_API_URL}/ingres`;
         const response = await axios.get(url, { headers });
