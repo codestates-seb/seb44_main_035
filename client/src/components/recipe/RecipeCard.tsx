@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import CreateButton from "./CreateButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../constants/constants";
 
 export interface RecipeList {
   recipeId: number;
@@ -22,7 +21,9 @@ function RecipeCard() {
 
   const getData = async (page: any) => {
     const res = await axios.get(
-      BASE_URL + `recipes/find/underbar/?page=${page}&size=20`
+      `${
+        import.meta.env.VITE_API_URL
+      }/recipes/find/underbar/?page=${page}&size=20`
     );
     const data = await res.data.data;
     setData((prev) => [...prev, ...data]);
@@ -117,7 +118,8 @@ const Component = styled.div`
 
   .img {
     width: 100%;
-    height: 100%;
+    height: 150px;
+    object-fit: cover;
     display: flex;
     flex-direction: column;
     position: relative;
