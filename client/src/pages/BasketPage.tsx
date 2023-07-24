@@ -39,9 +39,6 @@ const BasketPage = () => {
 
     // API 호출하여 새로운 데이터 로드
     try {
-      //   const headers = {
-      //       "ngrok-skip-browser-warning": "true",
-      //   };
       const queryString = ingreState
         .map((ingre) => `ingredients=${encodeURIComponent(ingre)}`)
         .join("&");
