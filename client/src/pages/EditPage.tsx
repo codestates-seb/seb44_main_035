@@ -45,15 +45,21 @@ const EditPage = () => {
       console.error("Error fetching recipe data:", error);
     }
   };
-
+  //이미지 URL에 해당하는 이미지 데이터를 요청
   const getRecipeImageData = async (imageUrl: string) => {
-    const response = await axios.get(imageUrl, { responseType: "blob" });
+    // 헤더 수정
+
+    const response = await axios.get(imageUrl, {
+      responseType: "blob",
+    });
     return new File([response.data], "update.jpg", { type: "image/jpeg" });
   };
 
   const getListRecipeImageData = async (imageUrls: string[]) => {
     const imageRequests = imageUrls.map((imageUrl) =>
-      axios.get(imageUrl, { responseType: "blob" })
+      axios.get(imageUrl, {
+        responseType: "blob",
+      })
     );
     const responses = await Promise.all(imageRequests);
     return responses.map(
@@ -112,9 +118,6 @@ const EditPage = () => {
   /* TODO 상세 페이지에서 레시피 아이디 받아서 넣기 */
   const updateRecipe = async () => {
     try {
-      const headers = {
-        Authorization: `Bearer ${token.access}`,
-      };
       const url = `${import.meta.env.VITE_API_URL}/recipes/update/${id}`;
 
       const formData = new FormData();
@@ -136,7 +139,8 @@ const EditPage = () => {
       const blob = new Blob([json], { type: "application/json" });
       formData.append("recipe", blob);
 
-      const response = await axios.patch(url, formData, { headers });
+      const response = await axios.patch(url, formData);
+      navigate(`/recipes/${id}`);
       console.log(response);
     } catch (error) {
       console.log("Error:", error);

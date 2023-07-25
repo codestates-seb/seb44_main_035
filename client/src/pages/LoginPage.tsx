@@ -20,7 +20,9 @@ const loginInput: LoginInput = {
   password: "",
 };
 const LoginPage = () => {
+
   const [loginState, setLoginState] = useState(loginInput);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const url = `${import.meta.env.VITE_API_URL}/members/login`;
   const navigate = useNavigate();
   //TODO 라우트 연결
@@ -45,6 +47,7 @@ const LoginPage = () => {
       );
 
       localStorage.setItem("isLoggedIn", "true");
+
       window.location.href = "/";
       navigate("/");
     } catch (error) {
@@ -80,15 +83,6 @@ const LoginPage = () => {
         handleLogin();
       }
     };
-  // const handleguest = async () => {
-  //   try {
-  //     const response = await axios.get(`${url}/random-id`); // 'url'은 랜덤 아이디를 제공하는 API 엔드포인트의 URL로 대체해야 합니다.
-  //     setRandomId(response.data.randomId);
-  //   } catch (error) {
-  //     console.error("랜덤 아이디 가져오기 실패:", error);
-  //     setRandomId("랜덤 아이디를 가져오는데 실패했습니다.");
-  //   }
-  // };
 
   return (
     <StyledWrapper>
