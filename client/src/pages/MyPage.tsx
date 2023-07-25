@@ -5,6 +5,7 @@ import AddModal from "../components/MyPage/AddModal";
 import axios from "axios";
 
 const MyPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
@@ -21,48 +22,39 @@ const MyPage = () => {
     setIsOpenAddIngredientModal(false);
   };
 
-  /*페이지 로드 */
-  async function fetchData() {
-    try {
-      const response = await axios.get("URL");
-      const data = response.data;
-      setMemberId(data.memberId);
-      setName(data.name);
-      setImage(data.image);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-  // 받아온 데이터를 활용하여 화면에 표시하는 로직 작성
-  useEffect(() => {
-    fetchData();
-  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+  // /*페이지 로드 */
+  // async function fetchData() {
+  //   try {
+  //     const response = await axios.get("URL");
+  //     const data = response.data;
+  //     setMemberId(data.memberId);
+  //     setName(data.name);
+  //     setImage(data.image);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // }
+  // // 받아온 데이터를 활용하여 화면에 표시하는 로직 작성
+  // useEffect(() => {
+  //   fetchData();
+  // }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+  const handleLogout = () => {
+    sessionStorage.clear();
+    localStorage.clear();
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
+  // };
 
   return (
     <StyledWrapper>
       <AppBox>
         <ProFile>
-          {/* <form>
-            {recipeImage ? (
-              <>
-                <img src={recipeImage} />
-                <ImgLabel htmlFor="FoodImg">이미지 변경</ImgLabel>
-              </>
-            ) : (
-              <ImgLabel htmlFor="FoodImg">
-                <MdAddAPhoto size="45px" />
-                프로필 이미지 추가
-              </ImgLabel>
-            )}
-            <ImgInput
-              type="file"
-              accept="image/*"
-              id="FoodImg"
-              onChange={saveRecipeImage}
-            />
-          </form> */}
           <UserPicture>{image}유저 사진</UserPicture>
           <UserName>{name}유저 이름</UserName>
+          {isLoggedIn ? (
+            <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+          ) : null}
         </ProFile>
 
         <RecipeBox>
@@ -77,7 +69,23 @@ const MyPage = () => {
     </StyledWrapper>
   );
 };
+
 export default MyPage;
+const LogoutButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 40px;
+  color: #000000;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #fff;
+  &:hover {
+    background-color: rgba(98, 104, 131, 1);
+    border-radius: 10px;
+  }
+`;
 const StyledWrapper = styled.main`
   display: flex;
   align-items: center;
