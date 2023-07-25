@@ -1,120 +1,168 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-
-interface Comment {
-  id: number;
-  content: string;
-}
-
-export interface CommentList {
-  id: number;
-  name: string;
-  content: string;
-  date: string;
-}
+import { BASE_URL } from "../../constants/constants";
+import { Comments } from "../../types/types";
 
 function CommentForm() {
-  const [comments, setComments] = useState<CommentList[]>([]);
-  //새로 입력하는 댓글
-  const [newComment, setNewComment] = useState<string>("");
-  const [editComment, setEditComment] = useState<CommentList | null>(null);
+  const { recipeId } = useParams();
+
+  //데이터 불러오기
+  // let data;
+  // axios.get(BASE_URL + `recipes/find/${recipeId}`).then(function (res) {
+  //   data = [...res.data];
+  //   console.log(data);
+  // });
+
+  // const userId = data.data.comments.userId;
+  // const commentId = data.data.comments.commentId;
+  // console.log(userId);
+  // console.log(commentId);
+
+  //댓글 조회
+  //기존 댓글 불러오기
+  const [comments, setComments] = useState<Comments[]>([]);
+  const getComments = async () => {
+    try {
+      const res = await axios.get(BASE_URL + `recipes/find/${recipeId}`);
+      console.log(res);
+      setComments(res.data.data.comments);
+    } catch (error) {
+      console.log("에러입니다");
+    }
+  };
 
   useEffect(() => {
-    axios.get("http://localhost:5173/moks/comment.json").then((res) =>
-      //   {
-      //     console.log(res.data);}
-      setComments(res.data)
-    );
+    getComments();
   }, []);
 
-  const addComment = () => {
-    if (newComment !== "") {
-      const comment: CommentList = {
-        id: Date.now(),
-        name: "신영",
-        content: newComment,
-        date: "2020-10-10",
-      };
-      setComments([...comments, comment]);
-      setNewComment("");
-    }
-  };
+  // 댓글 추가
+  const [newComment, setNewComment] = useState("");
+  const [_commentArray, setCommentArray] = useState([] as any);
 
-  const editExistingComment = (comment: CommentList) => {
-    setEditComment(comment);
-    setNewComment(comment.content);
-  };
-
-  const updateComment = () => {
-    if (editComment && newComment !== "") {
-      const updatedComments = comments.map((comment) => {
-        if (comment.id === editComment.id) {
-          return {
-            ...comment,
-            content: newComment,
-          };
-        }
-        return comment;
-      });
-      setComments(updatedComments);
-      setNewComment("");
-      setEditComment(null);
-    }
-  };
-
-  const deleteComment = (comment: CommentList) => {
-    const filteredComments = comments.filter(
-      (existingComment) => existingComment.id !== comment.id
-    );
-    setComments(filteredComments);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editComment) {
-      updateComment();
-    } else {
-      addComment();
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!newComment) {
+      alert("댓글을 입력해주세요.");
+    } else {
+      // const commentValue = document.getElementsByTagName("input")[0].value;
+      setCommentArray((commentArray: any) => [newComment, ...commentArray]);
+      setNewComment("");
+      // const variables = {
+      //   commentContent: newComment,
+      // };
+      try {
+        axios
+          .post(BASE_URL + `recipes/comment/create/`, {
+            // /{recipe-id}/{user-id}
+            commentContent: newComment,
+          })
+          .then((res) => {
+            if (res.data.success) {
+              console.log(res.data.result);
+            } else {
+              alert("댓글을 저장하지 못했습니다.");
+            }
+            console.log(res.data);
+            window.location.reload();
+          });
+      } catch (error) {
+        console.log("에러입니다");
+      }
+    }
+  };
+
+  //댓글 수정
+  // 기존 댓글
+  //   const [editComment, setEditComment] = useState<CommentsEdit>({
+  //     commentId: 0,
+  //     commentContent: ''
+  //   }
+  // );
+
+  // const updateComment = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   if (!newComment) {
+  //     alert("댓글을 입력해주세요.");
+  //   } else {
+  //     if(window.confirm('게시글을 수정하시겠습니까?')) {
+  //       axios.patch(BASE_URL + `recipes/comment/update/${commentId}`, {
+  //         commentId: ,
+  //         commentContent: editComment
+  //       })
+  //     }
+  //   }
+  // }
+
+  //댓글 삭제
+  const deleteComment = async (_commentId: any) => {
+    // const url = BASE_URL + `recipes/comment/delete/${commentId}`;
+    if (window.confirm("게시글을 삭제하시겠습니까?")) {
+      await axios
+        .delete("url", {
+          headers: {
+            // Authoriztion: authorizationToken,
+          },
+          data: {},
+        })
+        // .delete(BASE_URL + `recipes/comment/delete/${commentId}`)
+        .then((_res) => {
+          alert("삭제되었습니다.");
+        });
+    }
   };
 
   return (
     <CommentWrapper>
       <section>
         <div className="content-title">댓글 목록</div>
+
         <ul>
           <div className="content">
-            {comments.map((comment) => (
-              <Contents>
-                <li key={comment.id}>
-                  <div className="comment">{comment.content}</div>
-                  <div className="name">{comment.name}</div>
-                  <div className="time">{comment.date}</div>
-                  <button onClick={() => editExistingComment(comment)}>
-                    수정
-                  </button>
-                  <button onClick={() => deleteComment(comment)}>삭제</button>
+            {comments.map((comment: any) => (
+              <ContentsWrapper>
+                <li key={comment.commentId}>
+                  <Contents>
+                    <div className="comment">{comment.commentContent}</div>
+                    <div className="time">{comment.createdAt}</div>
+                  </Contents>
+                  <ButtonContainer>
+                    <span
+                      className="editCommentButton"
+                      // onClick={updateComment}
+                    >
+                      수정
+                    </span>
+                    <span
+                      className="deleteCommentButton"
+                      onClick={deleteComment}
+                    >
+                      삭제
+                    </span>
+                  </ButtonContainer>
                 </li>
-              </Contents>
+              </ContentsWrapper>
             ))}
+            <Input>
+              <form onSubmit={onSubmit}>
+                <input
+                  className="inputForm"
+                  type="text"
+                  placeholder="댓글을 달아주세요 💬"
+                  value={newComment}
+                  onChange={onChange}
+                ></input>
+                <button className="commentButton">등록</button>
+              </form>
+            </Input>
           </div>
         </ul>
-
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={newComment}
-            onChange={handleChange}
-            placeholder="댓글을 입력하세요"
-          />
-          <button type="submit">{editComment ? "수정" : "추가"}</button>
-        </form>
       </section>
     </CommentWrapper>
   );
@@ -123,32 +171,65 @@ function CommentForm() {
 const CommentWrapper = styled.div`
   width: 100%;
   padding: 8px;
+  margin-bottom: 3px;
+
   .content-title {
     font-size: 30px;
     margin-top: 6px;
   }
-  .content {
-    margin-top: 10px;
-    padding-left: 8px;
+  .name {
+    font-size: 12px;
   }
+`;
+
+const ContentsWrapper = styled.div`
+  border-radius: 30px;
+  margin-bottom: 2px;
+  background-color: #ececec;
+  height: 90px;
+  font-size: 14px;
+`;
+
+const Contents = styled.div`
+  margin-left: 15px;
   .comment {
     margin-top: 10px;
     font-size: 18px;
   }
 
   .time {
-    font-size: 12px;
-  }
-
-  .name {
-    font-size: 12px;
+    font-size: 14px;
+    color: grey;
   }
 `;
 
-const Contents = styled.div`
-  border-radius: 30px;
-  margin-bottom: 2px;
-  background-color: #ececec;
+const ButtonContainer = styled.div`
+  margin-top: 10px;
+  margin-right: 9px;
+  text-align: right;
+  span {
+    margin-right: 3px;
+    background-color: #626883;
+    color: #f5f1e9;
+    height: 50px;
+    width: 80px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 10px;
+  }
+`;
+
+const Input = styled.div`
+  .inputForm {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 40px;
+    width: 85%;
+  }
+
+  .commentButton {
+    height: 40px;
+  }
 `;
 
 export default CommentForm;

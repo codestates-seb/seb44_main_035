@@ -1,109 +1,107 @@
-import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { useState, useCallback, useEffect, Key } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import CreateButton from "./CreateButton";
 import { useNavigate } from "react-router-dom";
-import { useInView } from "react-intersection-observer";
 
 export interface RecipeList {
-  recipe_id: number;
-  name: string;
-  view: number;
-  likes: number;
-  img: string;
+  recipeId: number;
+  recipeName: string;
+  recipeImg: string;
+  recommendCount: number;
 }
 
 function RecipeCard() {
   //무한스크롤
+  const navigate = useNavigate();
+  // const { keyword } = useParams();
   const [data, setData] = useState<RecipeList[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const apiUrl = "http://localhost:5173/moks/recipe.json";
-  const [ref, inView] = useInView();
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (inView) {
-      loadMoreItems();
-    }
-  }, [inView]);
-
-  // 데이터 로드 함수
-  const loadMoreItems = async () => {
-    // 페이지 증가
-    setCurrentPage((prevPage) => prevPage + 1);
-
-    // API 호출하여 새로운 데이터 로드
-    try {
-      const response = await axios.get(`${apiUrl}?page=${currentPage}`);
-      // const response = await axios.get(`${apiUrl}?page=${currentPage}`);
-      const newItems: RecipeList[] = response.data;
-
-      // 기존 데이터와 새로운 데이터 합치기
-      setData((prevData) => [...prevData, ...newItems]);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const getData = async (page: any) => {
+    const res = await axios.get(
+      `${
+        import.meta.env.VITE_API_URL
+      }/recipes/find/underbar/?page=${page}&size=20`
+    );
+    const data = await res.data.data;
+    setData((prev) => [...prev, ...data]);
+    setLoading(true);
   };
 
-  const navigate = useNavigate();
-  const { keyword } = useParams();
-  const {
-    isLoading,
-    error,
-    data: recipes,
-    //data를 recipes라고 해줌
-    //key 이름 아래에 데이터 보관
-    //원하는 세부 상태 별로 다양한 상태 조합해서 사용
-  } = useQuery(["recipes", keyword], async () => {
-    //데이터 가져오는 함수
-    return (
-      axios
-        .get("http://localhost:5173/moks/recipe.json")
-        // .get(`/recipes/${keyword? 'find/underbar': 'findbyname/{recipe-name} })
-        .then((res) => res.data)
-        .catch(() => {
-          console.log("에러입니다");
-        })
-    );
-  });
+  useEffect(() => {
+    getData(page);
+  }, [page]);
+
+  const loadMore = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  const pageEnd = useRef<any>();
+
+  useEffect(() => {
+    if (loading) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            loadMore();
+          }
+        },
+        { threshold: 1 }
+      );
+      observer.observe(pageEnd.current);
+    }
+  }, [loading]);
 
   return (
     <>
-      <div>Recipes</div>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Something is wrong</p>}
-      {recipes && (
-        <ul>
-          <Wrapper>
-            {data.map((recipe: any, index: Key | null | undefined) => (
-              <>
-                <Component>
-                  <li
-                    key={index}
-                    onClick={() => {
-                      navigate(`/recipes/${recipe.recipe_id}`, {
-                        state: { recipe },
-                      });
-                    }}
-                  >
-                    <img className="img" alt="img" src={recipe.img} />
-                    <div className="name">{recipe.name}</div>
-                    <div className="view">view: {recipe.view}</div>
-                    <div className="likes">likes: {recipe.likes}</div>
-                  </li>
-                </Component>
-              </>
-            ))}
-          </Wrapper>
-        </ul>
-      )}
-      <div ref={ref}></div>
+      <TitleWrapper>
+        <span className="recipesTitle"> 🍽️ 전체 레시피 조회 🍽️</span>
+        <CreateButton />
+      </TitleWrapper>
+      <ul>
+        <RecipeWrapper>
+          {data.map((recipe: any, index: number) => (
+            <>
+              <Component>
+                <li
+                  key={index}
+                  onClick={() => {
+                    navigate(`/recipes/${recipe.recipeId}`);
+                  }}
+                >
+                  <img
+                    className="img"
+                    alt="recipeImg"
+                    src={recipe.recipeImage}
+                  />
+                  <div className="name">{recipe.recipeName}</div>
+                </li>
+              </Component>
+            </>
+          ))}
+        </RecipeWrapper>
+        <InfiniteScroll ref={pageEnd} />
+      </ul>
     </>
   );
 }
 
-const Wrapper = styled.section`
+const TitleWrapper = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
+  .recipesTitle {
+    color: grey;
+    font-size: 20px;
+    text-align: center;
+  }
+`;
+
+const RecipeWrapper = styled.section`
   width: 100%;
   height: 100%;
   display: grid;
@@ -120,11 +118,14 @@ const Component = styled.div`
 
   .img {
     width: 100%;
-    height: 100%;
+    height: 150px;
+    object-fit: cover;
     display: flex;
     flex-direction: column;
     position: relative;
   }
 `;
+
+const InfiniteScroll = styled.div``;
 
 export default RecipeCard;

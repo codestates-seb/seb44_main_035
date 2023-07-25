@@ -17,13 +17,13 @@ function CreateButton() {
   );
 }
 
-const ButtonWrapper = styled.div`
+const ButtonWrapper = styled.span`
   text-align: right;
-  margin-bottom: 100px;
 
   .pencil-icon {
-    width: 5rem;
-    height: 5rem;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
     color: grey;
   }
 `;

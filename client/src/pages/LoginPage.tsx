@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainLogo from "../components/Main/MainLogo";
 import styled from "styled-components";
 import axios from "axios";
 /* ----- 로그인, 유저 타입 -----  */
@@ -21,7 +20,7 @@ const loginInput: LoginInput = {
   password: "",
 };
 const LoginPage = () => {
-  // const [randomId, setRandomId] = useState("");
+
   const [loginState, setLoginState] = useState(loginInput);
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const url = `${import.meta.env.VITE_API_URL}/members/login`;
@@ -48,7 +47,7 @@ const LoginPage = () => {
       );
 
       localStorage.setItem("isLoggedIn", "true");
-      // setIsLoggedIn(true);
+
       window.location.href = "/";
       navigate("/");
     } catch (error) {

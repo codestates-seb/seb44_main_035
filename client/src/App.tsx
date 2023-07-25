@@ -1,29 +1,28 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import RefridgePage from "./pages/RefridgePage";
 import MainPage from "./pages/MainPage";
 import WritePage from "./pages/WritePage";
 import MyPage from "./pages/MyPage";
 import MyWritePage from "./pages/MyWritePage";
-import Login from "./pages/Login";
+import EditPage from "./pages/EditPage";
 import RecipePage from "./pages/RecipePage";
 import DetailPage from "./pages/DetailPage";
-import EditPage from "./pages/EditPage";
-import BottomNavBar from "./components/bottom/BottomNavBar";
 import SearchPage from "./pages/SearchPage";
-import { RecipeProps } from "./components/detail/RecipeDetail";
-import { useState } from "react";
 import BasketPage from "./pages/BasketPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 
-interface Props {
-  // data: RecipeProps[];
-  search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
-  state: string;
+export interface RecipeList {
+  Recipes: {
+    recipe_id: number;
+    name: string;
+    view: number;
+    likes: number;
+    img: string;
+  };
 }
-function App() {
-  const [data, setData] = useState([]);
 
+function App() {
   function isLoggedIn() {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     console.log("isLoggedIn:", isLoggedIn);
@@ -45,9 +44,8 @@ function App() {
         <Route path="/recipes/:id" element={<DetailPage />} />
         <Route path="/basket" element={<BasketPage />} />
         <Route path="/recipes/search/:keyword" element={<SearchPage />} />
+        <Route path="/refridge" element={<RefridgePage />} />
       </Routes>
-
-      {/* <BottomNavBar /> */}
     </>
   );
 }

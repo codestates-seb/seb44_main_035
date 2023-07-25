@@ -7,6 +7,7 @@ import { MdAddAPhoto } from "react-icons/md";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { recipesStateAtom } from "../atoms/atoms";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 const WritePage = () => {
   const navigate = useNavigate();
@@ -96,52 +97,55 @@ const WritePage = () => {
   };
 
   return (
-    <StyledWrapper>
-      <AppBox>
-        <Title>레시피 제목</Title>
-        <TitleInput
-          type="text"
-          name="title"
-          placeholder="요리의 제목을 입력해 주세요."
-          onChange={handleRecipeNameChange}
-        ></TitleInput>
-        <PhotoUpload>
-          <form>
-            {recipeImage ? (
-              <>
-                <img src={recipeImage} />
-                <ImgLabel htmlFor="FoodImg">이미지 변경</ImgLabel>
-              </>
-            ) : (
-              <ImgLabel htmlFor="FoodImg">
-                <MdAddAPhoto size="45px" />
-                프로필 이미지 추가
-              </ImgLabel>
-            )}
-            <ImgInput
-              type="file"
-              accept="image/*"
-              id="FoodImg"
-              onChange={saveRecipeImage}
-            />
-          </form>
-        </PhotoUpload>
-        <Title>요리 소개</Title>
-        <IntroduceInput
-          type="textarea"
-          name="food-intoduce"
-          placeholder="이 레시피의 탄생 배경을 적어주세요."
-          onChange={handleContentChange}
-        ></IntroduceInput>
+    <>
+      <StyledWrapper>
+        <AppBox>
+          <Title>레시피 제목</Title>
+          <TitleInput
+            type="text"
+            name="title"
+            placeholder="요리의 제목을 입력해 주세요."
+            onChange={handleRecipeNameChange}
+          ></TitleInput>
+          <PhotoUpload>
+            <form>
+              {recipeImage ? (
+                <>
+                  <img src={recipeImage} />
+                  <ImgLabel htmlFor="FoodImg">이미지 변경</ImgLabel>
+                </>
+              ) : (
+                <ImgLabel htmlFor="FoodImg">
+                  <MdAddAPhoto size="45px" />
+                  프로필 이미지 추가
+                </ImgLabel>
+              )}
+              <ImgInput
+                type="file"
+                accept="image/*"
+                id="FoodImg"
+                onChange={saveRecipeImage}
+              />
+            </form>
+          </PhotoUpload>
+          <Title>요리 소개</Title>
+          <IntroduceInput
+            type="textarea"
+            name="food-intoduce"
+            placeholder="이 레시피의 탄생 배경을 적어주세요."
+            onChange={handleContentChange}
+          ></IntroduceInput>
 
-        <Ingredient />
-        <CookingOrder />
-        <BtnContainer>
-          <SaveBtn onClick={handleSaveClick}>저장하기</SaveBtn>
-          <CancelBtn onClick={() => navigate("/recipes")}>취소하기</CancelBtn>
-        </BtnContainer>
-      </AppBox>
-    </StyledWrapper>
+          <Ingredient />
+          <CookingOrder />
+          <BtnContainer>
+            <SaveBtn onClick={handleSaveClick}>저장하기</SaveBtn>
+            <CancelBtn onClick={() => navigate("/recipes")}>취소하기</CancelBtn>
+          </BtnContainer>
+        </AppBox>
+      </StyledWrapper>
+      <BottomNavBar />
+    </>
   );
 };
 
@@ -162,6 +166,7 @@ const AppBox = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  padding-bottom: 60px;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;

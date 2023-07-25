@@ -8,6 +8,7 @@ import CookingOrder from "../components/edit/EditCookingOrder";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { recipesStateAtom } from "../atoms/atoms";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 const EditPage = () => {
   const [recipes, setRecipes] = useRecoilState(recipesStateAtom);
@@ -147,48 +148,51 @@ const EditPage = () => {
   };
 
   return (
-    <StyledWrapper>
-      <AppBox>
-        <Title>레시피 제목</Title>
-        <TitleInput
-          type="text"
-          value={recipes.recipeName}
-          name="title"
-          placeholder="요리의 제목을 입력해 주세요."
-          onChange={handleRecipeNameChange}
-        ></TitleInput>
-        <PhotoUpload>
-          <form>
-            <>
-              <img src={URL.createObjectURL(recipes.recipeImage)} />
-              <ImgLabel htmlFor="FoodImg">이미지 변경</ImgLabel>
-            </>
-            <ImgInput
-              type="file"
-              accept="image/*"
-              id="FoodImg"
-              onChange={saveRecipeImage}
-            />
-          </form>
-        </PhotoUpload>
-        <Title>요리 소개</Title>
-        <IntroduceInput
-          type="textarea"
-          value={recipes.recipeIntro}
-          name="food-intoduce"
-          placeholder="이 레시피의 탄생 배경을 적어주세요."
-          onChange={handleContentChange}
-        ></IntroduceInput>
-        <Ingredient />
-        <CookingOrder />
-        <BtnContainer>
-          <SaveBtn onClick={updateRecipe}>저장하기</SaveBtn>
-          <CancelBtn onClick={() => navigate(`/recipes/${id}`)}>
-            취소하기
-          </CancelBtn>
-        </BtnContainer>
-      </AppBox>
-    </StyledWrapper>
+    <>
+      <StyledWrapper>
+        <AppBox>
+          <Title>레시피 제목</Title>
+          <TitleInput
+            type="text"
+            value={recipes.recipeName}
+            name="title"
+            placeholder="요리의 제목을 입력해 주세요."
+            onChange={handleRecipeNameChange}
+          ></TitleInput>
+          <PhotoUpload>
+            <form>
+              <>
+                <img src={URL.createObjectURL(recipes.recipeImage)} />
+                <ImgLabel htmlFor="FoodImg">이미지 변경</ImgLabel>
+              </>
+              <ImgInput
+                type="file"
+                accept="image/*"
+                id="FoodImg"
+                onChange={saveRecipeImage}
+              />
+            </form>
+          </PhotoUpload>
+          <Title>요리 소개</Title>
+          <IntroduceInput
+            type="textarea"
+            value={recipes.recipeIntro}
+            name="food-intoduce"
+            placeholder="이 레시피의 탄생 배경을 적어주세요."
+            onChange={handleContentChange}
+          ></IntroduceInput>
+          <Ingredient />
+          <CookingOrder />
+          <BtnContainer>
+            <SaveBtn onClick={updateRecipe}>저장하기</SaveBtn>
+            <CancelBtn onClick={() => navigate(`/recipes/${id}`)}>
+              취소하기
+            </CancelBtn>
+          </BtnContainer>
+        </AppBox>
+      </StyledWrapper>
+      <BottomNavBar />
+    </>
   );
 };
 export default EditPage;
@@ -207,6 +211,7 @@ const AppBox = styled.div`
   max-width: 420px;
   width: 100%;
   height: 100%;
+  padding-bottom: 60px;
   position: relative;
   overflow-y: scroll;
   -ms-overflow-style: none;

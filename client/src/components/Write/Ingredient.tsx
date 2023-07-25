@@ -8,7 +8,7 @@ type IngredientType = {
   quantity: string;
 };
 const Ingredient = () => {
-  const [recipes, setRecipes] = useRecoilState(recipesStateAtom);
+  const [_recipes, setRecipes] = useRecoilState(recipesStateAtom);
   const [ingredientName, setIngredientName] = useState([
     { placeholder: "예) 스파게티 면" },
     { placeholder: "예) 토마토 소스" },

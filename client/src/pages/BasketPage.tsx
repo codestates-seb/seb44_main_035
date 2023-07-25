@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useRecoilState } from "recoil";
 import { ingreItemAtom } from "../atoms/atoms";
+import BottomNavBar from "../components/bottom/BottomNavBar";
 
 export interface RecipeList {
   recipeId: number;
@@ -24,7 +25,7 @@ const BasketPage = () => {
   const [ref, inView] = useInView();
   const navigate = useNavigate();
 
-  const [ingreState, setIngreState] = useRecoilState(ingreItemAtom);
+  const [ingreState, _setIngreState] = useRecoilState(ingreItemAtom);
 
   useEffect(() => {
     if (inView) {
@@ -55,38 +56,42 @@ const BasketPage = () => {
   };
 
   return (
-    <Container>
-      <AppBox>
-        <Header>
-          <BackButton />
-          <SearchBar />
-        </Header>
-        <>
-          <ul>
-            <Wrapper>
-              {data.map((recipe) => (
-                <Component key={recipe.recipeId}>
-                  <li
-                    onClick={() => {
-                      navigate(`/recipes/${recipe.recipeId}`, {
-                        state: { recipe },
-                      });
-                    }}
-                  >
-                    <img className="img" alt="img" src={recipe.recipeImage} />
-                    <div className="name">{recipe.recipeName}</div>
-                    <div className="view">view: {recipe.views}</div>
-                    <div className="likes">likes: {recipe.recommendCount}</div>
-                  </li>
-                </Component>
-              ))}
-            </Wrapper>
-          </ul>
-          <div ref={ref}></div>
-        </>
-        <CreateButton />
-      </AppBox>
-    </Container>
+    <>
+      <Container>
+        <AppBox>
+          <Header>
+            <BackButton />
+            <SearchBar />
+          </Header>
+          <TitleWrapper>
+            <span className="recipesTitle"> 🍽️ 장바구니 레시피 조회 🍽️</span>
+            <CreateButton />
+          </TitleWrapper>
+          <>
+            <ul>
+              <Wrapper>
+                {data.map((recipe: any, index: number) => (
+                  <Component key={index}>
+                    <li
+                      onClick={() => {
+                        navigate(`/recipes/${recipe.recipeId}`, {
+                          state: { recipe },
+                        });
+                      }}
+                    >
+                      <img className="img" alt="img" src={recipe.recipeImage} />
+                      <div className="name">{recipe.recipeName}</div>
+                    </li>
+                  </Component>
+                ))}
+              </Wrapper>
+            </ul>
+            <div ref={ref}></div>
+          </>
+        </AppBox>
+      </Container>
+      <BottomNavBar />
+    </>
   );
 };
 export default BasketPage;
@@ -96,6 +101,19 @@ const Wrapper = styled.section`
   height: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+`;
+
+const TitleWrapper = styled.section`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
+  .recipesTitle {
+    color: grey;
+    font-size: 20px;
+    text-align: center;
+  }
 `;
 
 const Component = styled.div`
@@ -108,7 +126,8 @@ const Component = styled.div`
 
   .img {
     width: 100%;
-    height: 100%;
+    height: 150px;
+    object-fit: cover;
     display: flex;
     flex-direction: column;
     position: relative;
