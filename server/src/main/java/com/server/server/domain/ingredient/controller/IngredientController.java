@@ -37,11 +37,6 @@ private final IngredientMapper mapper;
         return new ResponseEntity<>(new SingleResponseDto(mapper.ingredientToResponse(saveIngredient)), HttpStatus.CREATED);
     }
 
-    @PostMapping("/request")
-    public ResponseEntity requestIngredient() {    //재료 추가 요청(마이페이지)
-        return null;
-    }
-
     @GetMapping
     public ResponseEntity getIngredients(@LoginMemberId Long userId,
                                          @Positive @RequestParam(value = "page", defaultValue = "1") int page,

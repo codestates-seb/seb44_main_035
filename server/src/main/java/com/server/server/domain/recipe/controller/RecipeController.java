@@ -145,4 +145,11 @@ public class RecipeController {
         recipeService.deleteRecipe(recipeId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+    //작성자 검증
+    @GetMapping("/verify/{recipe-id}")
+    public ResponseEntity verifyRecipeUser(@LoginMemberId Long userId,
+                                            @PathVariable("recipe-id") Long recipeId) {
+        recipeService.verifyRecipe(recipeId, userId);
+        return ResponseEntity.ok().body("작성 유저 검증을 통과하였습니다.");
+    }
 }
