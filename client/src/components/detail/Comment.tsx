@@ -3,31 +3,23 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { BASE_URL } from "../../constants/constants";
 import { Comments } from "../../types/types";
+import { CommentsEdit } from "../../types/types";
 
-function CommentForm() {
-  const { recipeId } = useParams();
+function Comment() {
+  const { id } = useParams();
 
-  //데이터 불러오기
-  // let data;
-  // axios.get(BASE_URL + `recipes/find/${recipeId}`).then(function (res) {
-  //   data = [...res.data];
-  //   console.log(data);
-  // });
-
-  // const userId = data.data.comments.userId;
-  // const commentId = data.data.comments.commentId;
-  // console.log(userId);
-  // console.log(commentId);
+  // const commentId = res.data.data.commentId
 
   //댓글 조회
   //기존 댓글 불러오기
   const [comments, setComments] = useState<Comments[]>([]);
   const getComments = async () => {
     try {
-      const res = await axios.get(BASE_URL + `recipes/find/${recipeId}`);
-      console.log(res);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/recipes/find/${id}`
+      );
+      // console.log(res.data.data);
       setComments(res.data.data.comments);
     } catch (error) {
       console.log("에러입니다");
@@ -36,85 +28,143 @@ function CommentForm() {
 
   useEffect(() => {
     getComments();
-  }, []);
+  }, [comments]);
 
   // 댓글 추가
+  // 새로 등록한 댓글
   const [newComment, setNewComment] = useState("");
-  const [_commentArray, setCommentArray] = useState([] as any);
+  // 새로 등록한 댓글이 추가된 리스트
+  const [commentList, setCommentList] = useState([] as any);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
   };
 
+  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+    access: string;
+    refresh: string;
+  };
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!newComment) {
       alert("댓글을 입력해주세요.");
     } else {
       // const commentValue = document.getElementsByTagName("input")[0].value;
-      setCommentArray((commentArray: any) => [newComment, ...commentArray]);
+      setCommentList((commentList: any) => [newComment, ...commentList]);
+      console.log(commentList);
       setNewComment("");
-      // const variables = {
-      //   commentContent: newComment,
-      // };
+
       try {
-        axios
-          .post(BASE_URL + `recipes/comment/create/`, {
-            // /{recipe-id}/{user-id}
-            commentContent: newComment,
-          })
-          .then((res) => {
-            if (res.data.success) {
-              console.log(res.data.result);
-            } else {
-              alert("댓글을 저장하지 못했습니다.");
-            }
-            console.log(res.data);
-            window.location.reload();
-          });
+        const headers = {
+          Authorization: `Bearer ${token.access}`,
+        };
+
+        const url = `${
+          import.meta.env.VITE_API_URL
+        }/recipes/comment/create/${id}`;
+
+        const data = {
+          commentContent: newComment,
+        };
+
+        await axios.post(url, data, { headers });
       } catch (error) {
-        console.log("에러입니다");
+        console.log("에러입니다", { error });
       }
     }
   };
 
-  //댓글 수정
-  // 기존 댓글
-  //   const [editComment, setEditComment] = useState<CommentsEdit>({
-  //     commentId: 0,
-  //     commentContent: ''
-  //   }
-  // );
+  // 댓글 수정
+  //댓글 수정상태 저장
+  const [editComment, setEditComment] = useState("");
 
-  // const updateComment = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-  //   if (!newComment) {
-  //     alert("댓글을 입력해주세요.");
-  //   } else {
-  //     if(window.confirm('게시글을 수정하시겠습니까?')) {
-  //       axios.patch(BASE_URL + `recipes/comment/update/${commentId}`, {
-  //         commentId: ,
-  //         commentContent: editComment
-  //       })
-  //     }
+  //댓글 수정 버튼 클릭 시
+  const handleEditComment = (commentId: number) => {};
+
+  //해당 댓글의 내용을 댓글 수정 상태에 반영
+
+  //댓글 저장(수정) 버튼 클릭 시
+  const handleSaveComment = (commentId: number) => {
+    //댓글 수정 완료 후 댓글 목록 상태 업데이트
+    const updatedComeents = comments.map;
+  };
+
+  //Request
+  //   {
+  //     "commentId": 1,
+  //     "commentContent": "맛있다냥냥"
+  // }
+
+  //Response
+  // {
+  //   "data": {
+  //     "recipeId": 1,
+  //     "userId": 21,
+  //     "commentId": 1,
+  //     "commentContent": "맛있다냥냥",
+  //     "createdAt": "2023-07-24 02:27:28",
+  //     "modifiedAt": "2023-07-24 02:29:21"
   //   }
   // }
 
+  const updateComment = async (commentId: number) => {
+    console.log(commentId);
+    // 수정 버튼을 누르면
+
+    // 입력창이 뜬다
+
+    // 다시 제출 버튼을 눌렀을 때
+    if (!newComment) {
+      alert("댓글을 입력해주세요.");
+    } else {
+      if (window.confirm("게시글을 수정하시겠습니까?")) {
+        setEditComment(editComment);
+        try {
+          const headers = {
+            Authorization: `Bearer ${token.access}`,
+          };
+
+          const url = `${
+            import.meta.env.VITE_API_URL
+          }/recipes/comment/delete/${commentId}`;
+
+          const data = { commentId: { commentId }, commentContent: newComment };
+
+          await axios.patch(url, data, { headers });
+        } catch (error) {
+          console.log("에러입니다", { error });
+        }
+      }
+    }
+  };
+
   //댓글 삭제
-  const deleteComment = async (_commentId: any) => {
-    // const url = BASE_URL + `recipes/comment/delete/${commentId}`;
+  const deleteComment = async (commentId: number) => {
+    console.log(commentId);
+
+    //  /recipes/comment/update/1
+
     if (window.confirm("게시글을 삭제하시겠습니까?")) {
-      await axios
-        .delete("url", {
-          headers: {
-            // Authoriztion: authorizationToken,
-          },
-          data: {},
-        })
-        // .delete(BASE_URL + `recipes/comment/delete/${commentId}`)
-        .then((_res) => {
-          alert("삭제되었습니다.");
-        });
+      try {
+        const headers = {
+          Authorization: `Bearer ${token.access}`,
+        };
+
+        const url = `${
+          import.meta.env.VITE_API_URL
+        }/recipes/comment/delete/${commentId}`;
+
+        await axios
+          .delete(url, { headers })
+
+          .then(() => {
+            alert("삭제되었습니다.");
+          });
+      } catch (error) {
+        console.log("에러입니다", { error });
+      }
     }
   };
 
@@ -135,13 +185,13 @@ function CommentForm() {
                   <ButtonContainer>
                     <span
                       className="editCommentButton"
-                      // onClick={updateComment}
+                      onClick={() => updateComment(comment.commentId)}
                     >
                       수정
                     </span>
                     <span
                       className="deleteCommentButton"
-                      onClick={deleteComment}
+                      onClick={() => deleteComment(comment.commentId)}
                     >
                       삭제
                     </span>
@@ -158,6 +208,7 @@ function CommentForm() {
                   value={newComment}
                   onChange={onChange}
                 ></input>
+
                 <button className="commentButton">등록</button>
               </form>
             </Input>
@@ -171,7 +222,7 @@ function CommentForm() {
 const CommentWrapper = styled.div`
   width: 100%;
   padding: 8px;
-  margin-bottom: 3px;
+  padding-bottom: 100px;
 
   .content-title {
     font-size: 30px;
@@ -207,6 +258,7 @@ const ButtonContainer = styled.div`
   margin-top: 10px;
   margin-right: 9px;
   text-align: right;
+  cursor: pointer;
   span {
     margin-right: 3px;
     background-color: #626883;
@@ -220,16 +272,26 @@ const ButtonContainer = styled.div`
 `;
 
 const Input = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  form {
+    width: 100%;
+  }
   .inputForm {
     margin-top: 20px;
-    margin-bottom: 20px;
-    height: 40px;
-    width: 85%;
+    margin-bottom: 10px;
+    height: 100px;
+    width: 100%;
   }
 
   .commentButton {
-    height: 40px;
+    height: 35px;
+    width: 15%;
+    float: right;
   }
 `;
 
-export default CommentForm;
+export default Comment;
