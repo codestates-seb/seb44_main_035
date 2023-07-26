@@ -104,17 +104,14 @@ const EditPage = () => {
       updateRecipeImage(file);
     }
   };
-  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
-    access: string;
-    refresh: string;
-  };
+  // const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+  //   access: string;
+  //   refresh: string;
+  // };
 
   /* TODO 상세 페이지에서 레시피 아이디 받아서 넣기 */
   const updateRecipe = async () => {
     try {
-      const headers = {
-        Authorization: `Bearer ${token.access}`,
-      };
       const url = `${import.meta.env.VITE_API_URL}/recipes/update/${id}`;
 
       const formData = new FormData();
@@ -136,7 +133,8 @@ const EditPage = () => {
       const blob = new Blob([json], { type: "application/json" });
       formData.append("recipe", blob);
 
-      const response = await axios.patch(url, formData, { headers });
+      const response = await axios.patch(url, formData);
+      navigate(`/recipes/${id}`);
       console.log(response);
     } catch (error) {
       console.log("Error:", error);
