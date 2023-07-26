@@ -155,9 +155,11 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
 <img src="https://github.com/codestates-seb/seb44_main_035/assets/121713161/0fd66e5d-5f40-4c83-93bb-e32f0612b878" width="800" height="400"></img>
 <br>
 
-### 서비스 플로우 차트[요약 버전] 
-[To See Full Version | Click!]()    
-<img src="" width="1000"></img>
+### 문서     
+[사용자 요구사항 정의서](https://www.notion.so/codestates/82151966b70c459aaea4b79ce5a64e32)  
+[화면 정의서](https://www.figma.com/file/hqiDIBIShFznA0OomtUZOj/%EB%83%89%EC%9E%A5%EA%B3%A0%EB%A5%BC-%EB%B6%80%ED%83%81%ED%95%B4?type=design&node-id=0%3A1&mode=design&t=mkQ38Xeeg3xqQLUk-1)  
+[ERD](https://www.erdcloud.com/d/KXpBZrofC9Zie3KsM)  
+[API 명세서](https://documenter.getpostman.com/view/26575268/2s946k4qG7)
 <br>
 
 ### 냉파고 주요 페이지 뷰
