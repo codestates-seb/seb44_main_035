@@ -42,7 +42,6 @@ function RecipeDetail() {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/recipes/find/${id}`
       );
-      console.log(res);
       setData(res.data.data);
     } catch (error) {
       console.log("에러입니다");
@@ -66,8 +65,8 @@ function RecipeDetail() {
     return null;
   }
 
-  const cookStepData = Object.entries(data);
-  console.log(cookStepData);
+  // const cookStepData = Object.entries(data);
+  // console.log(cookStepData);
 
   return (
     <DetailWrapper>
