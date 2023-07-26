@@ -110,10 +110,10 @@ const EditPage = () => {
       updateRecipeImage(file);
     }
   };
-  const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
-    access: string;
-    refresh: string;
-  };
+  // const token = JSON.parse(sessionStorage.getItem("token") || "null") as {
+  //   access: string;
+  //   refresh: string;
+  // };
 
   /* TODO 상세 페이지에서 레시피 아이디 받아서 넣기 */
   const updateRecipe = async () => {

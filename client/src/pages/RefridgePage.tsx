@@ -139,6 +139,7 @@ const AppBox = styled.div`
   height: 100%;
   position: relative;
   overflow-y: auto;
+  padding-bottom: 60px;
 `;
 
 const TitleWrapper = styled.section`
