@@ -8,6 +8,7 @@ import com.server.server.global.response.MultiResponseDto;
 import com.server.server.global.response.SingleResponseDto;
 import com.server.server.global.security.auth.loginResolver.LoginMemberId;
 import com.server.server.global.utils.UriCreator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,11 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/recipes/comment")
 public class CommentController {
-
-    private final static String COMMENT_DEFAULT_URL = "/recipes/comment";
     private final CommentService commentService;
     private final CommentMapper commentMapper;
-
-    public CommentController(CommentService commentService, CommentMapper commentMapper) {
-        this.commentService = commentService;
-        this.commentMapper = commentMapper;
-    }
 
     @PostMapping("/create/{recipe-id}")
     @ResponseStatus(HttpStatus.CREATED)
