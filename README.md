@@ -153,7 +153,7 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
 
 ### 프로젝트에서 사용한 스택  
 <br>
-<img src="" width="1000"></img>
+<img src="https://github.com/codestates-seb/seb44_main_035/assets/121713161/0fd66e5d-5f40-4c83-93bb-e32f0612b878" width="1000" height="600"></img>
 <br>
 
 ### 서비스 플로우 차트[요약 버전] 
