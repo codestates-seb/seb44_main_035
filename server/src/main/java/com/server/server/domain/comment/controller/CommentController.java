@@ -8,6 +8,7 @@ import com.server.server.global.response.MultiResponseDto;
 import com.server.server.global.response.SingleResponseDto;
 import com.server.server.global.security.auth.loginResolver.LoginMemberId;
 import com.server.server.global.utils.UriCreator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,11 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/recipes/comment")
 public class CommentController {
-
-    private final static String COMMENT_DEFAULT_URL = "/recipes/comment";
     private final CommentService commentService;
     private final CommentMapper commentMapper;
-
-    public CommentController(CommentService commentService, CommentMapper commentMapper) {
-        this.commentService = commentService;
-        this.commentMapper = commentMapper;
-    }
 
     @PostMapping("/create/{recipe-id}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -58,22 +53,10 @@ public class CommentController {
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-
-
-//    @GetMapping("/{comment-id}")
-//    public ResponseEntity getComment(@PathVariable("comment-id") @Positive long commentId) {    //댓글 조회
-//        Comment foundComment = commentService.findComment(commentId);
-//        CommentDto.Response commentToCommentResponseDto = commentMapper.commentToCommentResponseDto(foundComment);
-//        return ResponseEntity.ok(new SingleResponseDto<>(commentToCommentResponseDto));
-//    }
-
-//    @GetMapping
-//    public ResponseEntity getComments(@RequestParam @Positive int page,
-//                                      @RequestParam @Positive int size) {
-//        Page<Comment> pageComments = commentService.findComments(page-1, size);
-//        List<Comment> comments = pageComments.getContent();
-//
-//        return new ResponseEntity<>(
-//                new MultiResponseDto<>(commentMapper.commentsToCommentResponseDtos(comments),pageComments), HttpStatus.OK);
-//    }
+    @GetMapping("/verify/{comment-id}")
+    public ResponseEntity verifyCommentUser(@LoginMemberId Long userId,
+                                            @PathVariable("comment-id") Long commentId) {
+        commentService.verifyComment(commentId, userId);
+        return ResponseEntity.ok().body("작성 유저 검증을 통과하였습니다.");
+    }
 }

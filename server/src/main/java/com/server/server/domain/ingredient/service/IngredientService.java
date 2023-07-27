@@ -30,12 +30,16 @@ public class IngredientService {
     @Transactional
     public Ingredient addIngredient(Ingredient ingredient, long userId){
         Ingredient findIngredient = findVerifiedIngredient(ingredient.getIngredientName(), userId);
-        Ingredient userIngredient = new Ingredient(findIngredient.getIngredientName());
+        if (findIngredient.getIncludedRecipe() == null) {
+            findIngredient.setIncludedRecipe(true);
+        }
+        Ingredient userIngredient = new Ingredient(findIngredient.getIngredientName(), findIngredient.getIncludedRecipe());
         User user = userService.findUser(userId);
         user.addIngredient(userIngredient);
 
         return ingredientRepository.save(userIngredient);
     }
+
     public List<Ingredient> saveAll(List<Ingredient> ingredients) {
         return ingredientRepository.saveAll(ingredients);
     }
@@ -46,9 +50,6 @@ public class IngredientService {
         user.removeIngredient(ingredient);
 
         ingredientRepository.delete(ingredient);
-    }
-    public void deleteIngredient(long ingredientId) {
-        ingredientRepository.delete(findIngredient(ingredientId));
     }
 
     @Transactional
@@ -61,25 +62,18 @@ public class IngredientService {
                 new BusinessLogicException(ExceptionCode.INGREDIENT_NOT_FOUND));
     }
     public Ingredient findVerifiedIngredient(String ingredientName, long userId){
-        try {
-            List<Ingredient> ingredients = ingredientRepository.findByIngredientName(ingredientName);
+        List<Ingredient> ingredients = ingredientRepository.findByIngredientName(ingredientName);
+        if (ingredients.size() != 0) {
             Ingredient ingredient = ingredients.get(0);
             verifyExistIngredient(ingredient, userId);
             return ingredient;
-        } catch (BusinessLogicException e) {
-            throw new BusinessLogicException(ExceptionCode.INGREDIENT_EXISTS);
-        } catch (Exception e) {
-            throw new BusinessLogicException(ExceptionCode.INGREDIENT_NOT_FOUND);
+        } else {
+            Ingredient ingredient = new Ingredient(ingredientName);
+            ingredient.setIncludedRecipe(false);
+            return ingredient;
         }
     }
 
-    //    @Transactional(readOnly = true) //트랜잭션 범위는 유지 /  기능을 조회함으로써 조회속도 개선
-//    public List<IngredientDto.Response> findIngredients(){
-//
-//        return  ingredientRepository.findAll().stream()
-//                .map(IngredientDto.Response::new)
-//                .collect(Collectors.toList());
-//    }
     public void verifyExistIngredient(Ingredient ingredient, long userId) {
         User user = userService.findUser(userId);
         for (Ingredient ingre : user.getIngredientList()) {

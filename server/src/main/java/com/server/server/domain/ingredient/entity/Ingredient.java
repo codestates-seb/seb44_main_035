@@ -21,6 +21,8 @@ public class Ingredient {
     private String ingredientName;
     @Column
     private String quantity;
+    @Column
+    private Boolean includedRecipe = true;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
@@ -30,5 +32,10 @@ public class Ingredient {
 
     public Ingredient(String ingredientName) {
         this.ingredientName = ingredientName;
+    }
+
+    public Ingredient(String ingredientName, boolean includedRecipe) {
+        this.ingredientName = ingredientName;
+        this.includedRecipe = includedRecipe;
     }
 }

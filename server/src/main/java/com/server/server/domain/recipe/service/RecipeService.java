@@ -1,5 +1,6 @@
 package com.server.server.domain.recipe.service;
 
+import com.server.server.domain.comment.entity.Comment;
 import com.server.server.domain.ingredient.entity.Ingredient;
 import com.server.server.domain.ingredient.service.IngredientService;
 import com.server.server.domain.recommend.service.RecommendService;
@@ -42,8 +43,18 @@ public class RecipeService {
     private final EntityManager entityManager;
 
 
-
-    public Recipe createRecipe(Recipe recipe, MultipartFile recipeImage, List<MultipartFile> cookStepImage, long userId) {
+//    public Recipe createRecipe(Recipe recipe, MultipartFile recipeImage, List<MultipartFile> cookStepImage, long userId) {
+//       User user = userService.findUser(userId);
+//       List<Ingredient> ingredients = ingredientService.saveAll(recipe.getIngredients());
+//        for (Ingredient ingredient : recipe.getIngredients()) {
+//            ingredient.setRecipe(recipe);
+//        }
+//        recipe.setIngredients(ingredients);
+//        user.addRecipe(recipe);
+//        uploadImage(recipe, recipeImage, cookStepImage);
+//        return recipeRepository.save(recipe);
+//    }
+    public Recipe createRecipe(Recipe recipe, long userId) {
         User user = userService.findUser(userId);
         List<Ingredient> ingredients = ingredientService.saveAll(recipe.getIngredients());
         for (Ingredient ingredient : recipe.getIngredients()) {
@@ -51,7 +62,7 @@ public class RecipeService {
         }
         recipe.setIngredients(ingredients);
         user.addRecipe(recipe);
-        uploadImage(recipe, recipeImage, cookStepImage);
+
         return recipeRepository.save(recipe);
     }
 
@@ -163,6 +174,17 @@ public class RecipeService {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
         return optionalRecipe.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.RECIPE_NOT_FOUND));
+    }
+
+    public void verifyRecipe(long recipeId, long userId) {
+        Recipe recipe = findRecipe(recipeId);
+        User user = userService.findUser(userId);
+        long recipeUserId = recipe.getUser().getUserId();
+        if (!user.getRoles().contains("ADMIN")) {
+            if (recipeUserId != userId) {
+                throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_EDITING_RECIPE);
+            }
+        }
     }
 
     // 레시피 제목으로 검색

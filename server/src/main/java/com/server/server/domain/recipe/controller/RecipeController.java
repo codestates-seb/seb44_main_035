@@ -31,14 +31,23 @@ public class RecipeController {
 
 
     //레시피 등록
+//    @PostMapping("/create")
+//    public ResponseEntity postRecipe(@RequestPart(value = "recipeImage", required = false) MultipartFile recipeImage,
+//                                     @RequestPart(value = "cookStepImage", required = false) List<MultipartFile> cookStepImage,
+//                                     @RequestPart(value = "recipe") RecipeDto.Post requestBody,
+//                                     @LoginMemberId Long userId) {
+//        List<Ingredient> ingredients = ingredientMapper.PostRecipeToIngredients(requestBody.getIngredients());
+//        Recipe recipe = recipeMapper.postToRecipe(requestBody, ingredients);
+//        Recipe savedRecipe = recipeService.createRecipe(recipe, recipeImage, cookStepImage, userId);
+//
+//        return new ResponseEntity<>(new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)), HttpStatus.CREATED);
+//    }
     @PostMapping("/create")
-    public ResponseEntity postRecipe(@RequestPart(value = "recipeImage", required = false) MultipartFile recipeImage,
-                                     @RequestPart(value = "cookStepImage", required = false) List<MultipartFile> cookStepImage,
-                                     @RequestPart(value = "recipe") RecipeDto.Post requestBody,
-                                     @LoginMemberId Long userId) {
+    public ResponseEntity postRecipe(@LoginMemberId Long userId,
+                                     @RequestBody RecipeDto.Post requestBody) {
         List<Ingredient> ingredients = ingredientMapper.PostRecipeToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeMapper.postToRecipe(requestBody, ingredients);
-        Recipe savedRecipe = recipeService.createRecipe(recipe, recipeImage, cookStepImage, userId);
+        Recipe savedRecipe = recipeService.createRecipe(recipe, userId);
 
         return new ResponseEntity<>(new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)), HttpStatus.CREATED);
     }
@@ -144,5 +153,12 @@ public class RecipeController {
     public ResponseEntity deleteRecipe(@PathVariable("recipe-id") long recipeId) {
         recipeService.deleteRecipe(recipeId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    //작성자 검증
+    @GetMapping("/verify/{recipe-id}")
+    public ResponseEntity verifyRecipeUser(@LoginMemberId Long userId,
+                                            @PathVariable("recipe-id") Long recipeId) {
+        recipeService.verifyRecipe(recipeId, userId);
+        return ResponseEntity.ok().body("작성 유저 검증을 통과하였습니다.");
     }
 }

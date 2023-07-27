@@ -48,13 +48,20 @@ public class CommentService {
         return commentOptional.orElseThrow(()-> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
 
-    public Page<Comment> findComments(int page, int size) {
-        return commentRepository.findAll(PageRequest.of(page, size, Sort.by("createdAt").descending()));
-    }
-
     public void deleteComment(long commentId) {
         Comment foundComment = findComment(commentId);
 
         commentRepository.delete(foundComment);
+    }
+
+    public void verifyComment(long commentId, long userId) {
+        Comment comment = findComment(commentId);
+        User user = userService.findUser(userId);
+        long commentUserId = comment.getUser().getUserId();
+        if (!user.getRoles().contains("ADMIN")) {
+            if (commentUserId != userId) {
+                throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_EDITING_COMMENT);
+            }
+        }
     }
 }

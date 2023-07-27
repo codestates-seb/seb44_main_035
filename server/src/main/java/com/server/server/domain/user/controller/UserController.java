@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Validated
 @RequestMapping("/members")
 public class UserController {
     private final UserMapper userMapper;
@@ -38,7 +41,7 @@ public class UserController {
     private final JwtTokenizer jwtTokenizer;
 
     @PostMapping("/register")
-    public ResponseEntity postUser(@RequestBody UserDto.Post requestBody) {
+    public ResponseEntity postUser(@Valid @RequestBody UserDto.Post requestBody) {
         User user = userService.createUser(userMapper.postToUser(requestBody));
         return new ResponseEntity(new SingleResponseDto<>(userMapper.userToResponse(user)), HttpStatus.OK);
     }
@@ -91,5 +94,8 @@ public class UserController {
         List<RecipeDto.ListResponse> responseList = recipeMapper.recipesToResponseList(recipePage.getContent());
         return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage), HttpStatus.OK);
     }
+//    @GetMapping("verify/comment")
+//    public ResponseEntity verifyUserComment(@LoginMemberId Long userId,
+//                                            )
 }
 
