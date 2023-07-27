@@ -12,24 +12,7 @@ public interface IngredientMapper {
     Ingredient PostRecipeToIngredient(IngredientDto.PostRecipe requestBody);
     List<Ingredient> PostRecipeToIngredients(List<IngredientDto.PostRecipe> requestBody);
     Ingredient PostUserToIngredient(IngredientDto.PostUser requestBody);
-    default IngredientDto.Response ingredientToResponse(Ingredient ingredient) {
-        if ( ingredient == null ) {
-            return null;
-        }
-
-        IngredientDto.Response response = new IngredientDto.Response();
-
-        response.setIngredientId( ingredient.getIngredientId() );
-        response.setIngredientName( ingredient.getIngredientName() );
-        response.setQuantity( ingredient.getQuantity() );
-        if (ingredient.getIncludedRecipe() == null) {
-            response.setIncludedRecipe(true);
-        } else {
-            response.setIncludedRecipe( ingredient.getIncludedRecipe() );
-        }
-
-        return response;
-    }
+    IngredientDto.Response ingredientToResponse(Ingredient ingredient);
     List<IngredientDto.Response> ingredientsToResponses(List<Ingredient> ingredients);
 
 }
