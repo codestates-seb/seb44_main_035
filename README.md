@@ -82,7 +82,7 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
 <div markdown="1">
 <br>
 
-![badge](https://img.shields.io/static/v1?label=Github&message=baekseungyong&color=blue&style=for-the-badge&logo=github)  
+![badge](https://img.shields.io/static/v1?label=Github&message=younihi&color=blue&style=for-the-badge&logo=github)  
 
 - **Role** : Team Member  
 - **Position** : 
