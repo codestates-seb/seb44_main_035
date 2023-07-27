@@ -43,28 +43,28 @@ public class RecipeService {
     private final EntityManager entityManager;
 
 
-//    public Recipe createRecipe(Recipe recipe, MultipartFile recipeImage, List<MultipartFile> cookStepImage, long userId) {
-//       User user = userService.findUser(userId);
-//       List<Ingredient> ingredients = ingredientService.saveAll(recipe.getIngredients());
-//        for (Ingredient ingredient : recipe.getIngredients()) {
-//            ingredient.setRecipe(recipe);
-//        }
-//        recipe.setIngredients(ingredients);
-//        user.addRecipe(recipe);
-//        uploadImage(recipe, recipeImage, cookStepImage);
-//        return recipeRepository.save(recipe);
-//    }
-    public Recipe createRecipe(Recipe recipe, long userId) {
-        User user = userService.findUser(userId);
-        List<Ingredient> ingredients = ingredientService.saveAll(recipe.getIngredients());
+    public Recipe createRecipe(Recipe recipe, MultipartFile recipeImage, List<MultipartFile> cookStepImage, long userId) {
+       User user = userService.findUser(userId);
+       List<Ingredient> ingredients = ingredientService.saveAll(recipe.getIngredients());
         for (Ingredient ingredient : recipe.getIngredients()) {
             ingredient.setRecipe(recipe);
         }
         recipe.setIngredients(ingredients);
         user.addRecipe(recipe);
-
+        uploadImage(recipe, recipeImage, cookStepImage);
         return recipeRepository.save(recipe);
     }
+//    public Recipe createRecipe(Recipe recipe, long userId) {
+//        User user = userService.findUser(userId);
+//        List<Ingredient> ingredients = ingredientService.saveAll(recipe.getIngredients());
+//        for (Ingredient ingredient : recipe.getIngredients()) {
+//            ingredient.setRecipe(recipe);
+//        }
+//        recipe.setIngredients(ingredients);
+//        user.addRecipe(recipe);
+//
+//        return recipeRepository.save(recipe);
+//    }
 
     public void uploadImage(Recipe recipe, MultipartFile recipeImage, List<MultipartFile> cookStepImage) {
         String fileUrl = s3Uploader.upload(recipeImage);

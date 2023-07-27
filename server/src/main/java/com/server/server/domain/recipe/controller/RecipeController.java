@@ -31,26 +31,26 @@ public class RecipeController {
 
 
     //레시피 등록
-//    @PostMapping("/create")
-//    public ResponseEntity postRecipe(@RequestPart(value = "recipeImage", required = false) MultipartFile recipeImage,
-//                                     @RequestPart(value = "cookStepImage", required = false) List<MultipartFile> cookStepImage,
-//                                     @RequestPart(value = "recipe") RecipeDto.Post requestBody,
-//                                     @LoginMemberId Long userId) {
-//        List<Ingredient> ingredients = ingredientMapper.PostRecipeToIngredients(requestBody.getIngredients());
-//        Recipe recipe = recipeMapper.postToRecipe(requestBody, ingredients);
-//        Recipe savedRecipe = recipeService.createRecipe(recipe, recipeImage, cookStepImage, userId);
-//
-//        return new ResponseEntity<>(new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)), HttpStatus.CREATED);
-//    }
     @PostMapping("/create")
-    public ResponseEntity postRecipe(@LoginMemberId Long userId,
-                                     @RequestBody RecipeDto.Post requestBody) {
+    public ResponseEntity postRecipe(@RequestPart(value = "recipeImage", required = false) MultipartFile recipeImage,
+                                     @RequestPart(value = "cookStepImage", required = false) List<MultipartFile> cookStepImage,
+                                     @RequestPart(value = "recipe") RecipeDto.Post requestBody,
+                                     @LoginMemberId Long userId) {
         List<Ingredient> ingredients = ingredientMapper.PostRecipeToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeMapper.postToRecipe(requestBody, ingredients);
-        Recipe savedRecipe = recipeService.createRecipe(recipe, userId);
+        Recipe savedRecipe = recipeService.createRecipe(recipe, recipeImage, cookStepImage, userId);
 
         return new ResponseEntity<>(new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)), HttpStatus.CREATED);
     }
+//    @PostMapping("/create")
+//    public ResponseEntity postRecipe(@LoginMemberId Long userId,
+//                                     @RequestBody RecipeDto.Post requestBody) {
+//        List<Ingredient> ingredients = ingredientMapper.PostRecipeToIngredients(requestBody.getIngredients());
+//        Recipe recipe = recipeMapper.postToRecipe(requestBody, ingredients);
+//        Recipe savedRecipe = recipeService.createRecipe(recipe, userId);
+//
+//        return new ResponseEntity<>(new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)), HttpStatus.CREATED);
+//    }
 
     //레시피 추천(토글 형식)
     @PostMapping("/recommend/{recipe-id}")
