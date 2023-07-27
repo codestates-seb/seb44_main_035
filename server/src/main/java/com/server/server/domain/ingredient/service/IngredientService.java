@@ -30,7 +30,7 @@ public class IngredientService {
     @Transactional
     public Ingredient addIngredient(Ingredient ingredient, long userId){
         Ingredient findIngredient = findVerifiedIngredient(ingredient.getIngredientName(), userId);
-        Ingredient userIngredient = new Ingredient(findIngredient.getIngredientName(), findIngredient.isIncludedRecipe());
+        Ingredient userIngredient = new Ingredient(findIngredient.getIngredientName(), findIngredient.getIncludedRecipe());
         User user = userService.findUser(userId);
         user.addIngredient(userIngredient);
 
