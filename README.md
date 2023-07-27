@@ -45,7 +45,7 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
 <div markdown="3">
 <br>
 
-![badge](https://img.shields.io/static/v1?label=Github&message=david419kr&color=blue&style=for-the-badge&logo=github)  
+![badge](https://img.shields.io/static/v1?label=Github&message=kimyoungsik12&color=blue&style=for-the-badge&logo=github)  
 
 - **Role** : Team Leader
 - **Position** : Back-end
