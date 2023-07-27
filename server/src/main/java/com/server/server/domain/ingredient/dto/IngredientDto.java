@@ -31,6 +31,6 @@ public class IngredientDto {
         private long ingredientId;
         private String ingredientName;
         private String quantity;
-        private boolean includedRecipe;
+        private Boolean includedRecipe;
     }
 }

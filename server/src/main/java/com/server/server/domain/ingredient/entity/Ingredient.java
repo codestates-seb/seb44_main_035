@@ -22,7 +22,7 @@ public class Ingredient {
     @Column
     private String quantity;
     @Column
-    private boolean includedRecipe = true;
+    private Boolean includedRecipe = true;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
