@@ -1,26 +1,18 @@
 package com.server.server.global.s3;
 
-import com.amazonaws.SdkBaseException;
+
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -38,7 +30,7 @@ public class S3Uploader {
 
 
     public String upload(MultipartFile multipartFile) {
-        String s3FileName = UUID.randomUUID()+"";// + "-" + multipartFile.getOriginalFilename();
+        String s3FileName = UUID.randomUUID()+"";
 
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(multipartFile.getSize());
@@ -48,7 +40,6 @@ public class S3Uploader {
         } catch (IOException e) {
             log.error("Failed to upload file to S3", e);
             // 예외 처리: IOException 발생 시 로그 출력
-            // 더 이상 로그 메시지를 표시하지 않도록 설정 가능
         }
 
         return amazonS3.getUrl(bucket, s3FileName).toString();

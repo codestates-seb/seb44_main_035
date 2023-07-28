@@ -175,4 +175,8 @@ public class UserService {
 
         return new PageImpl<>(pagedRecipes, pageable, recipeList.size());
     }
+    public void deleteUser(long userId) {
+        User user = findUser(userId);
+        userRepository.delete(user);
+    }
 }

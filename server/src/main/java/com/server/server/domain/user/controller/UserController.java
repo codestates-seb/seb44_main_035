@@ -45,6 +45,7 @@ public class UserController {
         User user = userService.createUser(userMapper.postToUser(requestBody));
         return new ResponseEntity(new SingleResponseDto<>(userMapper.userToResponse(user)), HttpStatus.OK);
     }
+
     @PostMapping("/logout")
     public ResponseEntity logout(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
@@ -54,6 +55,7 @@ public class UserController {
 
         return ResponseEntity.ok().body("Successfully logged out");
     }
+
     @GetMapping("/guest")
     public ResponseEntity getGuestUser() {
         String email = EmailPasswordGenerator.generateRandomEmail();
@@ -65,6 +67,7 @@ public class UserController {
         return new ResponseEntity(new SingleResponseDto<>(
                 userMapper.userToGuestResponse(savedUser)), HttpStatus.OK);
     }
+
     @GetMapping("/find/liked")
     public ResponseEntity getUserRecommend(@LoginMemberId Long userId,
                                            @RequestParam(value = "page", defaultValue = "1") int page,
@@ -73,8 +76,9 @@ public class UserController {
         Page<Recipe> recipePage = userService.findUserRecommendRecipe(userId, pageable);
         List<RecipeDto.ListResponse> responseList = recipeMapper.recipesToResponseList(recipePage.getContent());
 
-        return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage),HttpStatus.OK );
+        return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage), HttpStatus.OK);
     }
+
     @GetMapping("/find/recipe")
     public ResponseEntity getUserRecipe(@LoginMemberId Long userId,
                                         @RequestParam(value = "page", defaultValue = "1") int page,
@@ -83,8 +87,9 @@ public class UserController {
         Page<Recipe> recipePage = userService.findUserRecipe(userId, pageable);
         List<RecipeDto.ListResponse> responseList = recipeMapper.recipesToResponseList(recipePage.getContent());
 
-        return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage),HttpStatus.OK );
+        return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage), HttpStatus.OK);
     }
+
     @GetMapping("/find/comment")
     public ResponseEntity getUserComment(@LoginMemberId Long userId,
                                          @RequestParam(value = "page", defaultValue = "1") int page,
@@ -93,6 +98,12 @@ public class UserController {
         Page<Recipe> recipePage = userService.findUserCommentRecipe(userId, pageable);
         List<RecipeDto.ListResponse> responseList = recipeMapper.recipesToResponseList(recipePage.getContent());
         return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{user-id}")
+    public ResponseEntity deleteUser(@PathVariable long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().body("삭제 완료");
     }
 //    @GetMapping("verify/comment")
 //    public ResponseEntity verifyUserComment(@LoginMemberId Long userId,
