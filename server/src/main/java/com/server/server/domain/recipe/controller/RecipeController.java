@@ -12,7 +12,6 @@ import com.server.server.global.security.auth.loginResolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +48,9 @@ public class RecipeController {
 //        Recipe recipe = recipeMapper.postToRecipe(requestBody, ingredients);
 //        Recipe savedRecipe = recipeService.createRecipe(recipe, userId);
 //
-//        return new ResponseEntity<>(new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)), HttpStatus.CREATED);
+//        return new ResponseEntity<>(
+//                new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)),
+//                HttpStatus.CREATED);
 //    }
 
     //레시피 추천(토글 형식)
@@ -80,8 +81,8 @@ public class RecipeController {
         Recipe recipe = recipeMapper.patchToRecipe(requestBody, ingredients);
         Recipe updatedRecipe = recipeService.updateRecipe(recipe, recipeImage, cookStepImage);
         return new ResponseEntity(
-                new SingleResponseDto<>(recipeMapper.recipeToResponse(updatedRecipe))
-                        ,HttpStatus.OK);
+                new SingleResponseDto<>(recipeMapper.recipeToResponse(updatedRecipe)),
+                HttpStatus.OK);
     }
 
     //레시피 상세 조회
@@ -91,8 +92,8 @@ public class RecipeController {
         recipeService.incrementViewCount(recipe);
 
         return new ResponseEntity(
-                new SingleResponseDto<>(recipeMapper.recipeToResponse(recipe))
-                        , HttpStatus.OK);
+                new SingleResponseDto<>(recipeMapper.recipeToResponse(recipe)),
+                HttpStatus.OK);
     }
 
     //레시피 제목으로 검색
@@ -142,7 +143,6 @@ public class RecipeController {
             @RequestParam(value = "size", defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("recommendCount").descending());
         Page<Recipe> recipePage = recipeService.getAllRecipes(pageable);
-
         List<RecipeDto.ListResponse> responseList = recipeMapper.recipesToResponseList(recipePage.getContent());
 
         return new ResponseEntity(new MultiResponseDto<>(responseList, recipePage),HttpStatus.OK );
@@ -152,6 +152,7 @@ public class RecipeController {
     @DeleteMapping("/delete/{recipe-id}")
     public ResponseEntity deleteRecipe(@PathVariable("recipe-id") long recipeId) {
         recipeService.deleteRecipe(recipeId);
+
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
     //작성자 검증
@@ -159,6 +160,7 @@ public class RecipeController {
     public ResponseEntity verifyRecipeUser(@LoginMemberId Long userId,
                                             @PathVariable("recipe-id") Long recipeId) {
         recipeService.verifyRecipe(recipeId, userId);
+
         return ResponseEntity.ok().body("작성 유저 검증을 통과하였습니다.");
     }
 }

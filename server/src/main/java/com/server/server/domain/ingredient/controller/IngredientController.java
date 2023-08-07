@@ -26,17 +26,18 @@ public class IngredientController {
 private final IngredientService ingredientService;
 private final IngredientMapper mapper;
 
-
-
+    //재료 등록(유저의 재료목록에 추가)
     @PostMapping("/add")
     public ResponseEntity postIngredient(@LoginMemberId Long userId,
-                                         @RequestBody IngredientDto.PostUser requestBody) {    //재료 등록(유저의 재료목록에 추가)
+                                         @RequestBody IngredientDto.PostUser requestBody) {
        Ingredient ingredient = mapper.PostUserToIngredient(requestBody);
        Ingredient saveIngredient = ingredientService.addIngredient(ingredient,userId);
 
-        return new ResponseEntity<>(new SingleResponseDto(mapper.ingredientToResponse(saveIngredient)), HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                new SingleResponseDto(mapper.ingredientToResponse(saveIngredient)),
+                HttpStatus.CREATED);
     }
-
+    //재료 목록 조회
     @GetMapping
     public ResponseEntity getIngredients(@LoginMemberId Long userId,
                                          @Positive @RequestParam(value = "page", defaultValue = "1") int page,
@@ -48,11 +49,12 @@ private final IngredientMapper mapper;
                 new MultiResponseDto<>(mapper.ingredientsToResponses(ingredientList),pageIngredient),
                 HttpStatus.OK);
     }
-
+    //재료 삭제
     @DeleteMapping("/delete/{ingre-id}") //해당 재료 삭제
     public ResponseEntity deleteIngredient(@PathVariable("ingre-id") long ingredientId,
                                            @LoginMemberId Long userId) {//재료 삭제
         ingredientService.deleteIngredient(ingredientId, userId);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

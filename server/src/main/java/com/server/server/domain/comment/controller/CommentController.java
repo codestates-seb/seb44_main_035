@@ -26,37 +26,40 @@ public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
 
+    //댓글 등록
     @PostMapping("/create/{recipe-id}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
                                       @PathVariable("recipe-id") long recipeId,
-                                      @LoginMemberId Long userId) {    //댓글 등록
+                                      @LoginMemberId Long userId) {
         Comment comment = commentMapper.commentPostToComment(post);
         Comment response = commentService.createComment(comment, recipeId, userId);
-
 
         return new ResponseEntity(new SingleResponseDto<>(commentMapper.commentToCommentResponseDto(response)),
                 HttpStatus.CREATED);
     }
-
+    //댓글 수정
     @PatchMapping("/update/{comment-id}")
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
                                        @Positive @PathVariable("comment-id") long commentId) {    //댓글 수정
         patch.setCommentId(commentId);
         Comment updatedComment = commentService.updateComment(commentMapper.commentPatchToComment(patch));
+
         return new ResponseEntity<>(new SingleResponseDto<>(commentMapper.commentToCommentResponseDto(updatedComment)), HttpStatus.OK);
     }
-
+    //댓글 삭제
     @DeleteMapping("/delete/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId) {    //댓글 삭제
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive long commentId) {
         commentService.deleteComment(commentId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+    //작성자 검증
     @GetMapping("/verify/{comment-id}")
     public ResponseEntity verifyCommentUser(@LoginMemberId Long userId,
                                             @PathVariable("comment-id") Long commentId) {
         commentService.verifyComment(commentId, userId);
+
         return ResponseEntity.ok().body("작성 유저 검증을 통과하였습니다.");
     }
 }
