@@ -32,12 +32,10 @@ public class CommentDto {
     public static class Response {
         private long recipeId;
         private long userId;
-//        private String userName;
         private long commentId;
         private String commentContent;
         private String createdAt;
         private String modifiedAt;
-//        private String createdBy;
     }
 
     @Getter

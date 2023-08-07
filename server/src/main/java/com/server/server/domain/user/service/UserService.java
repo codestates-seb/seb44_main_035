@@ -32,9 +32,6 @@ public class UserService {
     @Autowired
     private final JwtTokenizer jwtTokenizer;
 
-
-
-
     public User createUser(User user) {
         verifyExistEmail(user.getEmail());
         user.setName(verifyExistName(user.getName()));   //중복되는 이름 확인 후 중복되는 이름이 있을 시 뒤에 0~9999까지 번호를 붙여서 이름 저장
@@ -51,6 +48,7 @@ public class UserService {
 
         return savedUser;
     }
+
     public User createUserOAuth2(User user) {
 
         List<String> roles = authorityUtils.createRoles(user.getEmail());

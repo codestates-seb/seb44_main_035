@@ -33,7 +33,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final JwtTokenizer jwtTokenizer;
     private final UserRepository userRepository;
 
-    // (3)
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
@@ -52,7 +51,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             User findUser = optionalMember.orElseThrow(() ->
                     new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-            // (3-3)
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 

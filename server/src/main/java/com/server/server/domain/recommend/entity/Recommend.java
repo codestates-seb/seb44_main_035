@@ -16,11 +16,9 @@ public class Recommend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long recommendId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
