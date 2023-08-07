@@ -1,6 +1,5 @@
 package com.server.server.domain.recipe.service;
 
-import com.server.server.domain.comment.entity.Comment;
 import com.server.server.domain.ingredient.entity.Ingredient;
 import com.server.server.domain.ingredient.service.IngredientService;
 import com.server.server.domain.recommend.service.RecommendService;
@@ -20,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
@@ -29,8 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class RecipeService {
     @Autowired
     private final RecipeRepository recipeRepository;
@@ -119,6 +120,7 @@ public class RecipeService {
     public Recipe incrementViewCount(Recipe recipe) {
         recipe.setViews(recipe.getViews()+1);
         recipeRepository.save(recipe);
+
         return recipe;
     }
     public RecipeDto.RecommendResponse toggleRecipeRecommend(long userId, long recipeId) {

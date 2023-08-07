@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class IngredientService {
     private final IngredientRepository ingredientRepository;
@@ -58,6 +59,7 @@ public class IngredientService {
     }
     public Ingredient findVerifiedIngredient(long ingredientId){
         Optional<Ingredient> ingredient = ingredientRepository.findById(ingredientId);
+
         return  ingredient.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.INGREDIENT_NOT_FOUND));
     }
@@ -86,6 +88,7 @@ public class IngredientService {
         User findUser = userService.findUser(userId);
         Pageable pageable = PageRequest.of(page, size,Sort.by("ingredientId"));
         Page<Ingredient> ingredients = ingredientRepository.findAllByUser(findUser, pageable);
+
         return ingredients;
     }
 }

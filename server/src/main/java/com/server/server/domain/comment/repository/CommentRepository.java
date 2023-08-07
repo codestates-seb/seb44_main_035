@@ -8,6 +8,4 @@ import java.util.Optional;
 import java.util.concurrent.CompletionException;
 
 public interface CommentRepository extends JpaRepository<Comment,Long> {
-//    List<Comment> findAllCommentsByRecipeId(Long recipeId);
-    Optional<Comment> findByUserUserId(Long userId);
 }
