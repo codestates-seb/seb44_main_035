@@ -1,9 +1,7 @@
 package com.server.server.domain.ingredient.service;
 
-import com.server.server.domain.ingredient.dto.IngredientDto;
 import com.server.server.domain.ingredient.entity.Ingredient;
 import com.server.server.domain.ingredient.repository.IngredientRepository;
-import com.server.server.domain.recipe.entity.Recipe;
 import com.server.server.domain.user.entity.User;
 import com.server.server.domain.user.service.UserService;
 import com.server.server.global.exception.BusinessLogicException;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,7 +25,7 @@ public class IngredientService {
     private final IngredientRepository ingredientRepository;
     private final UserService userService;
 
-    @Transactional
+    // 재료 추가(유저의 재료목록에 추가)
     public Ingredient addIngredient(Ingredient ingredient, long userId){
         Ingredient findIngredient = findVerifiedIngredient(ingredient.getIngredientName(), userId);
         if (findIngredient.getIncludedRecipe() == null) {
@@ -44,7 +41,8 @@ public class IngredientService {
     public List<Ingredient> saveAll(List<Ingredient> ingredients) {
         return ingredientRepository.saveAll(ingredients);
     }
-    @Transactional
+
+    // 재료 삭제(유저의 재료목록에서 삭제)
     public void deleteIngredient(long ingredientId, long userId) {
         User user = userService.findUser(userId);
         Ingredient ingredient = findIngredient(ingredientId);
@@ -53,18 +51,21 @@ public class IngredientService {
         ingredientRepository.delete(ingredient);
     }
 
-    @Transactional
+
     public Ingredient findIngredient(long ingredientId) {
         return findVerifiedIngredient(ingredientId);
     }
+
     public Ingredient findVerifiedIngredient(long ingredientId){
         Optional<Ingredient> ingredient = ingredientRepository.findById(ingredientId);
 
         return  ingredient.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.INGREDIENT_NOT_FOUND));
     }
+
     public Ingredient findVerifiedIngredient(String ingredientName, long userId){
         List<Ingredient> ingredients = ingredientRepository.findByIngredientName(ingredientName);
+
         if (ingredients.size() != 0) {
             Ingredient ingredient = ingredients.get(0);
             verifyExistIngredient(ingredient, userId);
@@ -78,12 +79,15 @@ public class IngredientService {
 
     public void verifyExistIngredient(Ingredient ingredient, long userId) {
         User user = userService.findUser(userId);
+
         for (Ingredient ingre : user.getIngredientList()) {
             if (ingre.getIngredientName().equals(ingredient.getIngredientName())) {
                 throw new BusinessLogicException(ExceptionCode.INGREDIENT_EXISTS);
             }
         }
     }
+
+    //유저의 재료 조회
     public Page<Ingredient> findUserIngredient(long userId, int page, int size) {
         User findUser = userService.findUser(userId);
         Pageable pageable = PageRequest.of(page, size,Sort.by("ingredientId"));

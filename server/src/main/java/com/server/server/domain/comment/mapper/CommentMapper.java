@@ -3,11 +3,8 @@ package com.server.server.domain.comment.mapper;
 import com.server.server.domain.comment.dto.CommentDto;
 import com.server.server.domain.comment.entity.Comment;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {

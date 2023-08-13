@@ -2,14 +2,12 @@ package com.server.server.domain.recipe.mapper;
 
 import com.server.server.domain.comment.dto.CommentDto;
 import com.server.server.domain.comment.entity.Comment;
-import com.server.server.domain.comment.mapper.CommentMapper;
 import com.server.server.domain.ingredient.dto.IngredientDto;
 import com.server.server.domain.ingredient.entity.Ingredient;
 import com.server.server.domain.recipe.dto.RecipeDto;
 import com.server.server.domain.recipe.entity.Recipe;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;

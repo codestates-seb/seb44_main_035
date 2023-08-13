@@ -37,6 +37,7 @@ private final IngredientMapper mapper;
                 new SingleResponseDto(mapper.ingredientToResponse(saveIngredient)),
                 HttpStatus.CREATED);
     }
+
     //재료 목록 조회
     @GetMapping
     public ResponseEntity getIngredients(@LoginMemberId Long userId,
@@ -49,6 +50,7 @@ private final IngredientMapper mapper;
                 new MultiResponseDto<>(mapper.ingredientsToResponses(ingredientList),pageIngredient),
                 HttpStatus.OK);
     }
+
     //재료 삭제
     @DeleteMapping("/delete/{ingre-id}") //해당 재료 삭제
     public ResponseEntity deleteIngredient(@PathVariable("ingre-id") long ingredientId,
