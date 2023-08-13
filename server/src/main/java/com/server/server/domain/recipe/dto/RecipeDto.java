@@ -1,7 +1,6 @@
 package com.server.server.domain.recipe.dto;
 
 import com.server.server.domain.comment.dto.CommentDto;
-import com.server.server.domain.comment.entity.Comment;
 import com.server.server.domain.ingredient.dto.IngredientDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -11,7 +11,6 @@ import com.server.server.global.exception.ExceptionCode;
 import com.server.server.global.security.auth.jwt.JwtTokenizer;
 import com.server.server.global.security.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,18 +28,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
-    @Autowired
     private final JwtTokenizer jwtTokenizer;
 
+    // 회원가입
     public User createUser(User user) {
         verifyExistEmail(user.getEmail());
-        user.setName(verifyExistName(user.getName()));   //중복되는 이름 확인 후 중복되는 이름이 있을 시 뒤에 0~9999까지 번호를 붙여서 이름 저장
 
-        // (3) 추가: Password 암호화
+        // Password 암호화
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
 
-        // (4) 추가: DB에 User Role 저장
+        // DB에 User Role 저장
         List<String> roles = authorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
 
@@ -49,6 +47,7 @@ public class UserService {
         return savedUser;
     }
 
+    //OAuth2 유저 회원가입
     public User createUserOAuth2(User user) {
 
         List<String> roles = authorityUtils.createRoles(user.getEmail());
@@ -89,7 +88,8 @@ public class UserService {
         return userRepository.existsUsersByEmail(email);
     }
 
-    private String verifyExistName(String name){     // oauth2로 로그인 했을 때 같은 이름이 있을 때 1~1000까지의 랜덤숫자를 붙임
+    // oauth2로 로그인 했을 때 같은 이름이 있을 때 1~1000까지의 랜덤숫자를 붙임
+    private String verifyExistName(String name){
         String newName = name;
         Optional<User> optionalUser = userRepository.findByName(name);
         if(optionalUser.isPresent()){
@@ -118,8 +118,6 @@ public class UserService {
 
 
     public String delegateRefreshToken(User user) {
-
-
         String subject = user.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
@@ -146,6 +144,7 @@ public class UserService {
         for (Recipe recipe : user.getRecipeList()) {
             recipeList.add(recipe);
         }
+
         return convertToPage(recipeList, pageable);
     }
     public Page<Recipe> findUserCommentRecipe(long userId, Pageable pageable) {
@@ -155,6 +154,7 @@ public class UserService {
         for (Comment comment : user.getCommentList()) {
             recipeList.add(comment.getRecipe());
         }
+
         return convertToPage(recipeList, pageable);
     }
     public Page<Recipe> convertToPage(List<Recipe> recipeList, Pageable pageable) {

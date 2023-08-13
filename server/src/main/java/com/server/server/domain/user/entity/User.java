@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Builder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -66,10 +65,6 @@ public class User {
         comment.setUser(this);
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-  
     public void removeIngredient(Ingredient ingredient) {
         this.ingredientList.remove(ingredient);
         if (ingredient.getUser() != this) {

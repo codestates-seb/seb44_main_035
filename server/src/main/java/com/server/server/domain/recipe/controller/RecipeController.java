@@ -41,23 +41,13 @@ public class RecipeController {
 
         return new ResponseEntity<>(new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)), HttpStatus.CREATED);
     }
-//    @PostMapping("/create")
-//    public ResponseEntity postRecipe(@LoginMemberId Long userId,
-//                                     @RequestBody RecipeDto.Post requestBody) {
-//        List<Ingredient> ingredients = ingredientMapper.PostRecipeToIngredients(requestBody.getIngredients());
-//        Recipe recipe = recipeMapper.postToRecipe(requestBody, ingredients);
-//        Recipe savedRecipe = recipeService.createRecipe(recipe, userId);
-//
-//        return new ResponseEntity<>(
-//                new SingleResponseDto(recipeMapper.recipeToPostResponse(savedRecipe)),
-//                HttpStatus.CREATED);
-//    }
 
     //레시피 추천(토글 형식)
     @PostMapping("/recommend/{recipe-id}")
     public ResponseEntity toggleRecipeRecommend(@LoginMemberId Long userId,
                                                 @PathVariable("recipe-id") long recipeId) {
         RecipeDto.RecommendResponse response = recipeService.toggleRecipeRecommend(userId, recipeId);
+
         if (response.getRecommendId() != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } else {
@@ -80,6 +70,7 @@ public class RecipeController {
         List<Ingredient> ingredients = ingredientMapper.PostRecipeToIngredients(requestBody.getIngredients());
         Recipe recipe = recipeMapper.patchToRecipe(requestBody, ingredients);
         Recipe updatedRecipe = recipeService.updateRecipe(recipe, recipeImage, cookStepImage);
+
         return new ResponseEntity(
                 new SingleResponseDto<>(recipeMapper.recipeToResponse(updatedRecipe)),
                 HttpStatus.OK);
