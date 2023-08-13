@@ -4,20 +4,15 @@ import com.server.server.domain.comment.dto.CommentDto;
 import com.server.server.domain.comment.entity.Comment;
 import com.server.server.domain.comment.mapper.CommentMapper;
 import com.server.server.domain.comment.service.CommentService;
-import com.server.server.global.response.MultiResponseDto;
 import com.server.server.global.response.SingleResponseDto;
 import com.server.server.global.security.auth.loginResolver.LoginMemberId;
-import com.server.server.global.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

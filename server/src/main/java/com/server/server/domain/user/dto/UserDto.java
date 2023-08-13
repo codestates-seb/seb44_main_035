@@ -33,7 +33,5 @@ public class UserDto {
     @AllArgsConstructor
     public static class GuestResponse {
         private long userId;
-        private String email;
-        private String password;
     }
 }

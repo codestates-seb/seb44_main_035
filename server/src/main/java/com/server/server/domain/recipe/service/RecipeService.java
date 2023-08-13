@@ -2,6 +2,7 @@ package com.server.server.domain.recipe.service;
 
 import com.server.server.domain.ingredient.entity.Ingredient;
 import com.server.server.domain.ingredient.service.IngredientService;
+import com.server.server.domain.recipe.repository.RecipeQueryRepository;
 import com.server.server.domain.recommend.service.RecommendService;
 import com.server.server.domain.user.entity.User;
 import com.server.server.domain.user.service.UserService;
@@ -16,15 +17,11 @@ import com.server.server.global.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,10 +37,9 @@ public class RecipeService {
     private final RecommendService recommendService;
     private final IngredientService ingredientService;
     private final S3Uploader s3Uploader;
-    @PersistenceContext
-    private final EntityManager entityManager;
+    private final RecipeQueryRepository recipeQueryRepository;
 
-
+    //레시피 작성
     public Recipe createRecipe(Recipe recipe, MultipartFile recipeImage, List<MultipartFile> cookStepImage, long userId) {
        User user = userService.findUser(userId);
        List<Ingredient> ingredients = ingredientService.saveAll(recipe.getIngredients());
@@ -55,18 +51,8 @@ public class RecipeService {
         uploadImage(recipe, recipeImage, cookStepImage);
         return recipeRepository.save(recipe);
     }
-//    public Recipe createRecipe(Recipe recipe, long userId) {
-//        User user = userService.findUser(userId);
-//        List<Ingredient> ingredients = ingredientService.saveAll(recipe.getIngredients());
-//        for (Ingredient ingredient : recipe.getIngredients()) {
-//            ingredient.setRecipe(recipe);
-//        }
-//        recipe.setIngredients(ingredients);
-//        user.addRecipe(recipe);
-//
-//        return recipeRepository.save(recipe);
-//    }
 
+    // 레시피에 들어가는 이미지를 S3에 업로드
     public void uploadImage(Recipe recipe, MultipartFile recipeImage, List<MultipartFile> cookStepImage) {
         String fileUrl = s3Uploader.upload(recipeImage);
         recipe.setRecipeImage(fileUrl);
@@ -76,6 +62,7 @@ public class RecipeService {
         }
     }
 
+    // 레시피 수정
     public Recipe updateRecipe(Recipe recipe, MultipartFile recipeImage, List<MultipartFile> cookStepImage) {
         Recipe findRecipe = findRecipe(recipe.getRecipeId());
 
@@ -123,6 +110,8 @@ public class RecipeService {
 
         return recipe;
     }
+
+    // 레시피 추천기능(토글 형식)
     public RecipeDto.RecommendResponse toggleRecipeRecommend(long userId, long recipeId) {
         User user = userService.findUser(userId);
         Recipe recipe = findRecipe(recipeId);
@@ -156,7 +145,7 @@ public class RecipeService {
         return response;
     }
 
-
+    // 레시피 삭제
     public void deleteRecipe(long recipeId) {
         Recipe findRecipe = findRecipe(recipeId);
         String url = findRecipe.getRecipeImage();
@@ -168,6 +157,7 @@ public class RecipeService {
 
         recipeRepository.delete(findRecipe);
     }
+
     public Recipe findRecipe(long recipeId) {
         return findVerifiedRecipe(recipeId);
     }
@@ -178,10 +168,12 @@ public class RecipeService {
                 new BusinessLogicException(ExceptionCode.RECIPE_NOT_FOUND));
     }
 
+    // 레시피 수정 권한 확인을 위해 요청한 유저와 레시피 작성유저를 비교
     public void verifyRecipe(long recipeId, long userId) {
         Recipe recipe = findRecipe(recipeId);
         User user = userService.findUser(userId);
         long recipeUserId = recipe.getUser().getUserId();
+
         if (!user.getRoles().contains("ADMIN")) {
             if (recipeUserId != userId) {
                 throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_EDITING_RECIPE);
@@ -194,52 +186,17 @@ public class RecipeService {
         return recipeRepository.findByRecipeNameContainingIgnoreCase(recipeName, pageable);
     }
 
-    // 장바구니 속 재료로 검색
+    // 전달받은 재료를 모두 포함하는 레시피 검색
     public Page<Recipe> searchAllRecipesByIngredients(List<String> ingredients, Pageable pageable) {
-        String countQuery = "SELECT COUNT(DISTINCT r) FROM Recipe r JOIN r.ingredients i WHERE i.ingredientName IN :ingredients " +
-                "GROUP BY r " +
-                "HAVING COUNT(DISTINCT i.ingredientName) = :ingredientCount " +
-                "AND COUNT(DISTINCT i.ingredientName) = :ingredientListCount";
-        TypedQuery<Long> countTypedQuery = entityManager.createQuery(countQuery, Long.class);
-        countTypedQuery.setParameter("ingredients", ingredients);
-        countTypedQuery.setParameter("ingredientCount", Long.valueOf(ingredients.size()));
-        countTypedQuery.setParameter("ingredientListCount", (long) ingredients.size());
-        Long totalCount = countTypedQuery.getSingleResult();
-
-        String query = "SELECT r FROM Recipe r JOIN r.ingredients i WHERE i.ingredientName IN :ingredients " +
-                "GROUP BY r " +
-                "HAVING COUNT(DISTINCT i.ingredientName) = :ingredientCount " +
-                "AND COUNT(DISTINCT i.ingredientName) = :ingredientListCount";
-        TypedQuery<Recipe> typedQuery = entityManager.createQuery(query, Recipe.class);
-        typedQuery.setParameter("ingredients", ingredients);
-        typedQuery.setParameter("ingredientCount", Long.valueOf(ingredients.size()));
-        typedQuery.setParameter("ingredientListCount", (long) ingredients.size());
-        typedQuery.setFirstResult((int) pageable.getOffset());
-        typedQuery.setMaxResults(pageable.getPageSize());
-        List<Recipe> resultList = typedQuery.getResultList();
-
-        return new PageImpl<>(resultList, pageable, totalCount);
+        return recipeQueryRepository.searchAllRecipesByIngredients(ingredients, pageable);
     }
 
-
-    //냉장고 속 재료로 검색
+    // 전달받은 재료중 하나라도 포함하는 레시피 검색
     public Page<Recipe> searchRecipesByIngredients(List<String> ingredients, Pageable pageable) {
-        String countQuery = "SELECT COUNT(DISTINCT r) FROM Recipe r JOIN r.ingredients i WHERE i.ingredientName IN :ingredients";
-        TypedQuery<Long> countTypedQuery = entityManager.createQuery(countQuery, Long.class);
-        countTypedQuery.setParameter("ingredients", ingredients);
-        Long totalCount = countTypedQuery.getSingleResult();
-
-        String query = "SELECT DISTINCT r FROM Recipe r JOIN r.ingredients i WHERE i.ingredientName IN :ingredients";
-        TypedQuery<Recipe> typedQuery = entityManager.createQuery(query, Recipe.class);
-        typedQuery.setParameter("ingredients", ingredients);
-        typedQuery.setFirstResult((int) pageable.getOffset());
-        typedQuery.setMaxResults(pageable.getPageSize());
-        List<Recipe> resultList = typedQuery.getResultList();
-
-        return new PageImpl<>(resultList, pageable, totalCount);
+        return recipeQueryRepository.searchRecipesByIngredients(ingredients, pageable);
     }
 
-    //전체 레시피 조회(하단 바)
+    //전체 레시피 조회(하단 바 클릭 시)
     public Page<Recipe> getAllRecipes(Pageable pageable) {
         return recipeRepository.findAll(pageable);
     }
