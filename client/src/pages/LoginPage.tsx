@@ -45,7 +45,7 @@ const LoginPage = () => {
           randomId: randomId,
         })
       );
-      localStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("isLoggedIn", "true");
       window.location.href = "/";
     } catch (error) {
       console.log("에러입니다", error);
@@ -68,7 +68,7 @@ const LoginPage = () => {
         })
       );
 
-      localStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("isLoggedIn", "true");
 
       window.location.href = "/";
       navigate("/");
