@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 // import { useNavigate } from "react-router-dom";
 import AddModal from "../components/MyPage/AddModal";
@@ -9,6 +10,13 @@ const MyPage = () => {
   const [_memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const navigate = useNavigate();
+  const loginInfo = JSON.parse(sessionStorage.getItem("token") || "null") as {
+    memberid: number;
+    // username: string;
+    // nickname: string;
+    // email: string;
+  };
   // const navigate = useNavigate();
   // const handleRecipesClick = () => {
   //   navigate("/my-recipes");
@@ -20,6 +28,12 @@ const MyPage = () => {
   };
   const handleCloseIngredientModal = () => {
     setIsOpenAddIngredientModal(false);
+  };
+  const handleLogout = () => {
+    // sessionStorage.removeItem("token");
+    sessionStorage.clear();
+    localStorage.clear();
+    navigate("/login");
   };
 
   /*페이지 로드 */
@@ -65,6 +79,9 @@ const MyPage = () => {
           </form> */}
             <UserPicture>{image}유저 사진</UserPicture>
             <UserName>{name}유저 이름</UserName>
+            {loginInfo ? (
+              <Logout onClick={handleLogout}>로그아웃</Logout>
+            ) : null}
           </ProFile>
 
           <RecipeBox>
@@ -119,6 +136,10 @@ const UserPicture = styled.div`
   color: white;
 `;
 const UserName = styled.div`
+  color: rgba(61, 80, 103, 1);
+  margin-top: 20px;
+`;
+const Logout = styled.div`
   color: rgba(61, 80, 103, 1);
   margin-top: 20px;
 `;
