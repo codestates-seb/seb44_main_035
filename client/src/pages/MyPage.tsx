@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AddModal from "../components/MyPage/AddModal";
 import axios from "axios";
 import BottomNavBar from "../components/bottom/BottomNavBar";
@@ -9,10 +9,10 @@ const MyPage = () => {
   const [_memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-  // const navigate = useNavigate();
-  // const handleRecipesClick = () => {
-  //   navigate("/my-recipes");
-  // };
+  const navigate = useNavigate();
+  const handleRecipesClick = () => {
+    navigate("/my-recipes");
+  };
   const [isOpenAddIngredientModal, setIsOpenAddIngredientModal] =
     useState(false);
   const handleAddClick = () => {
@@ -68,8 +68,8 @@ const MyPage = () => {
           </ProFile>
 
           <RecipeBox>
-            <List>내가 작성한 레시피</List>
-            <List>댓글 작성한 레시피</List>
+            <List onClick={handleRecipesClick}>내가 작성한 레시피</List>
+            {/* <List>댓글 작성한 레시피</List> */}
             <List onClick={handleAddClick}>재료 추가 신청</List>
             {isOpenAddIngredientModal && (
               <AddModal onClose={handleCloseIngredientModal} />
