@@ -90,7 +90,7 @@ export default function MyPostPage() {
                               if (
                                 window.confirm("게시글을 삭제하시겠습니까?")
                               ) {
-                                axios.delete(url, { headers }).then((res) => {
+                                axios.delete(url, { headers }).then((_res) => {
                                   alert("삭제되었습니다.");
                                   redirect("/my-recipes");
                                 });
