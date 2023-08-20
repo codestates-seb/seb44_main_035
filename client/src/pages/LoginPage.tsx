@@ -57,7 +57,6 @@ const LoginPage = () => {
   const login = async (loginState: LoginInput) => {
     try {
       const response = await axios.post(url, loginState);
-
       const Authorization = response.headers.authorization;
       const Refresh = response.headers.refresh;
 
@@ -68,12 +67,12 @@ const LoginPage = () => {
           refresh: Refresh,
         })
       );
-
+      const memberId = response.headers.memberid;
+      sessionStorage.setItem("memberId", memberId);
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("nonMembers", "false");
 
       window.location.href = "/";
-      navigate("/");
     } catch (error) {
       alert("가입되지 않은 유저입니다.");
     }

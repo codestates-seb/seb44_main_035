@@ -7,7 +7,7 @@ import axios from "axios";
 import BottomNavBar from "../components/bottom/BottomNavBar";
 
 const MyPage = () => {
-  const [_memberId, setMemberId] = useState("");
+  const [memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const navigate = useNavigate();
@@ -35,23 +35,43 @@ const MyPage = () => {
     localStorage.clear();
     navigate("/login");
   };
-
-  /*페이지 로드 */
-  async function fetchData() {
-    try {
-      const response = await axios.get("URL");
-      const data = response.data;
-      setMemberId(data.memberId);
-      setName(data.name);
-      setImage(data.image);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  const handleLoginDelete = (e) => {
+    const memberId = sessionStorage.getItem("memberId");
+    e.preventDefault();
+    if (window.confirm("확인을 누르면 회원 정보가 삭제됩니다.")) {
+      axios
+        .delete(`${import.meta.env.VITE_API_URL}/members/delete/${memberId}`, {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("token"), //  Authorization: `Bearer ${token.access}`
+          },
+        })
+        .then(() => {
+          sessionStorage.clear();
+          alert("그동안 이용해주셔서 감사합니다.");
+          navigate("/login");
+        })
+        .catch((err) => alert(err.response.data.message));
+    } else {
+      return;
     }
-  }
-  // 받아온 데이터를 활용하여 화면에 표시하는 로직 작성
-  useEffect(() => {
-    fetchData();
-  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
+  };
+
+  // /*페이지 로드 */
+  // async function fetchData() {
+  //   try {
+  //     const response = await axios.get("URL");
+  //     const data = response.data;
+  //     setMemberId(data.memberId);
+  //     setName(data.name);
+  //     setImage(data.image);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // }
+  // // 받아온 데이터를 활용하여 화면에 표시하는 로직 작성
+  // useEffect(() => {
+  //   fetchData();
+  // }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
 
   return (
     <>
@@ -82,6 +102,7 @@ const MyPage = () => {
             {loginInfo ? (
               <Logout onClick={handleLogout}>로그아웃</Logout>
             ) : null}
+            <LoginDelete onClick={handleLoginDelete}>회원 탈퇴</LoginDelete>
           </ProFile>
 
           <RecipeBox>
@@ -141,7 +162,11 @@ const UserName = styled.div`
 `;
 const Logout = styled.div`
   color: rgba(61, 80, 103, 1);
-  margin-top: 20px;
+  margin-top: 10px;
+`;
+const LoginDelete = styled.div`
+  color: rgba(61, 80, 103, 1);
+  margin-top: 10px;
 `;
 const RecipeBox = styled.div`
   margin-top: 30px;
