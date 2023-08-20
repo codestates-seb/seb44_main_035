@@ -20,7 +20,6 @@ const loginInput: LoginInput = {
   password: "",
 };
 const LoginPage = () => {
-
   const [loginState, setLoginState] = useState(loginInput);
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const url = `${import.meta.env.VITE_API_URL}/members/login`;
@@ -29,12 +28,35 @@ const LoginPage = () => {
   const handleNavigate = () => {
     navigate("/Signup");
   };
+  //비회원통신
+  const handleNonMembers = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/members/guest`
+      );
+      console.log(response);
+      const authorizationHeader = response.headers.authorization;
+      const randomId = response.headers.memberid;
+      console.log(randomId);
+      sessionStorage.setItem(
+        "token",
+        JSON.stringify({
+          access: authorizationHeader,
+          randomId: randomId,
+        })
+      );
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("nonMembers", "true");
+      window.location.href = "/";
+    } catch (error) {
+      console.log("에러입니다", error);
+    }
+  };
 
   //통신
   const login = async (loginState: LoginInput) => {
     try {
       const response = await axios.post(url, loginState);
-
       const Authorization = response.headers.authorization;
       const Refresh = response.headers.refresh;
 
@@ -45,11 +67,12 @@ const LoginPage = () => {
           refresh: Refresh,
         })
       );
-
-      localStorage.setItem("isLoggedIn", "true");
+      const memberId = response.headers.memberid;
+      sessionStorage.setItem("memberId", memberId);
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("nonMembers", "false");
 
       window.location.href = "/";
-      navigate("/");
     } catch (error) {
       alert("가입되지 않은 유저입니다.");
     }
@@ -114,6 +137,7 @@ const LoginPage = () => {
           />
           <LoginBox onClick={handleLogin}>로그인</LoginBox>
           <LoginBox onClick={handleNavigate}>회원가입</LoginBox>
+          <LoginBox onClick={handleNonMembers}>비회원으로 이용하기</LoginBox>
         </MainBox>
       </AppBox>
     </StyledWrapper>

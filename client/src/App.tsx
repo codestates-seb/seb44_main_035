@@ -24,8 +24,8 @@ export interface RecipeList {
 
 function App() {
   function isLoggedIn() {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    console.log("isLoggedIn:", isLoggedIn);
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+    // console.log("isLoggedIn:", isLoggedIn);
     return isLoggedIn;
   }
 
