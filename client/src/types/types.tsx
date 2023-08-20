@@ -46,3 +46,9 @@ export interface RecipeDetail {
   comments: Comments[];
   ingredients: Ingredients[];
 }
+
+export interface PostList {
+  recipeId: number;
+  recipeName: string;
+  recipeImage: string;
+}

@@ -7,22 +7,40 @@ import styled from "styled-components";
 import { ingreItemAtom } from "../atoms/atoms";
 import { useRecoilState } from "recoil";
 import BottomNavBar from "../components/bottom/BottomNavBar";
+import { BsFillQuestionCircleFill } from "react-icons/bs";
+import HelpModal from "../components/Main/HelpModal";
 
 const MainPage = () => {
   const [ingreState, _setIngreState] = useRecoilState(ingreItemAtom);
   const navigate = useNavigate();
   const [isOpenBasketModal, setIsOpenBasketModal] = useState(false);
+  const [isOpenHelpModal, setIsOpenHelpModal] = useState(false);
+
   const handleBasketClick = () => {
     setIsOpenBasketModal(!isOpenBasketModal);
   };
+
   const handleCloseBasketModal = () => {
     setIsOpenBasketModal(false);
+  };
+
+  const openHelpModal = () => {
+    setIsOpenHelpModal(!isOpenHelpModal);
+  };
+
+  const closeHelpModal = () => {
+    setIsOpenHelpModal(false);
   };
 
   return (
     <>
       <StyledWrapper>
         <AppBox>
+          <BsFillQuestionCircleFill
+            className="questionIcon"
+            onClick={openHelpModal}
+          />
+          {isOpenHelpModal && <HelpModal onClose={closeHelpModal} />}
           <Header>
             <MainLogo />
           </Header>
@@ -65,6 +83,13 @@ const AppBox = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  .questionIcon {
+    float: right;
+    margin: 10px;
+    color: grey;
+    font-size: 25px;
+    cursor: pointer;
+  }
 `;
 
 const Header = styled.header`

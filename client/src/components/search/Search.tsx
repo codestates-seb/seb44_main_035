@@ -22,7 +22,7 @@ function Search() {
   //검색 목록 담을 곳
   const [searchResult, setSearchResult] = useState<RecipeList[]>([]);
   const searchWord = location.state;
-  console.log(searchWord);
+  // console.log(searchWord);
 
   useEffect(() => {
     setSearch(searchWord); //state에 검색어 저장

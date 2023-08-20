@@ -11,16 +11,7 @@ import SearchPage from "./pages/SearchPage";
 import BasketPage from "./pages/BasketPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
-
-export interface RecipeList {
-  Recipes: {
-    recipe_id: number;
-    name: string;
-    view: number;
-    likes: number;
-    img: string;
-  };
-}
+import MyPostPage from "./pages/MyPostPage";
 
 function App() {
   function isLoggedIn() {
@@ -45,6 +36,7 @@ function App() {
         <Route path="/basket" element={<BasketPage />} />
         <Route path="/recipes/search/:keyword" element={<SearchPage />} />
         <Route path="/refridge" element={<RefridgePage />} />
+        <Route path="/my-recipes" element={<MyPostPage />} />
       </Routes>
     </>
   );

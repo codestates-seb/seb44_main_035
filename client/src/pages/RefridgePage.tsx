@@ -69,7 +69,7 @@ export default function RefridgePage() {
         import.meta.env.VITE_API_URL
       }/recipes/find/main?${queryStr}`;
       const res = await axios.get(url);
-      console.log(res.data);
+      // console.log(res.data);
       setData(res.data.data);
     } catch (error) {
       console.log("에러입니다");

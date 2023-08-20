@@ -1,7 +1,6 @@
 import BackButton from "../components/BackButton";
 import RecipeDetail from "../components/detail/RecipeDetail";
 import styled from "styled-components";
-import Comment from "../components/detail/Comment";
 import BottomNavBar from "../components/bottom/BottomNavBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -16,7 +15,6 @@ function DetailPage() {
           <QueryClientProvider client={queryClient}>
             <RecipeDetail />
           </QueryClientProvider>
-          <Comment />
         </AppBox>
       </Container>
       <BottomNavBar />
