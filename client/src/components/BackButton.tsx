@@ -22,6 +22,7 @@ const IconContainer = styled.span`
     width: 2rem;
     height: 2rem;
     color: darkgray;
+    cursor: pointer;
   }
 `;
 
