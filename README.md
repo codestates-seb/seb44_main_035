@@ -1,7 +1,4 @@
-<img src="" width="1000"></img>
-<br>
-<br>
-<br>
+<img width="257" alt="스크린샷 2023-08-21 오후 10 42 15" src="https://github.com/codestates-seb/seb44_main_035/assets/74245916/723f9f95-b78b-4cae-aeaa-149c8c1b0a04">  
 
 안녕하세요!  
   
@@ -163,23 +160,32 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
 <br>
 
 
+
 ### 냉파고 주요 페이지 뷰
 - 냉파고 로그인 화면
   - 회원가입, 로그인, 비회원 이용이 가능합니다.
   - 로그인 시 메인 화면으로 이동합니다.
+    ![1 로그인 화면](https://github.com/codestates-seb/seb44_main_035/assets/74245916/df098642-1de0-4b18-b961-9bd3701fa4e4)
+
 
  
 - 냉파고 메인 화면
   - 나의 냉장고에 있는 재료를 추가하여 냉장고 속 재료를 한 눈에 볼 수 있습니다.
   - 추가한 재료를 한 번 더 클릭하면 선택 재료에 담기게 됩니다.
+    ![2 메인 페이지 재료 추가](https://github.com/codestates-seb/seb44_main_035/assets/74245916/dc8a1194-341e-4c36-90f5-76ba596a44f6)
+
 
  
 - 냉장고 페이지 플로우
   - 냉장고 속 재료가 '1개라도' 포함된 레시피를 보여줍니다.
+    ![3 냉장고 페이지 플로우](https://github.com/codestates-seb/seb44_main_035/assets/74245916/b0332361-1a8d-4494-a46f-52d32102500b)
+    
 
  
 - 선택 재료 페이지 플로우
   - 냉장고 속 재료를 '모두' 포함한 레시피를 보여줍니다.
+    ![4 선택 재료 페이지 플로우](https://github.com/codestates-seb/seb44_main_035/assets/74245916/7a587e59-3492-4e90-baa4-d3aa9c929b3d)
+
 
  
 - 레시피 페이지
@@ -188,9 +194,12 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
   ![5 레시피 페이지 수정](https://github.com/codestates-seb/seb44_main_035/assets/74245916/19100e32-439b-4bab-8f26-5407f8b50235)
 
 
+
 - 레시피 상세 페이지
   - 레시피의 상세 내용을 보여줍니다.
   - 레시피 수정이 가능합니다.
+    ![6 레시피 상세 페이지](https://github.com/codestates-seb/seb44_main_035/assets/74245916/13d979f0-6155-416c-ab7c-60f44f715070)
+
 
  
 - 마이페이지
@@ -199,9 +208,3 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
   ![8 마이페이지](https://github.com/codestates-seb/seb44_main_035/assets/74245916/c94aa052-2c4d-4be9-ab9d-0b6fcd83a7ec)
 
 
-<img src="" width="1000"></img>
-<br>
-<br>
-
--  
--  
