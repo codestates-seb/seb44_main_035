@@ -185,7 +185,7 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
 - 레시피 페이지
   - 등록된 전체 레시피를 보여줍니다.
   - 원하는 키워드로 레시피 검색이 가능합니다.  
-  - ![5 레시피 페이지 수정](https://github.com/codestates-seb/seb44_main_035/assets/74245916/19100e32-439b-4bab-8f26-5407f8b50235)
+  ![5 레시피 페이지 수정](https://github.com/codestates-seb/seb44_main_035/assets/74245916/19100e32-439b-4bab-8f26-5407f8b50235)
 
 
 - 레시피 상세 페이지
@@ -196,8 +196,7 @@ _레시피를 공유할 수 있는 소통 공간이 있었으면 좋겠어요._
 - 마이페이지
   - 로그아웃, 회원 탈퇴, 내가 작성한 레시피 보기, 재료 추가 신청이 가능합니다.  
   - 내가 작성한 레시피 페이지에서는 작성 레시피를 수정/삭제할 수 있습니다.
-  - <img width="317" alt="스크린샷 2023-08-21 오전 11 05 23" src="https://github.com/codestates-seb/seb44_main_035/assets/74245916/183d858d-0363-43dc-82fa-6e6f04e65781">
-  - ![8 마이페이지](https://github.com/codestates-seb/seb44_main_035/assets/74245916/c94aa052-2c4d-4be9-ab9d-0b6fcd83a7ec)
+  ![8 마이페이지](https://github.com/codestates-seb/seb44_main_035/assets/74245916/c94aa052-2c4d-4be9-ab9d-0b6fcd83a7ec)
 
 
 <img src="" width="1000"></img>
